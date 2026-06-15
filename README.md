@@ -1,4 +1,4 @@
-# 🧠 Mentria
+# Vinculo
 
 ![Status](https://img.shields.io/badge/Status-Em_Desenvolvimento-yellow?style=for-the-badge)
 ![Version](https://img.shields.io/badge/Vers%C3%A3o-0.1-blue?style=for-the-badge)
@@ -76,5 +76,3 @@ A plataforma é dividida logicamente em três áreas de atuação:
 * **Nicolas Stringari da Silva**
 * **Instituição:** Centro Universitário Católica de Santa Catarina
 * **Escopo:** Projeto de Portfólio — PAC VII (2026/1)
-
-[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/seu-usuario-aqui)
