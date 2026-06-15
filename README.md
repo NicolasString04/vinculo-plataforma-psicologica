@@ -4,7 +4,7 @@
 ![Version](https://img.shields.io/badge/Vers%C3%A3o-0.1-blue?style=for-the-badge)
 ![Deploy](https://img.shields.io/badge/Hospedagem-Vercel-black?style=for-the-badge&logo=vercel&logoColor=white)
 
-O **Mentria** é uma plataforma web desenvolvida para conectar usuários a psicólogos de forma simples, segura e acessível. O sistema otimiza todo o fluxo de atendimento psicológico, abrangendo desde a busca por profissionais qualificados e agendamentos até a triagem inicial e a organização dos fluxos de trabalho dos especialistas.
+O **Vinculo** é uma plataforma web desenvolvida para conectar usuários a psicólogos de forma simples, segura e acessível. O sistema otimiza todo o fluxo de atendimento psicológico, abrangendo desde a busca por profissionais qualificados e agendamentos até a triagem inicial e a organização dos fluxos de trabalho dos especialistas.
 
 ---
 
