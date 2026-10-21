@@ -1,0 +1,371 @@
+.cadastro-page {
+  width: min(1200px, calc(100% - 64px));
+  margin: 0 auto;
+  padding: 30px 0 50px;
+}
+
+.cadastro-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 24px;
+
+  color: var(--elora-text);
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.cadastro-back:hover {
+  color: var(--elora-navy);
+  text-decoration: underline;
+}
+
+.cadastro-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr);
+  gap: 48px;
+  align-items: start;
+}
+
+.cadastro-card {
+  padding: 36px 40px;
+  border: 1px solid #e7edf5;
+  border-radius: 24px;
+
+  background: white;
+  box-shadow: 0 10px 40px rgba(20, 45, 80, 0.05);
+}
+
+.cadastro-eyebrow {
+  margin: 0 0 14px;
+
+  color: #337cb6;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.cadastro-card h1 {
+  margin: 0 0 15px;
+
+  color: var(--elora-navy);
+  font-family: var(--elora-heading-font);
+  font-size: 43px;
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -1.2px;
+}
+
+.cadastro-description {
+  margin: 0 0 25px;
+  color: var(--elora-text);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.cadastro-form {
+  display: grid;
+  gap: 17px;
+}
+
+.cadastro-field label {
+  display: block;
+  margin-bottom: 7px;
+
+  color: var(--elora-navy);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.cadastro-field input {
+  width: 100%;
+  min-height: 49px;
+  padding: 12px 14px;
+  border: 1px solid var(--elora-border);
+  border-radius: 10px;
+
+  background: #fff;
+  color: var(--elora-navy);
+  font-size: 14px;
+}
+
+.cadastro-field input::placeholder {
+  color: #788496;
+}
+
+.cadastro-field input[aria-invalid="true"] {
+  border-color: #b94343;
+}
+
+.cadastro-field small {
+  display: block;
+  margin-top: 6px;
+  color: #65748a;
+  font-size: 11px;
+}
+
+.cadastro-password {
+  position: relative;
+}
+
+.cadastro-password input {
+  padding-right: 85px;
+}
+
+.cadastro-password button {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+
+  padding: 6px;
+  border: 0;
+  background: transparent;
+  color: #276ca6;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cadastro-error {
+  margin: 6px 0 0;
+  color: #a33232;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.cadastro-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+
+  width: 100%;
+  min-height: 51px;
+  margin-top: 5px;
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 14px;
+
+  background: var(--elora-blue);
+  color: var(--elora-navy);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cadastro-submit:hover {
+  background: #87bff0;
+}
+
+a.cadastro-submit {
+  text-decoration: none;
+}
+
+.cadastro-demo-note {
+  margin: -7px 0 0;
+  color: #65748a;
+  font-size: 11px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.cadastro-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #edf0f5;
+
+  color: var(--elora-text);
+  font-size: 13px;
+}
+
+.cadastro-login button,
+.cadastro-login a {
+  padding: 4px;
+  border: 0;
+  background: transparent;
+
+  color: #276ca6;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.cadastro-login button:hover,
+.cadastro-login a:hover {
+  text-decoration: underline;
+}
+
+.cadastro-visual {
+  overflow: hidden;
+  border-radius: 24px;
+  background: #f3effb;
+}
+
+.cadastro-photo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.cadastro-visual-copy {
+  padding: 28px 35px 35px;
+}
+
+.cadastro-logo {
+  display: block;
+  width: 57px;
+  height: 57px;
+  margin-bottom: 20px;
+  object-fit: contain;
+}
+
+.cadastro-visual-copy h2 {
+  margin: 0 0 15px;
+
+  color: var(--elora-navy);
+  font-family: var(--elora-heading-font);
+  font-size: 43px;
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -1px;
+}
+
+.cadastro-visual-copy > p:last-of-type {
+  margin: 0;
+  color: var(--elora-text);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.cadastro-optional {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+
+  margin-top: 24px;
+  padding: 17px;
+  border: 1px solid #dfd6f1;
+  border-radius: 14px;
+
+  background: rgba(255, 255, 255, 0.65);
+  color: var(--elora-text);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.cadastro-optional > span:first-child {
+  color: #337cb6;
+  font-size: 23px;
+  line-height: 1;
+}
+
+.cadastro-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+
+  margin-bottom: 20px;
+  padding: 14px;
+  border: 1px solid #cfe1f3;
+  border-radius: 12px;
+
+  background: #eef6ff;
+}
+
+.cadastro-message p {
+  flex: 1;
+  margin: 0;
+  color: var(--elora-text);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.cadastro-message button {
+  padding: 0 4px;
+  border: 0;
+  background: transparent;
+  color: var(--elora-navy);
+  font-size: 21px;
+  cursor: pointer;
+}
+
+.cadastro-success {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #b9d7cb;
+  border-radius: 12px;
+
+  background: #eef8f3;
+  color: #245843;
+  font-size: 13px;
+}
+
+.cadastro-success p {
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.cadastro-success a {
+  display: inline-block;
+  margin-top: 10px;
+  color: #245843;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+@media (max-width: 950px) {
+  .cadastro-page {
+    width: calc(100% - 40px);
+  }
+
+  .cadastro-layout {
+    gap: 25px;
+  }
+
+  .cadastro-card {
+    padding: 30px 25px;
+  }
+
+  .cadastro-card h1 {
+    font-size: 36px;
+  }
+
+  .cadastro-visual-copy {
+    padding: 25px;
+  }
+
+  .cadastro-visual-copy h2 {
+    font-size: 37px;
+  }
+}
+
+@media (max-width: 720px) {
+  .cadastro-page {
+    width: calc(100% - 32px);
+    padding-top: 23px;
+  }
+
+  .cadastro-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .cadastro-card {
+    padding: 28px 22px;
+  }
+
+  .cadastro-visual {
+    margin-top: 4px;
+  }
+
+  .cadastro-visual-copy {
+    padding: 25px;
+  }
+}
