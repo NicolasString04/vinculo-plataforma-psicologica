@@ -1,0 +1,404 @@
+.triagem-page {
+  min-height: 100vh;
+  overflow: hidden;
+  color: #132e55;
+  background: #f8f9fd;
+}
+
+.triagem-header {
+  position: relative;
+  z-index: 2;
+  min-height: 76px;
+  padding: 0 max(32px, calc((100vw - 1260px) / 2));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #6bb4ef;
+}
+
+.triagem-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: white;
+  text-decoration: none;
+}
+
+.triagem-brand img {
+  width: 39px;
+  height: 39px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+.triagem-brand span {
+  font-family: var(--elora-heading-font);
+  font-size: 41px;
+  letter-spacing: -2px;
+}
+
+.triagem-sair {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #132e55;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.triagem-sair span {
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.triagem-layout {
+  position: relative;
+  width: min(1260px, calc(100% - 64px));
+  min-height: calc(100vh - 126px);
+  margin: 0 auto;
+  padding: 66px 0 54px;
+  display: grid;
+  grid-template-columns: 1.04fr 0.96fr;
+  align-items: center;
+  gap: clamp(60px, 9vw, 145px);
+}
+
+.triagem-intro {
+  position: relative;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  isolation: isolate;
+}
+
+.triagem-intro-conteudo {
+  position: relative;
+  z-index: 1;
+  max-width: 530px;
+}
+
+.triagem-eyebrow,
+.triagem-etapa-label {
+  margin: 0 0 16px;
+  color: #527ba6;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2.3px;
+}
+
+.triagem-intro h1 {
+  margin: 0 0 21px;
+  font-family: var(--elora-heading-font);
+  font-size: clamp(44px, 5.3vw, 68px);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -2px;
+}
+
+.triagem-intro h1 em {
+  color: #6978b6;
+  font-weight: 400;
+}
+
+.triagem-descricao {
+  max-width: 465px;
+  margin: 0;
+  color: #52647e;
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.triagem-tempo {
+  margin-top: 28px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.triagem-tempo-icone {
+  width: 43px;
+  height: 43px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #e8eafa;
+  color: #596ca6;
+  font-size: 24px;
+}
+
+.triagem-tempo strong,
+.triagem-tempo small {
+  display: block;
+}
+
+.triagem-tempo strong {
+  margin-bottom: 4px;
+  font-size: 13px;
+}
+
+.triagem-tempo small {
+  color: #71809a;
+  font-size: 12px;
+}
+
+.triagem-nota {
+  max-width: 460px;
+  margin-top: 30px;
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  color: #64738a;
+}
+
+.triagem-nota > span {
+  color: #8792c5;
+  font-size: 19px;
+}
+
+.triagem-nota p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+/* Formas decorativas inspiradas no símbolo da marca */
+
+.triagem-forma {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.forma-azul {
+  width: 360px;
+  height: 300px;
+  top: 10px;
+  right: -120px;
+  border: 31px solid rgba(119, 183, 235, 0.24);
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+  border-radius: 48% 52% 43% 57%;
+  transform: rotate(29deg);
+}
+
+.forma-lilas {
+  width: 270px;
+  height: 250px;
+  right: -65px;
+  bottom: 20px;
+  border: 28px solid rgba(177, 162, 221, 0.22);
+  border-right-color: transparent;
+  border-top-color: transparent;
+  border-radius: 50%;
+  transform: rotate(-19deg);
+}
+
+.forma-rosa {
+  width: 105px;
+  height: 105px;
+  right: 35px;
+  top: 48px;
+  border: 19px solid rgba(227, 174, 184, 0.22);
+  border-radius: 50%;
+}
+
+/* Coluna das etapas */
+
+.triagem-caminho {
+  position: relative;
+  padding: 15px 0 10px;
+}
+
+.triagem-progresso {
+  margin-bottom: 48px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.triagem-progresso-numero {
+  color: #6978b6;
+  font-family: var(--elora-heading-font);
+  font-size: 18px;
+}
+
+.triagem-progresso-linha {
+  width: 110px;
+  height: 2px;
+  background: linear-gradient(90deg, #8bbce9 34%, #e2e6ee 34%);
+}
+
+.triagem-progresso-total {
+  color: #7c899d;
+  font-size: 11px;
+}
+
+.triagem-etapa-label {
+  margin-bottom: 9px;
+  font-size: 10px;
+}
+
+.triagem-caminho h2 {
+  margin: 0 0 9px;
+  font-family: var(--elora-heading-font);
+  font-size: clamp(30px, 3vw, 39px);
+  font-weight: 400;
+  letter-spacing: -0.8px;
+}
+
+.triagem-etapa-descricao {
+  margin: 0;
+  color: #64738a;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.triagem-temas {
+  margin-top: 26px;
+  border-top: 1px solid #dfe5ee;
+}
+
+.triagem-tema {
+  min-height: 65px;
+  display: grid;
+  grid-template-columns: 44px 1fr 24px;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #dfe5ee;
+  color: #344e70;
+  font-family: var(--elora-heading-font);
+  font-size: 17px;
+}
+
+.triagem-tema-numero {
+  color: #8b98ad;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+}
+
+.triagem-tema-simbolo {
+  color: #7187bd;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 21px;
+  text-align: center;
+}
+
+.triagem-acao {
+  margin-top: 30px;
+}
+
+.triagem-continuar {
+  min-height: 50px;
+  padding: 12px 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 24px;
+  border: 0;
+  border-radius: 999px;
+  background: #132e55;
+  color: white;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.triagem-continuar span {
+  font-size: 18px;
+}
+
+.triagem-acao p {
+  margin: 12px 0 0;
+  color: #8994a5;
+  font-size: 10px;
+}
+
+.triagem-pular {
+  display: inline-block;
+  margin-top: 24px;
+  color: #526d94;
+  font-size: 12px;
+  text-decoration-color: #a8b7cb;
+  text-underline-offset: 4px;
+}
+
+.triagem-footer {
+  min-height: 50px;
+  padding: 12px max(32px, calc((100vw - 1260px) / 2));
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  color: #8793a6;
+  font-size: 10px;
+}
+
+/* Ajustes para telas menores */
+
+@media (max-width: 800px) {
+  .triagem-layout {
+    width: min(620px, calc(100% - 40px));
+    padding: 45px 0;
+    grid-template-columns: 1fr;
+    gap: 45px;
+  }
+
+  .triagem-intro {
+    min-height: auto;
+    padding: 18px 0;
+  }
+
+  .triagem-forma {
+    right: -70px;
+  }
+
+  .triagem-progresso {
+    margin-bottom: 31px;
+  }
+
+  .triagem-footer {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .triagem-header {
+    min-height: 68px;
+    padding: 0 18px;
+  }
+
+  .triagem-brand img {
+    width: 33px;
+    height: 33px;
+  }
+
+  .triagem-brand span {
+    font-size: 35px;
+  }
+
+  .triagem-layout {
+    width: calc(100% - 36px);
+    padding-top: 35px;
+  }
+
+  .triagem-intro h1 {
+    font-size: 45px;
+  }
+
+  .triagem-descricao {
+    font-size: 14px;
+  }
+
+  .triagem-caminho h2 {
+    font-size: 31px;
+  }
+
+  .triagem-tema {
+    font-size: 15px;
+  }
+
+  .triagem-footer {
+    flex-direction: column;
+    gap: 5px;
+  }
+}

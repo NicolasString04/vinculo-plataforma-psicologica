@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import Header from "../components/Header";
 import "./Home.css";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Icon({ name, size = 24, className = "" }) {
   const paths = {
@@ -113,6 +115,7 @@ function localDateString() {
 }
 
 export default function Home() {
+    const navigate = useNavigate();
   const [mode, setMode] = useState("now");
   const [specialty, setSpecialty] = useState("");
   const [date, setDate] = useState("");
@@ -158,22 +161,16 @@ export default function Home() {
   }
 
   function handleSearch(event) {
-    event.preventDefault();
+  event.preventDefault();
 
-    const selectedSpecialty = specialty || "Todas as especialidades";
-
-    const selectedDate = date
-      ? new Date(`${date}T12:00:00`).toLocaleDateString("pt-BR")
-      : "";
-
-    showNotice({
-      title: "Sua busca está pronta.",
-      text:
-        mode === "now"
-          ? `Modalidade: conversar agora. Especialidade: ${selectedSpecialty}. A listagem de profissionais será construída na próxima etapa.`
-          : `Modalidade: agendar sessão. Data: ${selectedDate}. Especialidade: ${selectedSpecialty}. A agenda dos profissionais será integrada depois.`,
-    });
-  }
+  navigate("/cliente", {
+    state: {
+      modalidade: mode,
+      especialidade: specialty,
+      data: date,
+    },
+  });
+}
 
   return (
     <>
@@ -182,8 +179,15 @@ export default function Home() {
       </a>
 
       <Header
-        onAccountClick={(type) => showNotice(notices[type])}
-      />
+  onAccountClick={(type) => {
+    if (type === "professional") {
+      navigate("/psicologo");
+      return;
+    }
+
+    showNotice(notices[type]);
+  }}
+/>
 
       <main id="conteudo">
         <section
@@ -321,13 +325,9 @@ export default function Home() {
             </p>
           </div>
 
-          <button
-            type="button"
-            className="elora-triage-button"
-            onClick={() => showNotice(notices.triage)}
-          >
-            Começar triagem
-          </button>
+          <Link to="/triagem" className="elora-triage-button">
+  Começar triagem
+</Link>
 
           <div className="elora-triage-note">
             <p>Opcional. Você pode fazer depois.</p>
