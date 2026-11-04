@@ -78,9 +78,7 @@ export default function Triagem() {
           <div className="triagem-temas">
             {temas.map((tema, index) => (
               <div className="triagem-tema" key={tema}>
-                <span className="triagem-tema-numero">
-                  0{index + 1}
-                </span>
+                <span className="triagem-tema-numero">0{index + 1}</span>
                 <span>{tema}</span>
                 <span className="triagem-tema-simbolo" aria-hidden="true">
                   {index === 0 ? "↗" : "·"}
@@ -90,15 +88,25 @@ export default function Triagem() {
           </div>
 
           <div className="triagem-acao">
-            <button className="triagem-continuar" type="button">
-              Começar com calma <span aria-hidden="true">→</span>
-            </button>
-            <p>Esta tela é um protótipo visual. As perguntas serão definidas depois.</p>
+            <Link
+  to="/triagem/perguntas"
+  className="triagem-continuar"
+  style={{ textDecoration: "none" }}
+>
+  Começar com calma <span aria-hidden="true">→</span>
+</Link>
+
+<p>
+  Nesta versão, você vai percorrer exemplos fictícios
+  para testar a triagem.
+</p>
+
+            <Link className="triagem-pular" to="/triagem/concluida">
+              Prévia da tela de conclusão →
+            </Link>
           </div>
 
-          <Link className="triagem-pular" to="/cliente">
-            Prefiro conhecer os psicólogos agora
-          </Link>
+
         </section>
       </div>
 

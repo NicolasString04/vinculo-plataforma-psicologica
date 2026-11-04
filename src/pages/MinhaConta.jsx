@@ -1,5 +1,4 @@
 import { Link, Navigate, useNavigate } from "react-router-dom";
-
 import "./Cadastro.css";
 
 function lerSessao() {
@@ -58,7 +57,7 @@ export default function MinhaConta() {
           </p>
         </div>
 
-        <Link to="/#busca" className="cadastro-submit">
+        <Link to="/cliente" className="cadastro-submit">
           Explorar psicólogos →
         </Link>
 

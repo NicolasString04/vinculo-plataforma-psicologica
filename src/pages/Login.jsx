@@ -41,7 +41,7 @@ export default function Login() {
     }
 
     setSenha("");
-    navigate("/minha-conta", { replace: true });
+    navigate("/triagem", { replace: true });
   }
 
   return (

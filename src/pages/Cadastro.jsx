@@ -102,10 +102,7 @@ export default function Cadastro() {
         </Link>
 
         <div className="cadastro-layout">
-          <section
-            className="cadastro-card"
-            aria-labelledby="cadastro-title"
-          >
+          <section className="cadastro-card" aria-labelledby="cadastro-title">
             <p className="cadastro-eyebrow">SEU PRIMEIRO PASSO</p>
 
             <h1 id="cadastro-title">Um espaço para você.</h1>
@@ -135,11 +132,11 @@ export default function Cadastro() {
                 <strong>Os dados passaram na validação.</strong>
 
                 <p>
-                  Esta versão ainda não cria uma conta. Para testar
-                  o acesso demonstrativo, use a página de login.
+                  O cadastro ainda é demonstrativo. Você pode conhecer
+                  a triagem ou pular para a lista de psicólogos.
                 </p>
 
-                <Link to="/login">Ir para o login →</Link>
+                <Link to="/triagem">Continuar para a triagem →</Link>
               </div>
             )}
 
@@ -161,9 +158,7 @@ export default function Cadastro() {
                   onChange={handleChange}
                   required
                   aria-invalid={Boolean(errors.nome)}
-                  aria-describedby={
-                    errors.nome ? "nome-error" : undefined
-                  }
+                  aria-describedby={errors.nome ? "nome-error" : undefined}
                 />
 
                 {errors.nome && (
@@ -186,9 +181,7 @@ export default function Cadastro() {
                   onChange={handleChange}
                   required
                   aria-invalid={Boolean(errors.email)}
-                  aria-describedby={
-                    errors.email ? "email-error" : undefined
-                  }
+                  aria-describedby={errors.email ? "email-error" : undefined}
                 />
 
                 {errors.email && (
@@ -214,31 +207,21 @@ export default function Cadastro() {
                     minLength={8}
                     aria-invalid={Boolean(errors.senha)}
                     aria-describedby={
-                      errors.senha
-                        ? "senha-help senha-error"
-                        : "senha-help"
+                      errors.senha ? "senha-help senha-error" : "senha-help"
                     }
                   />
 
                   <button
                     type="button"
-                    onClick={() =>
-                      setShowPassword((current) => !current)
-                    }
-                    aria-label={
-                      showPassword
-                        ? "Ocultar senhas"
-                        : "Mostrar senhas"
-                    }
+                    onClick={() => setShowPassword((current) => !current)}
+                    aria-label={showPassword ? "Ocultar senhas" : "Mostrar senhas"}
                     aria-pressed={showPassword}
                   >
                     {showPassword ? "Ocultar" : "Mostrar"}
                   </button>
                 </div>
 
-                <small id="senha-help">
-                  Use pelo menos 8 caracteres.
-                </small>
+                <small id="senha-help">Use pelo menos 8 caracteres.</small>
 
                 {errors.senha && (
                   <p className="cadastro-error" id="senha-error">
@@ -248,9 +231,7 @@ export default function Cadastro() {
               </div>
 
               <div className="cadastro-field">
-                <label htmlFor="confirmarSenha">
-                  Confirmar senha
-                </label>
+                <label htmlFor="confirmarSenha">Confirmar senha</label>
 
                 <input
                   id="confirmarSenha"
@@ -263,26 +244,18 @@ export default function Cadastro() {
                   required
                   aria-invalid={Boolean(errors.confirmarSenha)}
                   aria-describedby={
-                    errors.confirmarSenha
-                      ? "confirmarSenha-error"
-                      : undefined
+                    errors.confirmarSenha ? "confirmarSenha-error" : undefined
                   }
                 />
 
                 {errors.confirmarSenha && (
-                  <p
-                    className="cadastro-error"
-                    id="confirmarSenha-error"
-                  >
+                  <p className="cadastro-error" id="confirmarSenha-error">
                     {errors.confirmarSenha}
                   </p>
                 )}
               </div>
 
-              <button
-                type="submit"
-                className="cadastro-submit"
-              >
+              <button type="submit" className="cadastro-submit">
                 Continuar
                 <span aria-hidden="true">→</span>
               </button>
@@ -315,9 +288,7 @@ export default function Cadastro() {
                 className="cadastro-logo"
               />
 
-              <p className="cadastro-eyebrow">
-                SEU ESPAÇO DE ESCUTA
-              </p>
+              <p className="cadastro-eyebrow">SEU ESPAÇO DE ESCUTA</p>
 
               <h2 id="cadastro-visual-title">
                 No seu tempo.
