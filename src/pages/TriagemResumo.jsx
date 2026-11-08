@@ -1,129 +1,198 @@
-// src/pages/TriagemResumo.jsx
-
-import { Link, useSearchParams } from "react-router-dom";
-
-import { buscarCenarioDemo } from "../data/triagemDemo";
-
-import "./TriagemTeste.css";
+import { Link, useLocation } from "react-router-dom";
+import "./TriagemCientifica.css";
 
 export default function TriagemResumo() {
-  const [searchParams] = useSearchParams();
+  const { state } = useLocation();
+  const resumo = state?.resumo;
 
-  const cenarioId = searchParams.get("cenario");
-  const cenario = buscarCenarioDemo(cenarioId);
-
-  if (!cenario) {
+  if (!resumo) {
     return (
-      <main className="tt-empty">
-        <p className="tt-eyebrow">DEMONSTRAÇÃO ELORA</p>
-
-        <h1>Escolha um exemplo primeiro.</h1>
+      <main className="ec-empty">
+        <h1>O resumo não está disponível.</h1>
 
         <p>
-          Para visualizar um resumo, comece pela demonstração
-          da triagem.
+          Por privacidade, ele não fica salvo no navegador.
+          Inicie uma nova conversa de teste.
         </p>
 
-        <Link
-          to="/triagem/perguntas"
-          className="tt-button tt-button-primary"
-        >
-          Escolher exemplo →
+        <Link className="ec-primary" to="/triagem/perguntas">
+          Voltar à triagem
         </Link>
       </main>
     );
   }
 
+  function baixarTxt() {
+    const texto = [
+      "ELORA — RESUMO DE TRIAGEM (PROTÓTIPO)",
+      resumo.sintese,
+
+      "\nMANIFESTAÇÕES MENCIONADAS",
+
+      ...resumo.manifestacoes.map(
+        (m) =>
+          `${m.descricao}\nEvidências: ${(
+            m.evidenciasDoRelato || []
+          ).join("; ")}\nRessalva: ${m.ressalva}`
+      ),
+
+      "\nCONTEXTO",
+      resumo.contexto,
+
+      "\nINFORMAÇÕES A ESCLARECER",
+      ...(resumo.lacunas || []),
+
+      "\nREFERÊNCIAS BIBLIOGRÁFICAS RELACIONADAS",
+
+      ...(resumo.fontes || []).map(
+        (f) => `${f.titulo}: ${f.url || "sem link cadastrado"}`
+      ),
+
+      "\n" + resumo.aviso,
+      resumo.avisoTeste,
+    ].join("\n");
+
+    const url = URL.createObjectURL(
+      new Blob([texto], {
+        type: "text/plain;charset=utf-8",
+      })
+    );
+
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = "elora-resumo-ficticio.txt";
+    link.click();
+
+    URL.revokeObjectURL(url);
+  }
+
   return (
-    <div className="tt-page">
-      <header className="tt-header">
-        <Link to="/" className="tt-brand" aria-label="Elora — início">
+    <div className="ec-page">
+      <header className="ec-header">
+        <Link to="/" className="ec-brand">
           <img src="/images/logo-elora.png" alt="" />
           <span>elora</span>
         </Link>
 
-        <Link
-          to="/triagem/perguntas"
-          className="tt-header-link"
-        >
-          Testar outro exemplo
+        <Link className="ec-link" to="/triagem">
+          Início
         </Link>
       </header>
 
-      <main className="tt-summary-main">
-        <p className="tt-eyebrow">RELATO ORGANIZADO</p>
+      <main className="ec-report">
+        <span className="ec-eyebrow">
+          ELORA · TRIAGEM EXPERIMENTAL
+        </span>
 
         <h1>Um olhar sobre o que foi compartilhado.</h1>
 
-        <p className="tt-description">
-          Este resumo foi escrito previamente para o exemplo
-          “{cenario.nome}”. Ele demonstra como queremos organizar
-          o relato, sem atribuir diagnóstico.
+        <p className="ec-lead">
+          Resumo automatizado de um relato fictício.
+          Não constitui avaliação clínica.
         </p>
 
-        <div className="tt-summary-badge">
-          Resumo demonstrativo · sem uso de IA
-        </div>
+        <span className="ec-mode">
+          {resumo.modo === "demo"
+            ? "Simulação sem IA"
+            : "Gerado com OpenAI"}
+        </span>
 
-        <section
-          className="tt-summary-list"
-          aria-label="Resumo do exemplo fictício"
-        >
-          <article className="tt-summary-item">
-            <span className="tt-summary-number">01</span>
-
-            <div>
-              <h2>O que foi compartilhado</h2>
-              <p>{cenario.resumo.assunto}</p>
-            </div>
-          </article>
-
-          <article className="tt-summary-item">
-            <span className="tt-summary-number">02</span>
-
-            <div>
-              <h2>Quando costuma aparecer</h2>
-              <p>{cenario.resumo.contexto}</p>
-            </div>
-          </article>
-
-          <article className="tt-summary-item">
-            <span className="tt-summary-number">03</span>
-
-            <div>
-              <h2>Como aparece na rotina</h2>
-              <p>{cenario.resumo.impacto}</p>
-
-              <span className="tt-impact-tag">
-                {cenario.resumo.situacaoImpacto}
-              </span>
-            </div>
-          </article>
+        <section className="ec-report-card">
+          <h2>Síntese do relato</h2>
+          <p>{resumo.sintese}</p>
         </section>
 
-        <div className="tt-summary-note">
-          <strong>O que estamos conferindo neste teste?</strong>
+        <section className="ec-report-card">
+          <h2>Manifestações mencionadas</h2>
 
-          <p>
-            Se a interface diferencia uma mudança relatada,
-            uma mudança negada e uma informação que não foi
-            fornecida. Esses exemplos não são uma avaliação clínica.
+          {resumo.manifestacoes?.length ? (
+            resumo.manifestacoes.map((m, i) => (
+              <article key={i} className="ec-finding">
+                <h3>{m.descricao}</h3>
+
+                <p>
+                  <strong>
+                    Relato que sustenta a observação:
+                  </strong>
+                </p>
+
+                <ul>
+                  {(m.evidenciasDoRelato || []).map((e, j) => (
+                    <li key={j}>{e}</li>
+                  ))}
+                </ul>
+
+                <p className="ec-muted">{m.ressalva}</p>
+              </article>
+            ))
+          ) : (
+            <p>
+              Nenhuma manifestação foi registrada de forma suficiente.
+            </p>
+          )}
+        </section>
+
+        <section className="ec-report-card">
+          <h2>Contexto relatado</h2>
+          <p>{resumo.contexto || "Não informado."}</p>
+
+          <h2>Informações que podem ser esclarecidas</h2>
+
+          <ul>
+            {(resumo.lacunas || []).map((l, i) => (
+              <li key={i}>{l}</li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="ec-report-card">
+          <h2>Materiais disponibilizados à IA</h2>
+
+          <p className="ec-muted">
+            As fontes abaixo estão relacionadas às notas autorais
+            recuperadas. Não significa que o sistema tenha consultado
+            os textos completos do DSM, CID ou do livro.
           </p>
+
+          <ul>
+            {(resumo.fontes || []).map((f) => (
+              <li key={f.id}>
+                {f.url ? (
+                  <a
+                    href={f.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {f.titulo}
+                  </a>
+                ) : (
+                  f.titulo
+                )}
+                {" — "}
+                {f.status}
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <div className="ec-disclaimer">
+          <strong>Aviso importante</strong>
+          <p>{resumo.aviso}</p>
+          <p>{resumo.avisoTeste}</p>
         </div>
 
-        <div className="tt-actions">
-          <Link
-            to="/triagem/perguntas"
-            className="tt-button tt-button-secondary"
+        <div className="ec-report-actions">
+          <button
+            className="ec-primary"
+            type="button"
+            onClick={baixarTxt}
           >
-            ← Testar outro exemplo
-          </Link>
+            Baixar TXT do exemplo
+          </button>
 
-          <Link
-            to="/triagem/concluida"
-            className="tt-button tt-button-primary"
-          >
-            Concluir demonstração →
+          <Link className="ec-secondary" to="/triagem/perguntas">
+            Nova conversa fictícia
           </Link>
         </div>
       </main>

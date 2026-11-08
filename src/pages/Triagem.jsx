@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import "./Triagem.css";
 
-const temas = [
-  "Como tenho me sentido",
-  "Minha rotina",
-  "O que estou buscando",
+const etapas = [
+  "Seu relato, com suas palavras",
+  "Perguntas conforme o contexto",
+  "Resumo sem diagnóstico",
 ];
 
 export default function Triagem() {
@@ -37,9 +37,9 @@ export default function Triagem() {
             </h1>
 
             <p className="triagem-descricao">
-              Este é um momento para olhar com calma para o que você está
-              vivendo. Responda no seu tempo — não existe resposta certa ou
-              errada.
+              Conte com suas palavras o que está vivendo. A conversa
+              se adapta ao relato e organiza as informações sem
+              atribuir diagnósticos.
             </p>
 
             <div className="triagem-tempo">
@@ -47,16 +47,16 @@ export default function Triagem() {
                 ◷
               </span>
               <span>
-                <strong>Leva cerca de 3 minutos</strong>
-                <small>Você pode parar quando quiser.</small>
+                <strong>Sem tempo fixo</strong>
+                <small>Você pode interromper quando quiser.</small>
               </span>
             </div>
 
             <div className="triagem-nota">
               <span aria-hidden="true">✳</span>
               <p>
-                A triagem é opcional e serve para apoiar a busca por
-                atendimento. Ela não faz diagnóstico.
+                Versão experimental do TCC. Use somente exemplos
+                fictícios. Não substitui avaliação psicológica.
               </p>
             </div>
           </div>
@@ -66,20 +66,21 @@ export default function Triagem() {
           <div className="triagem-progresso">
             <span className="triagem-progresso-numero">01</span>
             <span className="triagem-progresso-linha" />
-            <span className="triagem-progresso-total">03 etapas</span>
+            <span className="triagem-progresso-total">03 momentos</span>
           </div>
 
           <p className="triagem-etapa-label">SEU MOMENTO</p>
-          <h2 id="triagem-titulo">Por onde vamos passar</h2>
+          <h2 id="triagem-titulo">Como funciona a conversa</h2>
+
           <p className="triagem-etapa-descricao">
-            A conversa está organizada em três partes simples.
+            Não há um tema clínico escolhido antecipadamente.
           </p>
 
           <div className="triagem-temas">
-            {temas.map((tema, index) => (
-              <div className="triagem-tema" key={tema}>
+            {etapas.map((etapa, index) => (
+              <div className="triagem-tema" key={etapa}>
                 <span className="triagem-tema-numero">0{index + 1}</span>
-                <span>{tema}</span>
+                <span>{etapa}</span>
                 <span className="triagem-tema-simbolo" aria-hidden="true">
                   {index === 0 ? "↗" : "·"}
                 </span>
@@ -89,24 +90,19 @@ export default function Triagem() {
 
           <div className="triagem-acao">
             <Link
-  to="/triagem/perguntas"
-  className="triagem-continuar"
-  style={{ textDecoration: "none" }}
->
-  Começar com calma <span aria-hidden="true">→</span>
-</Link>
+              to="/triagem/perguntas"
+              className="triagem-continuar"
+              style={{ textDecoration: "none" }}
+            >
+              Começar com calma <span aria-hidden="true">→</span>
+            </Link>
 
-<p>
-  Nesta versão, você vai percorrer exemplos fictícios
-  para testar a triagem.
-</p>
+            <p>Somente para testar com relatos inventados.</p>
 
             <Link className="triagem-pular" to="/triagem/concluida">
               Prévia da tela de conclusão →
             </Link>
           </div>
-
-
         </section>
       </div>
 
