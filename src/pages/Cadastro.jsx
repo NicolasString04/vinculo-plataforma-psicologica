@@ -1,5 +1,6 @@
+
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import Header from "../components/Header";
 import "./Cadastro.css";
@@ -36,11 +37,12 @@ function validateForm(form) {
 }
 
 export default function Cadastro() {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [validated, setValidated] = useState(false);
-  const [notice, setNotice] = useState("");
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -79,11 +81,10 @@ export default function Cadastro() {
     }));
   }
 
+  // Redirecionamento para a área profissional.
   function handleAccountClick(type) {
     if (type === "professional") {
-      setNotice(
-        "O cadastro de psicólogos será construído em uma etapa própria."
-      );
+      navigate("/login/psicologo");
     }
   }
 
@@ -102,30 +103,23 @@ export default function Cadastro() {
         </Link>
 
         <div className="cadastro-layout">
-          <section className="cadastro-card" aria-labelledby="cadastro-title">
-            <p className="cadastro-eyebrow">SEU PRIMEIRO PASSO</p>
+          <section
+            className="cadastro-card"
+            aria-labelledby="cadastro-title"
+          >
+            <p className="cadastro-eyebrow">
+              SEU PRIMEIRO PASSO
+            </p>
 
-            <h1 id="cadastro-title">Um espaço para você.</h1>
+            <h1 id="cadastro-title">
+              Um espaço para você.
+            </h1>
 
             <p className="cadastro-description">
               Comece pelo seu cadastro. Depois, você poderá escolher
               fazer a triagem inicial ou seguir direto para os
               profissionais.
             </p>
-
-            {notice && (
-              <div className="cadastro-message" role="status">
-                <p>{notice}</p>
-
-                <button
-                  type="button"
-                  onClick={() => setNotice("")}
-                  aria-label="Fechar aviso"
-                >
-                  ×
-                </button>
-              </div>
-            )}
 
             {validated && (
               <div className="cadastro-success" role="status">
@@ -136,7 +130,9 @@ export default function Cadastro() {
                   a triagem ou pular para a lista de psicólogos.
                 </p>
 
-                <Link to="/triagem">Continuar para a triagem →</Link>
+                <Link to="/triagem">
+                  Continuar para a triagem →
+                </Link>
               </div>
             )}
 
@@ -145,8 +141,12 @@ export default function Cadastro() {
               onSubmit={handleSubmit}
               noValidate
             >
+              {/* NOME */}
+
               <div className="cadastro-field">
-                <label htmlFor="nome">Nome</label>
+                <label htmlFor="nome">
+                  Nome
+                </label>
 
                 <input
                   id="nome"
@@ -158,7 +158,9 @@ export default function Cadastro() {
                   onChange={handleChange}
                   required
                   aria-invalid={Boolean(errors.nome)}
-                  aria-describedby={errors.nome ? "nome-error" : undefined}
+                  aria-describedby={
+                    errors.nome ? "nome-error" : undefined
+                  }
                 />
 
                 {errors.nome && (
@@ -168,8 +170,12 @@ export default function Cadastro() {
                 )}
               </div>
 
+              {/* E-MAIL */}
+
               <div className="cadastro-field">
-                <label htmlFor="email">E-mail</label>
+                <label htmlFor="email">
+                  E-mail
+                </label>
 
                 <input
                   id="email"
@@ -181,7 +187,9 @@ export default function Cadastro() {
                   onChange={handleChange}
                   required
                   aria-invalid={Boolean(errors.email)}
-                  aria-describedby={errors.email ? "email-error" : undefined}
+                  aria-describedby={
+                    errors.email ? "email-error" : undefined
+                  }
                 />
 
                 {errors.email && (
@@ -191,8 +199,12 @@ export default function Cadastro() {
                 )}
               </div>
 
+              {/* SENHA */}
+
               <div className="cadastro-field">
-                <label htmlFor="senha">Senha</label>
+                <label htmlFor="senha">
+                  Senha
+                </label>
 
                 <div className="cadastro-password">
                   <input
@@ -207,21 +219,29 @@ export default function Cadastro() {
                     minLength={8}
                     aria-invalid={Boolean(errors.senha)}
                     aria-describedby={
-                      errors.senha ? "senha-help senha-error" : "senha-help"
+                      errors.senha
+                        ? "senha-help senha-error"
+                        : "senha-help"
                     }
                   />
 
                   <button
                     type="button"
-                    onClick={() => setShowPassword((current) => !current)}
-                    aria-label={showPassword ? "Ocultar senhas" : "Mostrar senhas"}
+                    onClick={() =>
+                      setShowPassword((current) => !current)
+                    }
+                    aria-label={
+                      showPassword ? "Ocultar senhas" : "Mostrar senhas"
+                    }
                     aria-pressed={showPassword}
                   >
                     {showPassword ? "Ocultar" : "Mostrar"}
                   </button>
                 </div>
 
-                <small id="senha-help">Use pelo menos 8 caracteres.</small>
+                <small id="senha-help">
+                  Use pelo menos 8 caracteres.
+                </small>
 
                 {errors.senha && (
                   <p className="cadastro-error" id="senha-error">
@@ -230,8 +250,12 @@ export default function Cadastro() {
                 )}
               </div>
 
+              {/* CONFIRMAR SENHA */}
+
               <div className="cadastro-field">
-                <label htmlFor="confirmarSenha">Confirmar senha</label>
+                <label htmlFor="confirmarSenha">
+                  Confirmar senha
+                </label>
 
                 <input
                   id="confirmarSenha"
@@ -244,18 +268,28 @@ export default function Cadastro() {
                   required
                   aria-invalid={Boolean(errors.confirmarSenha)}
                   aria-describedby={
-                    errors.confirmarSenha ? "confirmarSenha-error" : undefined
+                    errors.confirmarSenha
+                      ? "confirmarSenha-error"
+                      : undefined
                   }
                 />
 
                 {errors.confirmarSenha && (
-                  <p className="cadastro-error" id="confirmarSenha-error">
+                  <p
+                    className="cadastro-error"
+                    id="confirmarSenha-error"
+                  >
                     {errors.confirmarSenha}
                   </p>
                 )}
               </div>
 
-              <button type="submit" className="cadastro-submit">
+              {/* BOTÃO */}
+
+              <button
+                type="submit"
+                className="cadastro-submit"
+              >
                 Continuar
                 <span aria-hidden="true">→</span>
               </button>
@@ -267,9 +301,15 @@ export default function Cadastro() {
 
             <div className="cadastro-login">
               Já tem uma conta?
-              <Link to="/login">Entrar</Link>
+
+              <Link to="/login">
+                Entrar
+              </Link>
             </div>
+
           </section>
+
+          {/* PAINEL VISUAL */}
 
           <aside
             className="cadastro-visual"
@@ -288,7 +328,9 @@ export default function Cadastro() {
                 className="cadastro-logo"
               />
 
-              <p className="cadastro-eyebrow">SEU ESPAÇO DE ESCUTA</p>
+              <p className="cadastro-eyebrow">
+                SEU ESPAÇO DE ESCUTA
+              </p>
 
               <h2 id="cadastro-visual-title">
                 No seu tempo.
@@ -311,6 +353,7 @@ export default function Cadastro() {
               </div>
             </div>
           </aside>
+
         </div>
       </main>
     </>

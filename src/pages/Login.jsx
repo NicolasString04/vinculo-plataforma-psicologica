@@ -120,9 +120,12 @@ export default function Login() {
           </form>
 
           <div className="cadastro-login">
-            Ainda não tem conta?
-            <Link to="/cadastro">Criar conta</Link>
-          </div>
+  É psicólogo?
+
+  <Link to="/login/psicologo">
+    Acessar área profissional
+  </Link>
+</div>
         </section>
 
         <aside className="cadastro-visual">

@@ -1,4 +1,3 @@
-
 import { normalizar } from "./biblioteca/busca.mjs";
 
 import {
@@ -9,27 +8,38 @@ import {
   BENJAMIN_INTERVIEW_RULES,
 } from "./biblioteca/ai/prompts/benjamin-rules.mjs";
 
+// ======================================================
+// 1. CONFIGURAÇÕES
+// ======================================================
+
+const MAX_RESPOSTAS = 5;
+
+const MENSAGEM_ENCERRAMENTO =
+  "Obrigado por compartilhar um pouco da sua experiência. " +
+  "Com o que conversamos até aqui, já podemos organizar " +
+  "um resumo para apoiar uma futura conversa com um profissional. " +
+  "Você pode gerar seu resumo quando quiser.";
 
 // ======================================================
-// 1. CONHECIMENTO METODOLÓGICO DE BENJAMIN
+// 2. CONHECIMENTO METODOLÓGICO DE BENJAMIN
 // ======================================================
 
 function montarConhecimentoBenjamin() {
   const principios = (
     BENJAMIN_CHAPTER_05.principles ?? []
-  ).map((item) => {
-    return `
+  ).map((item) => `
 Princípio: ${item.title}
 Conceito: ${item.concept}
 Orientações: ${(item.rules ?? []).join("; ")}
 Referência: página ${item.sourcePages ?? "não informada"}
-`;
-  }).join("\n");
+`).join("\n");
 
   return `
 REFERÊNCIA METODOLÓGICA:
 ${BENJAMIN_CHAPTER_05.metadata.book}
+
 Autor: ${BENJAMIN_CHAPTER_05.metadata.author}
+
 Capítulo: ${BENJAMIN_CHAPTER_05.metadata.chapterTitle}
 
 OBJETIVO:
@@ -46,9 +56,8 @@ ${(BENJAMIN_CHAPTER_05.globalRules ?? []).join("\n")}
 const CONHECIMENTO_BENJAMIN =
   montarConhecimentoBenjamin();
 
-
 // ======================================================
-// 2. CONTROLE DE REPETIÇÃO
+// 3. IDENTIFICAÇÃO DE PERGUNTAS REPETIDAS
 // ======================================================
 
 const PALAVRAS_COMUNS = new Set([
@@ -64,12 +73,63 @@ const PALAVRAS_COMUNS = new Set([
   "ultimamente", "relacao",
   "dia", "dias", "rotina",
   "sentimento", "sensacao",
+  "voce", "gostaria", "pouco",
+  "experiencia", "momento", "maneira",
+  "sobre", "acontecendo", "pessoa",
+]);
+
+// Palavras diferentes que representam conceitos próximos.
+const SINONIMOS = new Map([
+  ["sozinho", "solidao"],
+  ["sozinha", "solidao"],
+  ["isolado", "solidao"],
+  ["isolada", "solidao"],
+  ["isolamento", "solidao"],
+
+  ["cansado", "cansaco"],
+  ["cansada", "cansaco"],
+  ["exausto", "cansaco"],
+  ["exausta", "cansaco"],
+  ["esgotado", "cansaco"],
+  ["esgotada", "cansaco"],
+
+  ["dificil", "dificuldade"],
+  ["dificuldade", "dificuldade"],
+  ["complicado", "dificuldade"],
+  ["complicada", "dificuldade"],
+  ["pesado", "dificuldade"],
+  ["pesando", "dificuldade"],
+
+  ["emprego", "trabalho"],
+  ["profissional", "trabalho"],
+  ["expediente", "trabalho"],
+
+  ["namoro", "relacionamento"],
+  ["namorando", "relacionamento"],
+  ["parceiro", "relacionamento"],
+  ["parceira", "relacionamento"],
+  ["companheiro", "relacionamento"],
+  ["companheira", "relacionamento"],
+
+  ["preocupado", "preocupacao"],
+  ["preocupada", "preocupacao"],
+  ["ansioso", "ansiedade"],
+  ["ansiosa", "ansiedade"],
 ]);
 
 function palavrasRelevantes(texto) {
+  const palavras =
+    normalizar(String(texto ?? ""))
+      .match(/[a-z]{3,}/g) ?? [];
+
   return new Set(
-    (normalizar(texto).match(/[a-z]{3,}/g) ?? [])
-      .filter((p) => !PALAVRAS_COMUNS.has(p))
+    palavras
+      .filter((palavra) =>
+        !PALAVRAS_COMUNS.has(palavra)
+      )
+      .map((palavra) =>
+        SINONIMOS.get(palavra) ?? palavra
+      )
   );
 }
 
@@ -80,34 +140,213 @@ function semelhanca(a, b) {
   if (!pa.size || !pb.size) return 0;
 
   const comuns = [...pa].filter(
-    (p) => pb.has(p)
+    (palavra) => pb.has(palavra)
   ).length;
 
-  const uniao = new Set([...pa, ...pb]).size;
+  const uniao = new Set([
+    ...pa,
+    ...pb,
+  ]).size;
 
-  return comuns / uniao;
+  const jaccard = comuns / uniao;
+
+  const cobertura =
+    comuns / Math.min(pa.size, pb.size);
+
+  return Math.max(
+    jaccard,
+    cobertura * 0.65
+  );
+}
+
+// Extrai somente a pergunta, sem o texto de acolhimento.
+
+function extrairPergunta(mensagem) {
+  const texto = String(mensagem ?? "");
+
+  const indice = texto.lastIndexOf("?");
+
+  if (indice === -1) return null;
+
+  const antes = texto.slice(0, indice);
+
+  const inicio = Math.max(
+    antes.lastIndexOf("."),
+    antes.lastIndexOf("!"),
+    antes.lastIndexOf("\n")
+  );
+
+  return texto
+    .slice(inicio + 1, indice + 1)
+    .trim();
+}
+
+function perguntasAnteriores(historico) {
+  return historico
+    .filter(
+      (item) => item.papel === "elora"
+    )
+    .map(
+      (item) => extrairPergunta(item.texto)
+    )
+    .filter(Boolean);
 }
 
 function jaFoiPerguntado(pergunta, historico) {
-  return historico
-    .filter((item) => item.papel === "elora")
-    .some((item) =>
-      semelhanca(pergunta, item.texto) >= 0.55
-    );
+  const anteriores =
+    perguntasAnteriores(historico);
+
+  return anteriores.some((anterior) => {
+    const atualNormalizada =
+      normalizar(pergunta);
+
+    const anteriorNormalizada =
+      normalizar(anterior);
+
+    if (
+      atualNormalizada === anteriorNormalizada
+    ) {
+      return true;
+    }
+
+    return semelhanca(
+      pergunta,
+      anterior
+    ) >= 0.50;
+  });
 }
 
+// ======================================================
+// 4. ALTERNATIVAS INTELIGENTES
+// ======================================================
+
+// Utilizadas somente quando o Ollama falha,
+// retorna conteúdo inválido ou repete uma pergunta.
+
+const DIMENSOES_RESERVA = [
+  {
+    nome: "inicio",
+
+    pergunta:
+      "Você lembra quando começou a perceber essa mudança?",
+
+    perguntaAnterior:
+      /quando comecou|desde quando|ha quanto tempo|lembra quando|inicio da situacao/,
+
+    respostaAnterior:
+      /ultimamente|recentemente|desde que|ha meses|ha semanas|ha dias|faz tempo|comecou|iniciou|depois que|apos/,
+  },
+
+  {
+    nome: "impacto",
+
+    pergunta:
+      "De que maneira essa situação tem aparecido na sua rotina, como no trabalho, nos estudos, no sono ou nas relações?",
+
+    perguntaAnterior:
+      /impacto|afeta|rotina|dia a dia|trabalho|estudos|sono|relacoes/,
+
+    respostaAnterior:
+      /trabalho|faculdade|estudo|sono|dorm|rotina|tarefas|relacion|familia|energia|concentr/,
+  },
+
+  {
+    nome: "frequencia",
+
+    pergunta:
+      "Isso acontece com frequência ou costuma aparecer em situações específicas?",
+
+    perguntaAnterior:
+      /frequencia|todos os dias|quantas vezes|momentos especificos|constantemente/,
+
+    respostaAnterior:
+      /todos os dias|todo dia|sempre|as vezes|de vez em quando|frequentemente|constantemente|com frequencia/,
+  },
+
+  {
+    nome: "apoio",
+
+    pergunta:
+      "Quando essa situação fica mais difícil, existe algo ou alguém que costuma ajudar você?",
+
+    perguntaAnterior:
+      /ajuda|apoio|alguem que|costuma ajudar|pessoa com quem/,
+
+    respostaAnterior:
+      /apoio|ajuda|converso|falo com|amigo|familia|terapia|psicologo/,
+  },
+];
+
+function mensagemDeReserva(historico) {
+  const respostas = historico
+    .filter(
+      (item) => item.papel === "paciente"
+    )
+    .map((item) => item.texto);
+
+  const perguntas = perguntasAnteriores(
+    historico
+  );
+
+  const textoRespostas = normalizar(
+    respostas.join(" ")
+  );
+
+  const textoPerguntas = normalizar(
+    perguntas.join(" ")
+  );
+
+  const proximaDimensao =
+    DIMENSOES_RESERVA.find((dimensao) => {
+      const jaPerguntou =
+        dimensao.perguntaAnterior.test(
+          textoPerguntas
+        );
+
+      const jaFoiInformado =
+        dimensao.respostaAnterior.test(
+          textoRespostas
+        );
+
+      const repetida = jaFoiPerguntado(
+        dimensao.pergunta,
+        historico
+      );
+
+      return (
+        !jaPerguntou &&
+        !jaFoiInformado &&
+        !repetida
+      );
+    });
+
+  if (proximaDimensao) {
+    return (
+      "Quero compreender um pouco melhor " +
+      "esse aspecto do que você compartilhou. " +
+      proximaDimensao.pergunta
+    );
+  }
+
+  return MENSAGEM_ENCERRAMENTO;
+}
 
 // ======================================================
-// 3. EXTRAÇÃO DA MENSAGEM DA IA
+// 5. TRATAMENTO DA RESPOSTA DO MODELO
 // ======================================================
 
 function limparMensagem(saida) {
   const original = String(saida ?? "")
-    .replace(/<think>[\s\S]*?<\/think>/gi, "")
+    .replace(
+      /<think>[\s\S]*?<\/think>/gi,
+      ""
+    )
     .trim();
 
   const risco =
-    /\bRISCO\s*:\s*(SIM|POSSIVEL)\b/i.test(original)
+    /\bRISCO\s*:\s*(SIM|POSSIVEL)\b/i.test(
+      original
+    )
       ? "possivel"
       : "nao_identificado";
 
@@ -124,7 +363,10 @@ function limparMensagem(saida) {
       /^\s*(?:MENSAGEM|PERGUNTA|RESPOSTA)\s*:\s*/i,
       ""
     )
-    .replace(/^\s*["'“”•*-]+\s*/, "")
+    .replace(
+      /^\s*["'“”•*-]+\s*/,
+      ""
+    )
     .replace(/\s+/g, " ")
     .trim();
 
@@ -149,83 +391,8 @@ function limparMensagem(saida) {
   };
 }
 
-function extrairPergunta(mensagem) {
-  const indice = mensagem.lastIndexOf("?");
-
-  if (indice === -1) return null;
-
-  const inicio = Math.max(
-    mensagem.lastIndexOf(".", indice),
-    mensagem.lastIndexOf("!", indice)
-  );
-
-  return mensagem
-    .slice(inicio + 1, indice + 1)
-    .trim();
-}
-
-
 // ======================================================
-// 4. ALTERNATIVAS PARA FALHAS DO MODELO
-// ======================================================
-
-function mensagemDeReserva(historico) {
-  const ultimo = [...historico]
-    .reverse()
-    .find((item) => item.papel === "paciente")
-    ?.texto ?? "";
-
-  const t = normalizar(ultimo);
-
-  const candidatos = [];
-
-  if (/triste|solidao|sozinh|saudade/.test(t)) {
-    candidatos.push(
-      "Você mencionou que a solidão tem sido difícil. O que mais tem pesado nessa experiência para você?"
-    );
-  }
-
-  if (/cans|exaust|energia|esgot/.test(t)) {
-    candidatos.push(
-      "Você comentou sobre o cansaço que vem sentindo. Quando começou a perceber essa mudança?"
-    );
-  }
-
-  if (/trabalh|empreg|chef|servico/.test(t)) {
-    candidatos.push(
-      "Parece que o trabalho tem ocupado um espaço importante nesse relato. O que mais gostaria de compartilhar sobre isso?"
-    );
-  }
-
-  if (/sono|dorm|descans/.test(t)) {
-    candidatos.push(
-      "Você comentou sobre suas dificuldades com o sono. Como isso tem afetado seus dias?"
-    );
-  }
-
-  if (/famil|relacion|namor|parceir/.test(t)) {
-    candidatos.push(
-      "Você trouxe uma questão importante sobre seus relacionamentos. O que gostaria de explorar melhor nessa situação?"
-    );
-  }
-
-  candidatos.push(
-    "Podemos continuar olhando com calma para o que você considera mais importante neste momento."
-  );
-
-  return candidatos.find(
-    (p) => {
-      const pergunta = extrairPergunta(p);
-
-      return !pergunta ||
-        !jaFoiPerguntado(pergunta, historico);
-    }
-  ) ?? candidatos[candidatos.length - 1];
-}
-
-
-// ======================================================
-// 5. COMUNICAÇÃO COM O OLLAMA
+// 6. COMUNICAÇÃO COM O OLLAMA
 // ======================================================
 
 async function conversarComOllama({
@@ -233,6 +400,7 @@ async function conversarComOllama({
   conhecimentos,
   model,
   ollamaUrl,
+  respostaRejeitada = "",
 }) {
   const controle = new AbortController();
 
@@ -249,10 +417,8 @@ async function conversarComOllama({
       .join("\n")
       .slice(0, 900);
 
-    const anteriores = historico
-      .filter((item) => item.papel === "elora")
-      .slice(-5)
-      .map((item) => item.texto);
+    const anteriores =
+      perguntasAnteriores(historico);
 
     const instrucoes = `
 # IDENTIDADE
@@ -263,7 +429,7 @@ de triagem psicológica.
 Converse em português brasileiro.
 
 Seu objetivo é conduzir uma conversa exploratória
-natural, respeitosa e contextualizada.
+natural, respeitosa, individualizada e contextualizada.
 
 # METODOLOGIA DE ENTREVISTA
 
@@ -272,68 +438,138 @@ A Entrevista de Ajuda, de Alfred Benjamin.
 
 ${BENJAMIN_INTERVIEW_RULES}
 
-# CONHECIMENTO METODOLÓGICO ESTRUTURADO
+# CONHECIMENTO METODOLÓGICO
 
 ${CONHECIMENTO_BENJAMIN}
 
-# CONDUÇÃO DA CONVERSA
+# REGRA MAIS IMPORTANTE: ESCUTAR ANTES DE PERGUNTAR
 
 Leia todo o histórico antes de responder.
 
+A pessoa não está preenchendo um formulário.
+
+Você está conduzindo uma conversa.
+
 Não trate cada resposta como uma conversa independente.
 
-Identifique o que a pessoa realmente acrescentou
-ao relato anterior.
+Não ignore informações que a pessoa já compartilhou.
+
+Não faça perguntas automáticas apenas para preencher
+uma quantidade de perguntas.
+
+Identifique o que a pessoa realmente quis comunicar.
+
+Considere o contexto emocional e os acontecimentos
+relatados anteriormente.
+
+# COMO RESPONDER
 
 Sua resposta deve:
 
-1. Reconhecer brevemente algo relevante do relato.
-2. Demonstrar que considerou o contexto anterior.
-3. Aprofundar um aspecto que ainda não foi esclarecido,
-   quando isso for útil.
-4. Fazer no máximo uma pergunta por mensagem.
+1. Demonstrar que compreendeu o relato mais recente.
+2. Considerar o que já foi compartilhado.
+3. Reconhecer aspectos relevantes sem repetir
+   literalmente a fala da pessoa.
+4. Aprofundar somente algo que ainda não esteja
+   suficientemente esclarecido.
+5. Fazer no máximo uma pergunta aberta.
 
-Você NÃO precisa fazer uma pergunta em todas as respostas.
+Você não precisa perguntar em todas as respostas.
 
-Às vezes, uma reflexão ou um convite para continuar
-é mais adequado do que outra pergunta.
+Se a pessoa já explicou suficientemente determinado
+aspecto, não volte a perguntar sobre ele.
+
+Se uma reflexão ou um acolhimento forem mais adequados,
+responda naturalmente sem fazer outra pergunta.
+
+# PROIBIÇÃO DE REPETIÇÃO
+
+As perguntas abaixo já foram realizadas:
+
+${JSON.stringify(anteriores)}
+
+Não repita nenhuma delas.
+
+Não reformule uma pergunta anterior apenas
+trocando algumas palavras.
+
+Não pergunte novamente algo que a pessoa
+já explicou espontaneamente.
+
+Não volte ao mesmo assunto sem uma razão relevante.
+
+Evite especialmente repetir perguntas genéricas como:
+
+- O que mais tem pesado nessa experiência?
+- Como isso tem afetado você?
+- Pode me contar mais sobre isso?
+- Como você se sente em relação a isso?
+
+Se precisar aprofundar um assunto, escolha um aspecto
+novo e específico do relato.
+
+${
+  respostaRejeitada
+    ? `
+# CORREÇÃO OBRIGATÓRIA
+
+Sua tentativa anterior foi rejeitada porque produziu
+uma resposta repetitiva ou inválida.
+
+Não reproduza a resposta abaixo:
+
+${respostaRejeitada}
+
+Crie uma resposta diferente, considerando todo
+o histórico e escolhendo outro aspecto ainda
+não explorado.
+`
+    : ""
+}
 
 # NATURALIDADE
 
-Não utilize sempre a mesma estrutura.
+Não comece todas as respostas com:
 
-Evite começar todas as respostas com:
 - Entendo.
 - Compreendo.
 - Obrigado por compartilhar.
 - Imagino como deve ser difícil.
 
-Não repita o relato inteiro da pessoa.
+Não utilize sempre a mesma estrutura.
 
-Não faça comentários artificiais ou excessivamente formais.
+Não transforme a conversa em uma entrevista mecânica.
 
-Não transforme a conversa em um formulário.
+Não faça listas para conversar com a pessoa.
 
-Não siga uma sequência fixa de perguntas.
+Não use linguagem excessivamente técnica.
 
-Escolha o próximo assunto de acordo com o que
-a pessoa já compartilhou.
+Não presuma emoções ou acontecimentos que
+não foram relatados.
 
-# LIMITES
+# CONHECIMENTOS COMPLEMENTARES
 
-Não atribua diagnósticos.
+${notas}
 
-Não presuma causas.
+Utilize o conhecimento metodológico para orientar
+sua escuta e a condução da conversa.
 
-Não invente sintomas.
+Não invente informações que não estejam presentes
+nas referências.
 
-Não apresente interpretações como fatos.
+# LIMITES CLÍNICOS
 
-Não sugira que a pessoa possui determinada condição
-psicológica.
+Você não realiza diagnósticos.
 
-As referências clínicas ainda não devem ser utilizadas
-para estabelecer hipóteses nesta etapa.
+Não confirme transtornos.
+
+Não atribua causas psicológicas aos relatos.
+
+Não apresente hipóteses clínicas como fatos.
+
+As referências clínicas são utilizadas como apoio
+ao desenvolvimento da triagem, não como autorização
+para diagnosticar.
 
 # SEGURANÇA
 
@@ -342,33 +578,20 @@ automutilação ou perigo imediato:
 
 - Marque RISCO: SIM.
 - Priorize o protocolo de segurança.
-- Não continue a entrevista comum como se nada
-  tivesse acontecido.
-- Utilize perguntas diretas quando necessárias.
+- Não continue a entrevista comum.
+- Não confunda tristeza ou cansaço isolados
+  com confirmação de risco.
 
-Não confunda tristeza ou cansaço isolados
-com confirmação de risco.
-
-# HISTÓRICO DE PERGUNTAS
-
-Não repita perguntas anteriores:
-
-${JSON.stringify(anteriores)}
-
-# CONHECIMENTOS COMPLEMENTARES
-
-${notas}
-
-# FORMATO DA RESPOSTA
+# FORMATO OBRIGATÓRIO
 
 Retorne exatamente:
 
-MENSAGEM: [resposta natural, breve, com no máximo uma pergunta]
+MENSAGEM: [resposta natural e breve, com no máximo uma pergunta]
 
 RISCO: SIM ou NAO
 
 Não inclua explicações sobre as instruções.
-Não gere listas ou JSON.
+Não gere JSON.
 `;
 
     const mensagens = [
@@ -377,13 +600,15 @@ Não gere listas ou JSON.
         content: instrucoes,
       },
 
-      ...historico.slice(-10).map((item) => ({
+      ...historico.slice(-12).map((item) => ({
         role:
           item.papel === "paciente"
             ? "user"
             : "assistant",
 
-        content: String(item.texto ?? "").slice(0, 900),
+        content: String(
+          item.texto ?? ""
+        ).slice(0, 900),
       })),
     ];
 
@@ -403,18 +628,22 @@ Não gere listas ou JSON.
           messages,
 
           options: {
-            temperature: 0.55,
+            temperature: 0.45,
+            top_p: 0.85,
+            repeat_penalty: 1.18,
             num_ctx: 4096,
             num_predict: 180,
           },
 
-          keep_alive: "2m",
+          keep_alive: "10m",
         }),
       }
     );
 
     if (!resposta.ok) {
-      throw new Error(`HTTP ${resposta.status}`);
+      throw new Error(
+        `Ollama retornou HTTP ${resposta.status}`
+      );
     }
 
     const dados = await resposta.json();
@@ -426,9 +655,8 @@ Não gere listas ou JSON.
   }
 }
 
-
 // ======================================================
-// 6. GERAÇÃO DA RESPOSTA DA ELORA
+// 7. GERAÇÃO DA RESPOSTA DA ELORA
 // ======================================================
 
 export async function gerarPergunta({
@@ -438,6 +666,23 @@ export async function gerarPergunta({
   ollamaUrl,
   demo = false,
 }) {
+  const totalRespostas = historico.filter(
+    (item) => item.papel === "paciente"
+  ).length;
+
+  // A quinta resposta encerra a entrevista.
+  // Não será criada uma sexta pergunta.
+
+  if (totalRespostas >= MAX_RESPOSTAS) {
+    return {
+      mensagem: MENSAGEM_ENCERRAMENTO,
+      risco: "nao_identificado",
+      origem: "encerramento",
+    };
+  }
+
+  // Modo de demonstração.
+
   if (demo) {
     return {
       mensagem: mensagemDeReserva(historico),
@@ -446,54 +691,76 @@ export async function gerarPergunta({
     };
   }
 
-  try {
-    const texto = await conversarComOllama({
-      historico,
-      conhecimentos,
-      model,
-      ollamaUrl,
-    });
+  // Duas tentativas: a segunda recebe instruções
+  // específicas para corrigir uma resposta repetitiva.
 
-    const resultado = limparMensagem(texto);
+  let respostaRejeitada = "";
 
-    if (resultado.risco === "possivel") {
-      return {
-        mensagem:
-          resultado.mensagem ??
-          mensagemDeReserva(historico),
+  for (let tentativa = 0; tentativa < 2; tentativa++) {
+    try {
+      const texto = await conversarComOllama({
+        historico,
+        conhecimentos,
+        model,
+        ollamaUrl,
+        respostaRejeitada:
+          tentativa === 1
+            ? respostaRejeitada
+            : "",
+      });
 
-        risco: "possivel",
-        origem: "ollama",
-      };
-    }
+      const resultado = limparMensagem(texto);
 
-    if (resultado.mensagem) {
-      const pergunta = extrairPergunta(
-        resultado.mensagem
-      );
-
-      if (
-        !pergunta ||
-        !jaFoiPerguntado(pergunta, historico)
-      ) {
+      if (resultado.risco === "possivel") {
         return {
-          mensagem: resultado.mensagem,
-          risco: "nao_identificado",
+          mensagem:
+            resultado.mensagem ??
+            "Precisamos priorizar sua segurança neste momento.",
+
+          risco: "possivel",
           origem: "ollama",
         };
       }
+
+      if (resultado.mensagem) {
+        const pergunta = extrairPergunta(
+          resultado.mensagem
+        );
+
+        if (
+          !pergunta ||
+          !jaFoiPerguntado(
+            pergunta,
+            historico
+          )
+        ) {
+          return {
+            mensagem: resultado.mensagem,
+            risco: "nao_identificado",
+            origem: "ollama",
+          };
+        }
+      }
+
+      respostaRejeitada =
+        resultado.mensagem ?? texto;
+
+      console.warn(
+        `Elora: tentativa ${tentativa + 1} repetitiva ou inválida.`
+      );
+
+    } catch (erro) {
+      console.warn(
+        "Elora: falha na comunicação com Ollama:",
+        erro?.message
+      );
+
+      break;
     }
-
-    console.warn(
-      "Elora: mensagem inválida ou repetitiva. Utilizando alternativa."
-    );
-
-  } catch (erro) {
-    console.warn(
-      "Elora: falha na comunicação com Ollama:",
-      erro?.message
-    );
   }
+
+  // Última alternativa caso o modelo não consiga
+  // gerar uma resposta adequada.
 
   return {
     mensagem: mensagemDeReserva(historico),
@@ -502,9 +769,8 @@ export async function gerarPergunta({
   };
 }
 
-
 // ======================================================
-// 7. GERAÇÃO DO RESUMO
+// 8. GERAÇÃO DO RESUMO
 // ======================================================
 
 export async function gerarResumo({
@@ -547,15 +813,17 @@ export async function gerarResumo({
   return {
     sintese,
 
-    manifestacoes: relatos.map((texto, indice) => ({
-      descricao:
-        `Experiência relatada na resposta ${indice + 1}`,
+    manifestacoes: relatos.map(
+      (texto, indice) => ({
+        descricao:
+          `Experiência relatada na resposta ${indice + 1}`,
 
-      evidenciasDoRelato: [texto],
+        evidenciasDoRelato: [texto],
 
-      ressalva:
-        "Registro literal do relato, sem interpretação ou confirmação clínica.",
-    })),
+        ressalva:
+          "Registro literal do relato, sem interpretação ou confirmação clínica.",
+      })
+    ),
 
     contexto:
       "As observações foram extraídas exclusivamente da conversa fictícia. Não foi verificada relação de causa e efeito entre as experiências relatadas.",

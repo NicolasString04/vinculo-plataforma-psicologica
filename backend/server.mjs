@@ -87,6 +87,12 @@ if (!["demo", "ollama"].includes(MODO)) {
 const TEMPO_SESSAO = 30 * 60 * 1000;
 const MAX_RESPOSTAS = 5;
 
+const ABERTURA_TRIAGEM =
+  "Olá, tudo bem? Seja bem-vindo(a) à Elora. " +
+  "O que fez você procurar a Elora hoje? " +
+  "Me conte um pouco sobre você e sobre o que está acontecendo. " +
+  "Pode compartilhar com suas próprias palavras, no seu tempo.";
+
 const sessoes = new Map();
 const limites = new Map();
 
@@ -316,7 +322,14 @@ export function criarServidor() {
           const id = randomUUID();
 
           sessoes.set(id, {
-            historico: [],
+            // A abertura também entra no histórico para que a IA
+            // saiba o que já perguntou desde o início da conversa.
+            historico: [
+              {
+                papel: "elora",
+                texto: ABERTURA_TRIAGEM,
+              },
+            ],
             idsConhecimento: new Set(),
             atualizadaEm: Date.now(),
             risco: false,
@@ -325,11 +338,9 @@ export function criarServidor() {
 
           return enviarJson(res, 200, {
             sessaoId: id,
-
-            mensagem:
-              "Olá. Este é um protótipo acadêmico da Elora. " +
-              "Com suas palavras, o que você gostaria de compartilhar?",
-
+            mensagem: ABERTURA_TRIAGEM,
+            numeroRespostas: 0,
+            limite: MAX_RESPOSTAS,
             modo: MODO,
             aviso: AVISO_TESTE,
           });
