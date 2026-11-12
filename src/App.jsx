@@ -11,6 +11,7 @@ import TriagemResumo from "./pages/TriagemResumo";
 import { PosTriagem } from "./pages/Portais";
 import ClienteHome from "./pages/cliente/ClienteHome";
 import PsicologoHome from "./pages/psicologo/PsicologoHome";
+import CadastroPsicologo from "./pages/CadastroPsicologo";
 
 export default function App() {
   return (
@@ -30,6 +31,12 @@ export default function App() {
         <Route path="/triagem/perguntas" element={<TriagemPerguntas />} />
         <Route path="/triagem/resumo" element={<TriagemResumo />} />
         <Route path="/triagem/concluida" element={<PosTriagem />} />
+        <Route path="/cadastro" element={<Cadastro />} />
+
+<Route
+  path="/cadastro/psicologo"
+  element={<CadastroPsicologo />}
+/>
 
         <Route
           path="*"

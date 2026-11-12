@@ -1,0 +1,608 @@
+
+.cadastro-elora-page {
+  --cadastro-primary: #176bc4;
+  --cadastro-primary-dark: #104d9b;
+  --cadastro-soft: #e4f2ff;
+  --cadastro-ink: #102653;
+  --cadastro-text: #4e5c78;
+  --cadastro-border: #aeb8c9;
+
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: 70px;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse at 90% 10%, #f1e9f6 0%, transparent 32%),
+    #fffdfa;
+  color: var(--cadastro-ink);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.cadastro-elora-page.cadastro-psicologo {
+  --cadastro-primary: #6424a9;
+  --cadastro-primary-dark: #48127e;
+  --cadastro-soft: #f1e5fa;
+}
+
+.cadastro-elora-page::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  width: 43%;
+  height: 270px;
+  background:
+    linear-gradient(
+      90deg,
+      #fffdfa 0%,
+      rgba(255, 253, 250, 0.12) 100%
+    ),
+    url("/images/home-elora.png") center 38% / cover no-repeat;
+  opacity: 0.48;
+  border-radius: 0 0 0 45%;
+  pointer-events: none;
+}
+
+.cadastro-elora-page::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  bottom: -105px;
+  left: -5%;
+  width: 110%;
+  height: 170px;
+  border-radius: 50% 50% 0 0;
+  background: linear-gradient(
+    120deg,
+    var(--cadastro-soft),
+    rgba(255, 255, 255, 0.8),
+    var(--cadastro-soft)
+  );
+  transform: rotate(-2deg);
+  pointer-events: none;
+}
+
+/* CABEÇALHO */
+
+.cadastro-elora-topbar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 20px 4%;
+}
+
+.cadastro-elora-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--cadastro-ink);
+  text-decoration: none;
+}
+
+.cadastro-elora-brand img {
+  width: 47px;
+  height: 47px;
+  object-fit: contain;
+}
+
+.cadastro-elora-brand span {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 37px;
+  font-weight: bold;
+  letter-spacing: -2px;
+}
+
+.cadastro-elora-divider {
+  width: 1px;
+  height: 36px;
+  background: #aab1c0;
+}
+
+.cadastro-elora-topbar > strong {
+  color: var(--cadastro-primary);
+  font-size: 19px;
+  font-weight: 600;
+}
+
+/* CONTEÚDO */
+
+.cadastro-elora-shell {
+  position: relative;
+  z-index: 1;
+  width: min(1100px, 92%);
+  margin: 35px auto 0;
+}
+
+.cadastro-elora-heading {
+  margin-bottom: 34px;
+}
+
+.cadastro-elora-eyebrow {
+  display: inline-block;
+  padding: 7px 17px;
+  border-radius: 30px;
+  background: var(--cadastro-soft);
+  color: var(--cadastro-primary);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.cadastro-elora-heading h1 {
+  margin: 17px 0 8px;
+  color: #0c2253;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(40px, 5vw, 64px);
+  line-height: 1.08;
+  letter-spacing: -2px;
+}
+
+.cadastro-elora-heading > p {
+  max-width: 650px;
+  margin: 0;
+  color: var(--cadastro-text);
+  font-size: 19px;
+  line-height: 1.6;
+}
+
+/* FORMULÁRIO */
+
+.cadastro-elora-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 25px;
+}
+
+.cadastro-elora-field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.campo-full {
+  grid-column: 1 / -1;
+}
+
+.cadastro-elora-field label {
+  color: #101a39;
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.cadastro-elora-field input,
+.cadastro-elora-field select {
+  width: 100%;
+  height: 49px;
+  padding: 0 15px;
+  border: 1px solid var(--cadastro-border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.82);
+  color: #263653;
+  font-size: 15px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.cadastro-elora-field input::placeholder {
+  color: #697187;
+}
+
+.cadastro-elora-field input:focus,
+.cadastro-elora-field select:focus {
+  outline: none;
+  border-color: var(--cadastro-primary);
+  box-shadow: 0 0 0 3px var(--cadastro-soft);
+}
+
+.cadastro-elora-field input[aria-invalid="true"] {
+  border-color: #d43e50;
+}
+
+.cadastro-elora-field small {
+  color: #c62e43;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* SENHA */
+
+.cadastro-elora-password {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cadastro-elora-password input {
+  padding-right: 85px;
+}
+
+.cadastro-elora-password button {
+  position: absolute;
+  right: 10px;
+  border: 0;
+  background: transparent;
+  color: var(--cadastro-primary);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cadastro-elora-password button:hover {
+  text-decoration: underline;
+}
+
+/* ENDEREÇO DO PROFISSIONAL */
+
+.cadastro-elora-address {
+  padding: 22px 24px 25px;
+  border-radius: 17px;
+  background: var(--cadastro-soft);
+}
+
+.cadastro-elora-address-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.cadastro-elora-address-heading h2 {
+  margin: 0 0 5px;
+  color: var(--cadastro-primary-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 25px;
+}
+
+.cadastro-elora-address-heading p {
+  margin: 0;
+  color: var(--cadastro-ink);
+  font-size: 14px;
+}
+
+.cadastro-elora-radio {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  flex-shrink: 0;
+}
+
+.cadastro-elora-radio label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--cadastro-ink);
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.cadastro-elora-radio input {
+  width: 19px;
+  height: 19px;
+  accent-color: var(--cadastro-primary);
+}
+
+.cadastro-elora-address-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 20px;
+}
+
+.endereco-rua,
+.endereco-complemento {
+  grid-column: span 1;
+}
+
+/* BOTÃO */
+
+.cadastro-elora-submit {
+  grid-column: 1 / -1;
+  min-height: 58px;
+  margin-top: 7px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(
+    110deg,
+    var(--cadastro-primary),
+    var(--cadastro-primary-dark)
+  );
+  color: white;
+  font-size: 20px;
+  font-weight: 750;
+  cursor: pointer;
+  transition: transform 0.2s, filter 0.2s;
+}
+
+.cadastro-elora-submit:hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+}
+
+.cadastro-elora-submit:active {
+  transform: translateY(0);
+}
+
+/* LINKS E AVISOS */
+
+.cadastro-elora-login,
+.cadastro-elora-other {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 24px;
+  color: var(--cadastro-ink);
+  font-size: 17px;
+}
+
+.cadastro-elora-other {
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.cadastro-elora-login a,
+.cadastro-elora-other a {
+  color: var(--cadastro-primary);
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.cadastro-elora-login a:hover,
+.cadastro-elora-other a:hover {
+  text-decoration: underline;
+}
+
+.cadastro-elora-success {
+  margin-bottom: 24px;
+  padding: 17px 20px;
+  border: 1px solid #9dd5b2;
+  border-radius: 12px;
+  background: #effaf2;
+  color: #175c31;
+}
+
+.cadastro-elora-success p {
+  margin: 7px 0 0;
+  line-height: 1.5;
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 760px) {
+  .cadastro-elora-page::before {
+    width: 65%;
+    height: 190px;
+    opacity: 0.25;
+  }
+
+  .cadastro-elora-topbar {
+    padding: 16px 5%;
+  }
+
+  .cadastro-elora-brand img {
+    width: 39px;
+    height: 39px;
+  }
+
+  .cadastro-elora-brand span {
+    font-size: 30px;
+  }
+
+  .cadastro-elora-shell {
+    width: 90%;
+    margin-top: 28px;
+  }
+
+  .cadastro-elora-heading h1 {
+    font-size: 43px;
+  }
+
+  .cadastro-elora-form {
+    gap: 17px;
+  }
+
+  .cadastro-elora-address-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 520px) {
+  .cadastro-elora-topbar {
+    gap: 11px;
+  }
+
+  .cadastro-elora-topbar > strong {
+    font-size: 15px;
+  }
+
+  .cadastro-elora-divider {
+    height: 28px;
+  }
+
+  .cadastro-elora-heading h1 {
+    font-size: 38px;
+  }
+
+  .cadastro-elora-heading > p {
+    font-size: 16px;
+  }
+
+  .cadastro-elora-form,
+  .cadastro-elora-address-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .campo-full,
+  .endereco-rua,
+  .endereco-complemento {
+    grid-column: 1;
+  }
+
+  .cadastro-elora-address {
+    padding: 19px 15px;
+  }
+
+  .cadastro-elora-address-heading h2 {
+    font-size: 22px;
+  }
+
+  .cadastro-elora-submit {
+    font-size: 17px;
+  }
+}
+
+/* =========================================
+   CENÁRIO DECORATIVO ELORA
+========================================= */
+
+.cadastro-elora-page {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+
+    background-color: #fffdfb;
+
+    background-image:
+        linear-gradient(
+            to bottom,
+            rgba(255, 253, 251, 0.02) 0%,
+            rgba(255, 253, 251, 0.08) 55%,
+            #fffdfb 100%
+        ),
+        url("/images/elora-sofa.png");
+
+    background-repeat: no-repeat;
+
+    background-position:
+        top right,
+        top right;
+
+    background-size:
+        100% 430px,
+        min(780px, 65vw) auto;
+}
+
+/* Identidade do paciente */
+
+.cadastro-elora-page--paciente {
+    --elora-accent: #2475c9;
+    --elora-soft: #e5f2ff;
+}
+
+/* Identidade do psicólogo */
+
+.cadastro-elora-page--psicologo {
+    --elora-accent: #6932a5;
+    --elora-soft: #f1e5fa;
+}
+
+/* Responsividade */
+
+@media (max-width: 768px) {
+    .cadastro-elora-page {
+        background-size:
+            100% 300px,
+            min(100%, 560px) auto;
+
+        background-position:
+            top center,
+            top right;
+    }
+}
+
+
+/* ==============================================
+   ELORA — SOFÁ DECORATIVO NOS CADASTROS
+   ============================================== */
+
+.cadastro-elora-page {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* Imagem decorativa */
+.cadastro-elora-page > .cadastro-elora-sofa {
+  position: absolute;
+  z-index: 0;
+
+  top: -12px;
+  right: -14px;
+
+  display: block;
+  width: min(48vw, 760px);
+  height: auto;
+  max-width: none;
+
+  object-fit: contain;
+  object-position: top right;
+
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.96;
+
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 76%,
+    transparent 100%
+  );
+
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 76%,
+    transparent 100%
+  );
+}
+
+/* Formulários acima da decoração */
+.cadastro-elora-page > .cadastro-elora-topbar,
+.cadastro-elora-page > .cadastro-elora-shell {
+  position: relative;
+  z-index: 1;
+}
+
+/* Paciente — sombra azul */
+.cadastro-elora-page--paciente
+  > .cadastro-elora-sofa {
+  filter: drop-shadow(
+    0 10px 22px rgba(33, 113, 192, 0.09)
+  );
+}
+
+/* Psicólogo — sombra lilás */
+.cadastro-elora-page--psicologo
+  > .cadastro-elora-sofa {
+  filter: drop-shadow(
+    0 10px 22px rgba(105, 50, 165, 0.10)
+  );
+}
+
+/* Tablets */
+@media (max-width: 900px) {
+  .cadastro-elora-page > .cadastro-elora-sofa {
+    width: min(54vw, 520px);
+    top: 0;
+    right: -22px;
+    opacity: 0.55;
+  }
+}
+
+/* Celulares */
+@media (max-width: 600px) {
+  .cadastro-elora-page > .cadastro-elora-sofa {
+    width: min(66vw, 350px);
+    top: 5px;
+    right: -40px;
+    opacity: 0.22;
+  }
+}

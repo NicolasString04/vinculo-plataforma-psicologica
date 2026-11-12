@@ -221,3 +221,11 @@ export default function LoginPsicologo() {
     </main>
   );
 }
+
+<div className="cadastro-login">
+  Ainda não tem conta profissional?
+
+  <Link to="/cadastro/psicologo">
+    Criar conta
+  </Link>
+</div>
