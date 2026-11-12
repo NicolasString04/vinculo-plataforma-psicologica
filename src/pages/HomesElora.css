@@ -1,0 +1,504 @@
+.eh-page {
+  --eh-navy: #172346;
+  --eh-muted: #4e5d73;
+  --eh-blue: #cce7f8;
+  --eh-lavender: #e9dcf8;
+  --eh-border: #ded7e6;
+  --eh-paper: #fffdfa;
+  --eh-coral: #a94336;
+  min-height: 100vh;
+  color: var(--eh-navy);
+  background: #fbf7f2;
+}
+
+.eh-page h1,
+.eh-page h2,
+.eh-page h3,
+.eh-brand span {
+  margin: 0;
+  font-family: var(--elora-heading-font, Georgia, serif);
+  line-height: 1.08;
+}
+
+.eh-page h1 {
+  font-size: clamp(2.65rem, 5vw, 5.15rem);
+  letter-spacing: -0.045em;
+}
+
+.eh-page h2 {
+  font-size: clamp(1.55rem, 2.7vw, 2.75rem);
+  letter-spacing: -0.025em;
+}
+
+.eh-page h3 {
+  font-size: clamp(1.25rem, 2.2vw, 1.85rem);
+}
+
+.eh-page p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.eh-page section[id] {
+  scroll-margin-top: 20px;
+}
+
+.eh-page [hidden] {
+  display: none;
+}
+
+.eh-header {
+  min-height: 76px;
+  padding: 12px max(24px, calc((100% - 1440px) / 2));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  background: linear-gradient(110deg, #d7edf9, #c8ddf7);
+}
+
+.eh-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--eh-navy);
+  text-decoration: none;
+}
+
+.eh-brand img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+}
+
+.eh-brand span {
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-weight: 700;
+  letter-spacing: -0.055em;
+}
+
+.eh-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.eh-nav a {
+  padding: 10px 13px;
+  border-radius: 12px;
+  color: var(--eh-navy);
+  font-size: 0.94rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.eh-nav a:hover,
+.eh-nav a[aria-current="page"] {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.eh-container {
+  width: min(1440px, calc(100% - 64px));
+  margin-inline: auto;
+}
+
+.eh-hero {
+  min-height: 300px;
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  align-items: center;
+  gap: 24px;
+  padding: 22px 0 0;
+}
+
+.eh-hero > div {
+  padding-inline: clamp(0px, 4vw, 68px) 0;
+}
+
+.eh-page .eh-eyebrow {
+  margin-bottom: 12px;
+  color: #615182;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.eh-hero h1 {
+  max-width: 9ch;
+}
+
+.eh-hero h1 + p,
+.eh-boas-vindas h1 + p {
+  margin-top: 14px;
+  color: var(--eh-muted);
+  font-size: clamp(1rem, 2vw, 1.45rem);
+}
+
+.eh-sala {
+  display: block;
+  align-self: end;
+  width: 100%;
+  max-height: 365px;
+}
+
+.eh-filtros {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  align-items: end;
+  gap: 16px;
+  padding: 18px 22px;
+  border-radius: 22px;
+  background: linear-gradient(110deg, #cbe7f9, #aad6f1);
+}
+
+.eh-filtros label {
+  display: grid;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.eh-filtros select {
+  width: 100%;
+  min-height: 46px;
+  padding: 8px 12px;
+  border: 1px solid #aacbe2;
+  border-radius: 12px;
+  background: white;
+  color: var(--eh-navy);
+  font: inherit;
+  font-size: 0.94rem;
+}
+
+.eh-button {
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 12px;
+  color: var(--eh-navy);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.eh-button:hover {
+  filter: brightness(0.95);
+}
+
+.eh-coral {
+  background: var(--eh-coral);
+  color: white;
+}
+
+.eh-filtros .eh-coral {
+  min-width: 142px;
+  min-height: 46px;
+}
+
+.eh-lilas {
+  background: var(--eh-lavender);
+}
+
+.eh-branco {
+  background: white;
+}
+
+.eh-lista {
+  padding: 28px 0 12px;
+}
+
+.eh-lista-topo {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-bottom: 16px;
+}
+
+.eh-lista-topo p,
+.eh-nota {
+  color: var(--eh-muted);
+  font-size: 0.85rem;
+}
+
+.eh-profissional {
+  margin-bottom: 10px;
+  padding: 12px 18px;
+  border: 1px solid #efe6df;
+  border-radius: 18px;
+  background: var(--eh-paper);
+}
+
+.eh-profissional-linha {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+}
+
+.eh-avatar {
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--eh-lavender);
+  font-family: var(--elora-heading-font, Georgia, serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.eh-profissional-info {
+  padding-left: 16px;
+  border-left: 3px solid #cbb1e8;
+}
+
+.eh-profissional-info p,
+.eh-solicitacao-linha p {
+  margin-top: 4px;
+  color: var(--eh-muted);
+}
+
+.eh-detalhe {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #f3edf9;
+  color: #3f3555;
+}
+
+.eh-page .eh-nota {
+  padding: 18px 0 24px;
+}
+
+.eh-psicologo {
+  background: #faf8f7;
+}
+
+.eh-boas-vindas {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: clamp(28px, 4vw, 58px) 0 32px;
+}
+
+.eh-faixa {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 24px;
+  padding: 18px 22px;
+  border-radius: 16px;
+  background: linear-gradient(110deg, #f0e8fa, #e7daf6);
+}
+
+.eh-faixa img {
+  width: 37px;
+  height: 37px;
+  object-fit: contain;
+}
+
+.eh-painel-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 20px;
+}
+
+.eh-painel {
+  min-width: 0;
+  padding: clamp(17px, 2.5vw, 28px);
+  border: 1px solid var(--eh-border);
+  border-radius: 18px;
+  background: var(--eh-paper);
+}
+
+.eh-painel h2 {
+  margin-bottom: 16px;
+}
+
+.eh-data {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.eh-data button,
+.eh-data span {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border: 1px solid var(--eh-border);
+  border-radius: 9px;
+  color: var(--eh-navy);
+  background: #fff;
+  font: inherit;
+}
+
+.eh-data button {
+  cursor: pointer;
+}
+
+.eh-agenda-lista,
+.eh-solicitacoes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.eh-agenda-lista li,
+.eh-solicitacoes li {
+  padding: 16px 0;
+  border-top: 1px solid var(--eh-border);
+}
+
+.eh-agenda-lista li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.eh-status {
+  padding: 5px 9px;
+  border-radius: 99px;
+  color: #215b36;
+  background: #e0f3e4;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.eh-solicitacao-linha {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.eh-avatar-menor {
+  width: 42px;
+  height: 42px;
+  font-size: 1rem;
+}
+
+.eh-disponibilidade {
+  margin-bottom: 20px;
+}
+
+.eh-horarios {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  margin-top: 12px;
+}
+
+.eh-horarios label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.eh-meu-perfil {
+  margin-top: 20px;
+  overflow-wrap: anywhere;
+}
+
+.eh-vazio {
+  padding: 14px;
+  border-radius: 12px;
+  background: #f3edf9;
+}
+
+.eh-vazio .eh-button {
+  margin-top: 8px;
+}
+
+.eh-page :is(a, button, select, input):focus-visible {
+  outline: 3px solid #3a5faf;
+  outline-offset: 3px;
+}
+
+@media (max-width: 820px) {
+  .eh-container {
+    width: min(100% - 32px, 700px);
+  }
+
+  .eh-header {
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    padding-inline: 16px;
+  }
+
+  .eh-nav {
+    order: 3;
+    width: 100%;
+  }
+
+  .eh-nav a {
+    padding: 8px;
+    font-size: 0.84rem;
+  }
+
+  .eh-hero,
+  .eh-painel-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .eh-hero {
+    gap: 6px;
+  }
+
+  .eh-hero > div {
+    padding: 16px 0 0;
+  }
+
+  .eh-hero h1 {
+    max-width: 14ch;
+  }
+
+  .eh-sala {
+    max-height: 255px;
+  }
+}
+
+@media (max-width: 540px) {
+  .eh-filtros {
+    grid-template-columns: 1fr;
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .eh-profissional-linha,
+  .eh-solicitacao-linha {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .eh-profissional-linha > .eh-button,
+  .eh-solicitacao-linha > .eh-button {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .eh-avatar {
+    width: 46px;
+    height: 46px;
+  }
+
+  .eh-profissional-info {
+    padding-left: 10px;
+  }
+
+  .eh-agenda-lista li {
+    gap: 8px;
+    font-size: 0.86rem;
+  }
+}

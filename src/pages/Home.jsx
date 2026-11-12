@@ -181,7 +181,7 @@ export default function Home() {
       <Header
   onAccountClick={(type) => {
     if (type === "professional") {
-      navigate("/psicologo");
+     navigate("/login/psicologo");
       return;
     }
 
