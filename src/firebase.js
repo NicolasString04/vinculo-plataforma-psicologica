@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAoq88m_bContWKO3pfa9vNhJowZV3hBsQ",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: "elora-tcc.firebaseapp.com",
   projectId: "elora-tcc",
   storageBucket: "elora-tcc.firebasestorage.app",
