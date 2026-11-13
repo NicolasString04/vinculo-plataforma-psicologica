@@ -1,0 +1,46 @@
+.requisitos-senha {
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--cad-suave, #edf5ff);
+  color: var(--cad-texto, #11234a);
+  font-size: 0.84rem;
+}
+
+.requisitos-senha-titulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  margin: 0 0 8px;
+}
+
+.requisitos-senha-titulo > span {
+  color: var(--cad-secundario, #45546f);
+  font-size: 0.76rem;
+}
+
+.requisitos-senha ul {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.requisitos-senha li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  color: var(--cad-secundario, #45546f);
+}
+
+.requisitos-senha .requisito-concluido {
+  color: #176344;
+}
+
+.requisito-icone {
+  min-width: 1rem;
+  text-align: center;
+  font-weight: 750;
+}

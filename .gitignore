@@ -1,3 +1,8 @@
+
+# ==========================================
+# ELORA - GITIGNORE
+# ==========================================
+
 # Logs
 logs
 *.log
@@ -7,15 +12,17 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Dependências e builds
+node_modules/
+dist/
+dist-ssr/
+coverage/
 *.local
 
-# Editor directories and files
+# Editor e arquivos do sistema
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
@@ -23,6 +30,39 @@ dist-ssr
 *.sln
 *.sw?
 
+# ==========================================
+# VARIÁVEIS DE AMBIENTE
+# ==========================================
 
+.env
+.env.*
+!.env.example
+
+# Backend
 backend/.env
-.env.local
+backend/.env.*
+
+# ==========================================
+# CREDENCIAIS E CHAVES PRIVADAS
+# ==========================================
+
+# Firebase Admin SDK / contas de serviço
+*serviceAccount*.json
+*service-account*.json
+*firebase-adminsdk*.json
+credentials.json
+
+# Certificados e chaves privadas
+*.pem
+*.p12
+*.pfx
+*.key
+
+# ==========================================
+# ARQUIVOS LOCAIS E BACKUPS
+# ==========================================
+
+*.sqlite
+*.sqlite3
+*.bak
+*.backup
