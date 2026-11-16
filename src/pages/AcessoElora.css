@@ -1,284 +1,917 @@
-.acesso-elora {
-  --acesso-fundo: #f7fbff;
-  --acesso-suave: #e3f2ff;
-  --acesso-destaque: #175fa7;
-  --acesso-hover: #104d8b;
-  --acesso-texto: #172d50;
-  --acesso-secundario: #4d5d75;
-  --acesso-borda: #c9d5e5;
 
-  min-height: 100vh;
-  padding: 24px clamp(16px, 4vw, 56px) 48px;
-  background: var(--acesso-fundo);
+/* =========================================
+   ELORA — ACESSO / LOGIN
+========================================= */
+
+.acesso-elora {
+  --acesso-principal: #0865c3;
+  --acesso-escuro: #072f78;
+  --acesso-borda: #b9c6ee;
+  --acesso-texto: #10184d;
+  --acesso-suave: #e8f3ff;
+  --acesso-frase: #91e4ff;
+
+  position: relative;
+  isolation: isolate;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100vw;
+  min-height: 100svh;
+  margin-left: calc(50% - 50vw);
+
+  padding: clamp(18px, 2.5vw, 42px);
+
+  overflow: hidden;
+  box-sizing: border-box;
+
   color: var(--acesso-texto);
   font-family: var(--elora-body-font, system-ui, sans-serif);
+
+  background:
+    radial-gradient(ellipse at 12% 10%, #c1bcff 0%, transparent 42%),
+    radial-gradient(ellipse at 85% 95%, #a4caff 0%, transparent 44%),
+    linear-gradient(130deg, #e5dfff, #f5eaff 56%, #b7d4ff);
 }
+
+/* VERSÃO PSICÓLOGO */
 
 .acesso-profissional {
-  --acesso-fundo: #fcf9ff;
-  --acesso-suave: #f0e5fa;
-  --acesso-destaque: #642e8e;
-  --acesso-hover: #512273;
-  --acesso-borda: #d9cce6;
+  --acesso-principal: #73099d;
+  --acesso-escuro: #4c076e;
+  --acesso-borda: #cfb0e5;
+  --acesso-suave: #f5eafa;
+  --acesso-frase: #e5a4f6;
+
+  background:
+    radial-gradient(ellipse at 15% 10%, #bb79d7 0%, transparent 43%),
+    radial-gradient(ellipse at 90% 94%, #d4a0e8 0%, transparent 46%),
+    linear-gradient(130deg, #d7a4ec, #f5e8fb 56%, #d1a2e4);
 }
 
+/* RESET */
+
 .acesso-elora,
-.acesso-elora * {
+.acesso-elora *,
+.acesso-elora *::before,
+.acesso-elora *::after {
   box-sizing: border-box;
 }
 
-.acesso-topo,
+/* =========================================
+   ESTRUTURA PRINCIPAL
+========================================= */
+
 .acesso-layout {
-  max-width: 1180px;
-  margin-inline: auto;
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.1fr)
+    minmax(0, 0.9fr);
+
+  width: min(100%, 1580px);
+
+  min-height: min(790px, calc(100svh - 64px));
+
+  border-radius: 34px;
+  overflow: hidden;
+
+  box-shadow:
+    0 24px 85px rgba(25, 19, 76, 0.19);
+
+  background: #fdfbff;
 }
 
-.acesso-topo {
+/* =========================================
+   BANNER ESQUERDO
+========================================= */
+
+.acesso-visual {
+  position: relative;
+
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 28px;
+  align-items: flex-start;
+
+  min-width: 0;
+  min-height: 680px;
+
+  padding: clamp(38px, 5vw, 78px);
+
+  overflow: hidden;
+
+  color: #fff;
+
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(9, 21, 60, 0.50),
+      rgba(9, 21, 60, 0.03) 80%
+    ),
+    url("/images/login-paciente.png");
+
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
+
+/* BANNER PSICÓLOGO */
+
+.acesso-profissional .acesso-visual {
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(42, 8, 57, 0.50),
+      rgba(42, 8, 57, 0.04) 80%
+    ),
+    url("/images/login-psicologo.png");
+}
+
+/* CONTEÚDO DO BANNER */
+
+.acesso-visual-conteudo {
+  position: relative;
+  z-index: 1;
+
+  width: 100%;
+  max-width: 590px;
+
+  padding-top: clamp(20px, 5vh, 58px);
+}
+
+/* ETIQUETA */
+
+.acesso-etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+
+  padding: 10px 20px;
+
+  border-radius: 999px;
+
+  background: rgba(95, 163, 236, 0.66);
+
+  color: #fff;
+
+  font-size: clamp(0.82rem, 1.35vw, 1.15rem);
+  font-weight: 750;
+  letter-spacing: 0.02em;
+
+  backdrop-filter: blur(9px);
+}
+
+.acesso-profissional .acesso-etiqueta {
+  background: rgba(143, 75, 167, 0.69);
+}
+
+/* FRASE PRINCIPAL */
+
+.acesso-frase {
+  max-width: 580px;
+
+  margin: 32px 0 24px;
+
+  color: #fff;
+
+  font-family: var(
+    --elora-display-font,
+    Georgia,
+    serif
+  );
+
+  font-size: clamp(2rem, 3.5vw, 3.5rem);
+
+  font-weight: 700;
+  line-height: 1.13;
+  letter-spacing: -0.035em;
+}
+
+.acesso-frase span {
+  display: inline;
+  color: var(--acesso-frase);
+}
+
+/* DETALHE DECORATIVO */
+
+.acesso-traco {
+  display: block;
+
+  width: 76px;
+  height: 6px;
+
+  margin-top: 30px;
+
+  border-radius: 20px;
+
+  background: var(--acesso-frase);
+}
+
+/* =========================================
+   PAINEL DIREITO
+========================================= */
+
+.acesso-painel {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  min-width: 0;
+
+  padding: clamp(32px, 4vw, 68px);
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff 0%,
+      #fbf9ff 65%,
+      var(--acesso-suave) 100%
+    );
+}
+
+/* LOGO ELORA */
 
 .acesso-marca {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+
+  gap: 12px;
+
+  margin-bottom: 34px;
+
   color: var(--acesso-texto);
-  font: 700 38px/1 var(--elora-heading-font, Georgia, serif);
+
   text-decoration: none;
 }
 
 .acesso-marca img {
-  width: 46px;
-  height: 46px;
-  object-fit: contain;
-}
-
-.acesso-voltar,
-.acesso-links a {
-  color: var(--acesso-destaque);
-  font-weight: 650;
-  text-underline-offset: 3px;
-}
-
-.acesso-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-  align-items: start;
-  gap: clamp(20px, 4vw, 52px);
-}
-
-.acesso-visual {
-  padding: clamp(20px, 3vw, 36px);
-  border-radius: 32px;
-  background: linear-gradient(160deg, var(--acesso-suave), var(--acesso-fundo));
-}
-
-.acesso-etiqueta {
-  display: inline-block;
-  padding: 7px 12px;
-  border-radius: 999px;
-  background: #fff;
-  color: var(--acesso-destaque);
-  font-size: 0.76rem;
-  font-weight: 750;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.acesso-frase,
-.acesso-painel h1 {
-  font-family: var(--elora-heading-font, Georgia, serif);
-  line-height: 1.08;
-  letter-spacing: -0.025em;
-}
-
-.acesso-frase {
-  max-width: 14ch;
-  margin: 18px 0;
-  font-size: clamp(2rem, 3.4vw, 3.5rem);
-}
-
-.acesso-sofa {
   display: block;
+
+  width: 58px;
+  height: 58px;
+
+  max-width: 58px;
+  max-height: 58px;
+
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.acesso-marca span {
+  font-family: var(
+    --elora-display-font,
+    Georgia,
+    serif
+  );
+
+  font-size: clamp(2.5rem, 3.5vw, 3.5rem);
+
+  font-weight: 700;
+  line-height: 1;
+
+  letter-spacing: -0.04em;
+}
+
+/* CONTEÚDO DO PAINEL */
+
+.acesso-painel-conteudo {
   width: 100%;
-  height: auto;
+  max-width: 560px;
+  min-width: 0;
 }
 
-.acesso-painel {
-  padding: clamp(20px, 3.5vw, 44px);
-  border: 1px solid var(--acesso-borda);
-  border-radius: 28px;
-  background: #fff;
-  box-shadow: 0 16px 44px #172d500d;
+/* CABEÇALHO */
+
+.acesso-cabecalho {
+  margin-bottom: 34px;
+  text-align: center;
 }
 
-.acesso-painel h1 {
+.acesso-cabecalho h1 {
+  margin: 0 0 12px;
+
+  color: var(--acesso-texto);
+
+  font-family: var(
+    --elora-display-font,
+    Georgia,
+    serif
+  );
+
+  font-size: clamp(2rem, 3vw, 3.1rem);
+
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+}
+
+.acesso-cabecalho p {
   margin: 0;
-  font-size: clamp(2rem, 3.4vw, 3.1rem);
+
+  color: #536084;
+
+  font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+  line-height: 1.5;
 }
 
-.acesso-intro {
-  margin: 10px 0 24px;
-  color: var(--acesso-secundario);
+/* =========================================
+   FORMULÁRIO
+========================================= */
+
+.acesso-form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 19px;
+
+  width: 100%;
 }
 
-.acesso-form,
-.acesso-grade-endereco {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.acesso-largo {
-  grid-column: 1 / -1;
-}
+/* CAMPOS */
 
 .acesso-campo {
-  min-width: 0;
+  display: flex;
+  flex-direction: column;
+
+  gap: 9px;
+
+  width: 100%;
 }
 
-.acesso-campo > label {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 0.9rem;
-  font-weight: 650;
+.acesso-campo label {
+  color: var(--acesso-texto);
+
+  font-size: 0.98rem;
+  font-weight: 700;
 }
 
-.acesso-campo input {
-  display: block;
+/* INPUT */
+
+.acesso-input-wrap {
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  width: 100%;
+  height: 57px;
+
+  padding: 0 17px;
+
+  border: 1.5px solid var(--acesso-borda);
+  border-radius: 14px;
+
+  background: rgba(255, 255, 255, 0.85);
+
+  color: var(--acesso-escuro);
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.acesso-input-wrap:focus-within {
+  border-color: var(--acesso-principal);
+
+  background: #fff;
+
+  box-shadow:
+    0 0 0 4px rgba(8, 101, 195, 0.09);
+}
+
+.acesso-input-wrap input {
+  flex: 1;
+
   width: 100%;
   min-width: 0;
-  min-height: 46px;
-  padding: 9px 12px;
-  border: 1px solid var(--acesso-borda);
-  border-radius: 10px;
-  background: #fff;
-  color: var(--acesso-texto);
-  font: inherit;
-}
+  height: 100%;
 
-.acesso-campo-senha {
-  position: relative;
-}
+  padding: 0;
 
-.acesso-campo-senha input {
-  padding-right: 76px;
-}
+  border: none;
+  outline: none;
 
-.acesso-campo-senha button {
-  position: absolute;
-  inset: 0 4px 0 auto;
-  padding-inline: 8px;
-  border: 0;
-  border-radius: 8px;
   background: transparent;
-  color: var(--acesso-destaque);
-  font: inherit;
-  font-size: 0.8rem;
-  cursor: pointer;
+
+  color: var(--acesso-texto);
+
+  font-family: inherit;
+  font-size: 1rem;
 }
 
-.acesso-elora :focus-visible {
-  outline: 2px solid var(--acesso-destaque);
-  outline-offset: 3px;
+.acesso-input-wrap input::placeholder {
+  color: #9ba5bf;
 }
 
-.acesso-endereco {
-  min-width: 0;
-  margin: 0;
-  padding: 14px;
-  border: 1px solid var(--acesso-borda);
-  border-radius: 14px;
-  background: var(--acesso-suave);
+.acesso-input-wrap input:focus {
+  outline: none;
 }
 
-.acesso-endereco legend {
-  padding: 0 5px;
-  font-weight: 700;
-}
+/* BOTÃO MOSTRAR SENHA */
 
-.acesso-endereco p,
-.acesso-demo {
-  margin: 0;
-  color: var(--acesso-secundario);
-  font-size: 0.86rem;
-}
-
-.acesso-opcoes {
+.acesso-mostrar-senha {
   display: flex;
-  gap: 20px;
-  margin-top: 10px;
-}
-
-.acesso-opcoes label {
-  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  min-height: 32px;
+  justify-content: center;
+
+  width: 36px;
+  height: 36px;
+
+  flex-shrink: 0;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: var(--acesso-escuro);
+
   cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
-.acesso-opcoes input {
-  accent-color: var(--acesso-destaque);
+.acesso-mostrar-senha:hover {
+  background: var(--acesso-suave);
+  color: var(--acesso-principal);
 }
 
-.acesso-grade-endereco {
-  margin-top: 14px;
+/* =========================================
+   RECUPERAÇÃO DE SENHA
+========================================= */
+
+.acesso-recuperacao {
+  display: flex;
+  justify-content: flex-end;
+
+  width: 100%;
+
+  margin-top: -9px;
 }
 
-.acesso-submit {
-  min-height: 50px;
-  padding: 12px 18px;
-  border: 0;
-  border-radius: 12px;
-  background: var(--acesso-destaque);
-  color: #fff;
-  font: inherit;
+.acesso-recuperacao button {
+  padding: 3px 0;
+
+  border: none;
+
+  background: transparent;
+
+  color: var(--acesso-principal);
+
+  font-family: inherit;
+  font-size: 0.96rem;
   font-weight: 700;
+
+  text-decoration: underline;
+  text-underline-offset: 3px;
+
   cursor: pointer;
 }
 
-.acesso-submit:hover {
-  background: var(--acesso-hover);
+.acesso-recuperacao button:hover {
+  color: var(--acesso-escuro);
+}
+
+.acesso-recuperacao button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* =========================================
+   MENSAGENS
+========================================= */
+
+.acesso-mensagem {
+  width: 100%;
+
+  margin: 0;
+
+  padding: 12px 15px;
+
+  border-radius: 10px;
+
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
 
 .acesso-erro {
-  margin: 0;
-  color: #a12635;
-  font-size: 0.9rem;
+  border: 1px solid #f1b7bd;
+
+  background: #fff0f1;
+
+  color: #a32937;
 }
 
-.acesso-links {
-  display: grid;
-  gap: 8px;
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid var(--acesso-borda);
-  font-size: 0.9rem;
+.acesso-aviso {
+  border: 1px solid #b7ddc6;
+
+  background: #effaf2;
+
+  color: #24683e;
 }
 
-.acesso-links p {
-  margin: 0;
+/* =========================================
+   BOTÃO ENTRAR
+========================================= */
+
+.acesso-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 14px;
+
+  width: 100%;
+  min-height: 59px;
+
+  margin-top: 3px;
+  padding: 14px 22px;
+
+  border: none;
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      105deg,
+      var(--acesso-principal),
+      var(--acesso-escuro)
+    );
+
+  color: #fff;
+
+  font-family: inherit;
+  font-size: 1.08rem;
+  font-weight: 750;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 20px rgba(8, 70, 150, 0.13);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
 }
 
-@media (max-width: 800px) {
+.acesso-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 26px rgba(8, 70, 150, 0.22);
+}
+
+.acesso-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.acesso-submit:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.acesso-profissional .acesso-submit {
+  box-shadow:
+    0 8px 20px rgba(115, 9, 157, 0.15);
+}
+
+/* =========================================
+   SEPARADOR
+========================================= */
+
+.acesso-separador {
+  width: 100%;
+  height: 1px;
+
+  margin: 32px 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      var(--acesso-borda),
+      transparent
+    );
+}
+
+/* =========================================
+   CRIAR CONTA
+========================================= */
+
+.acesso-criar-conta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+
+  width: 100%;
+  min-height: 55px;
+
+  padding: 12px 16px;
+
+  border: 1.5px solid var(--acesso-principal);
+  border-radius: 13px;
+
+  background: transparent;
+
+  color: var(--acesso-escuro);
+
+  font-size: 1rem;
+  font-weight: 750;
+
+  text-decoration: none;
+  text-align: center;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.acesso-criar-conta:hover {
+  background: var(--acesso-principal);
+  color: #fff;
+
+  transform: translateY(-1px);
+}
+
+/* =========================================
+   TROCAR PERFIL
+========================================= */
+
+.acesso-trocar-perfil {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  width: 100%;
+
+  margin-top: 25px;
+
+  color: var(--acesso-escuro);
+
+  font-size: 0.98rem;
+  font-weight: 700;
+
+  text-decoration: underline;
+  text-underline-offset: 4px;
+
+  transition: color 0.2s ease;
+}
+
+.acesso-trocar-perfil:hover {
+  color: var(--acesso-principal);
+}
+
+/* =========================================
+   ACESSIBILIDADE
+========================================= */
+
+.acesso-elora button:focus-visible,
+.acesso-elora a:focus-visible,
+.acesso-elora input:focus-visible {
+  outline: 3px solid var(--acesso-principal);
+  outline-offset: 3px;
+}
+
+/* =========================================
+   RESPONSIVIDADE — TABLETS
+========================================= */
+
+@media (max-width: 1050px) {
+  .acesso-layout {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1fr);
+
+    min-height: 700px;
+  }
+
+  .acesso-visual {
+    padding: 35px;
+  }
+
+  .acesso-painel {
+    padding: 35px;
+  }
+
+  .acesso-frase {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+  }
+
+  .acesso-marca {
+    margin-bottom: 25px;
+  }
+}
+
+/* =========================================
+   RESPONSIVIDADE — CELULARES
+========================================= */
+
+@media (max-width: 760px) {
+  .acesso-elora {
+    align-items: flex-start;
+    padding: 14px;
+  }
+
   .acesso-layout {
     grid-template-columns: 1fr;
+
+    width: 100%;
+    max-width: 540px;
+
+    min-height: auto;
+
+    border-radius: 23px;
   }
 
-  .acesso-sofa {
-    max-width: 340px;
-    margin-inline: auto;
+  .acesso-visual {
+    min-height: 270px;
+
+    padding: 28px;
+
+    background-position: center 45%;
+  }
+
+  .acesso-visual-conteudo {
+    padding-top: 0;
+  }
+
+  .acesso-etiqueta {
+    padding: 8px 14px;
+    font-size: 0.8rem;
+  }
+
+  .acesso-frase {
+    max-width: 380px;
+
+    margin: 22px 0 14px;
+
+    font-size: clamp(1.8rem, 7vw, 2.5rem);
+  }
+
+  .acesso-traco {
+    width: 55px;
+    height: 4px;
+    margin-top: 18px;
+  }
+
+  .acesso-painel {
+    padding: 30px 24px 36px;
+  }
+
+  .acesso-marca {
+    margin-bottom: 25px;
+  }
+
+  .acesso-marca img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .acesso-marca span {
+    font-size: 2.6rem;
+  }
+
+  .acesso-cabecalho {
+    margin-bottom: 26px;
+  }
+
+  .acesso-cabecalho h1 {
+    font-size: clamp(1.9rem, 7vw, 2.5rem);
+  }
+
+  .acesso-form {
+    gap: 17px;
+  }
+
+  .acesso-separador {
+    margin: 25px 0;
   }
 }
 
-@media (max-width: 520px) {
-  .acesso-form,
-  .acesso-grade-endereco {
-    grid-template-columns: 1fr;
+/* =========================================
+   TELAS MUITO PEQUENAS
+========================================= */
+
+@media (max-width: 380px) {
+  .acesso-visual {
+    min-height: 235px;
+    padding: 22px;
+  }
+
+  .acesso-painel {
+    padding: 25px 17px 30px;
+  }
+
+  .acesso-frase {
+    font-size: 1.8rem;
+  }
+
+  .acesso-submit {
+    font-size: 0.95rem;
+  }
+
+  .acesso-criar-conta {
+    font-size: 0.88rem;
+  }
+}
+
+/* =========================================
+   ALTURA REDUZIDA
+========================================= */
+
+@media (min-width: 761px) and (max-height: 760px) {
+  .acesso-layout {
+    min-height: calc(100svh - 40px);
+  }
+
+  .acesso-visual {
+    min-height: 600px;
+  }
+
+  .acesso-painel {
+    padding-top: 25px;
+    padding-bottom: 25px;
+  }
+
+  .acesso-marca {
+    margin-bottom: 20px;
+  }
+
+  .acesso-cabecalho {
+    margin-bottom: 22px;
+  }
+
+  .acesso-separador {
+    margin: 22px 0;
+  }
+}
+
+/* BOTÃO VOLTAR AO INÍCIO */
+
+.acesso-voltar {
+  position: absolute;
+  top: 22px;
+  left: 28px;
+  z-index: 10;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+
+  padding: 11px 19px;
+
+  border: 1px solid var(--acesso-borda);
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(12px);
+
+  color: var(--acesso-escuro);
+
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+
+  box-shadow: 0 4px 15px rgba(20, 30, 80, 0.07);
+
+  transition: all 0.2s ease;
+}
+
+.acesso-voltar span {
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.acesso-voltar:hover {
+  transform: translateX(-3px);
+  background: #fff;
+  border-color: var(--acesso-principal);
+  color: var(--acesso-principal);
+}
+
+@media (max-width: 760px) {
+  .acesso-elora {
+    padding-top: 75px;
+  }
+
+  .acesso-voltar {
+    top: 14px;
+    left: 14px;
+    padding: 5px 10px;
+    font-size: 0.85rem;
   }
 }

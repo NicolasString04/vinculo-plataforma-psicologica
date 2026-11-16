@@ -1,0 +1,742 @@
+/* =====================================================
+   ELORA — RELATÓRIOS DO PSICÓLOGO
+   Estilos exclusivos: prefixo rp-
+===================================================== */
+
+.rp-pagina {
+  display: grid;
+  gap: 19px;
+  color: #281236;
+}
+
+.rp-pagina,
+.rp-pagina * {
+  box-sizing: border-box;
+}
+
+.rp-pagina button,
+.rp-pagina input,
+.rp-pagina textarea,
+.rp-pagina select {
+  font: inherit;
+}
+
+/* =====================================================
+   CABEÇALHO DA PÁGINA
+===================================================== */
+
+.rp-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  color: #fff;
+}
+
+.rp-topo p {
+  font-size: 0.93rem;
+}
+
+.rp-primario,
+.rp-rascunho,
+.rp-secundario {
+  border-radius: 13px;
+  border: 1px solid transparent;
+  padding: 13px 22px;
+  font-weight: 750;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.rp-primario {
+  background: linear-gradient(
+    100deg,
+    #9130af,
+    #611378
+  );
+  color: white;
+  box-shadow: 0 5px 15px #43105232;
+}
+
+.rp-rascunho {
+  background: #eacdf5;
+  color: #4c1b62;
+}
+
+.rp-secundario {
+  border-color: #b78bcd;
+  background: transparent;
+  color: #54206b;
+}
+
+.rp-primario:hover:not(:disabled),
+.rp-rascunho:hover:not(:disabled),
+.rp-secundario:hover:not(:disabled) {
+  filter: brightness(0.96);
+}
+
+.rp-pagina button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* =====================================================
+   BARRA DE BUSCA
+===================================================== */
+
+.rp-barra-pesquisa {
+  background: #fff5ffeb;
+  border: 1px solid #ffffffb0;
+  border-radius: 20px;
+  padding: 16px;
+}
+
+.rp-seletor {
+  position: relative;
+  min-width: 0;
+}
+
+.rp-label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #30123e;
+}
+
+.rp-campo-busca,
+.rp-paciente-selecionado {
+  min-height: 53px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  border: 1px solid #d4b2e3;
+  border-radius: 12px;
+  background: #fff8ff;
+  padding: 5px 12px;
+}
+
+.rp-campo-busca > span {
+  font-size: 1.8rem;
+  line-height: 1;
+  color: #803ba2;
+}
+
+.rp-campo-busca input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #321540;
+}
+
+.rp-campo-busca button,
+.rp-paciente-selecionado button {
+  margin-left: auto;
+  border: 0;
+  background: transparent;
+  font-size: 1.55rem;
+  line-height: 1;
+  color: #6d3384;
+  cursor: pointer;
+}
+
+.rp-paciente-selecionado strong {
+  font-size: 0.95rem;
+  overflow-wrap: anywhere;
+}
+
+.rp-foto {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+.rp-foto-vazia {
+  background: linear-gradient(
+    140deg,
+    #a662c2,
+    #69208b
+  );
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+/* =====================================================
+   SUGESTÕES DE PACIENTES
+===================================================== */
+
+.rp-sugestoes {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 4px);
+  z-index: 80;
+
+  max-height: 260px;
+  overflow: auto;
+
+  border: 1px solid #d4b3e0;
+  border-radius: 13px;
+  padding: 6px;
+
+  background: #fffaff;
+  box-shadow: 0 14px 32px #32153c30;
+}
+
+.rp-sugestoes > p {
+  padding: 11px;
+  font-size: 0.81rem;
+  color: #665373;
+}
+
+.rp-sugestoes button {
+  width: 100%;
+  text-align: left;
+
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  padding: 7px 9px;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  color: #341542;
+
+  cursor: pointer;
+}
+
+.rp-sugestoes button:hover {
+  background: #f2e3f8;
+}
+
+.rp-sugestoes .rp-fechar-busca {
+  justify-content: center;
+  color: #6f288b;
+  font-size: 0.77rem;
+  border-top: 1px solid #f0e1f7;
+  border-radius: 0;
+}
+
+/* =====================================================
+   PAINEL DE RELATÓRIOS
+===================================================== */
+
+.rp-painel {
+  background: rgba(255, 249, 255, 0.94);
+  border-radius: 21px;
+  padding: 22px;
+  border: 1px solid #fff;
+  box-shadow: 0 12px 28px #2d133c25;
+}
+
+.rp-painel h2 {
+  color: #2d1239;
+  font-size: clamp(1.4rem, 2vw, 1.85rem);
+  font-family: Georgia, serif;
+}
+
+.rp-subtitulo {
+  color: #6c5477;
+  font-size: 0.86rem;
+  margin: 7px 0 18px !important;
+}
+
+.rp-estado {
+  padding: 36px 12px;
+  text-align: center;
+  color: #70577e;
+}
+
+.rp-aviso,
+.rp-erro {
+  padding: 11px 13px;
+  margin: 10px 0;
+  border-radius: 11px;
+  font-size: 0.84rem;
+}
+
+.rp-aviso {
+  color: #28683c;
+  background: #e5f5ea;
+}
+
+.rp-erro {
+  color: #922e40;
+  background: #fff0f2;
+  border: 1px solid #eabfc8;
+}
+
+/* =====================================================
+   TABELA
+===================================================== */
+
+.rp-tabela-scroll {
+  overflow-x: auto;
+}
+
+.rp-tabela {
+  width: 100%;
+  min-width: 650px;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+
+.rp-tabela th {
+  padding: 13px 11px;
+  text-align: left;
+  color: #64387b;
+  background: #eedcf5;
+  white-space: nowrap;
+}
+
+.rp-tabela th:first-child {
+  border-radius: 11px 0 0 0;
+}
+
+.rp-tabela th:last-child {
+  border-radius: 0 11px 0 0;
+}
+
+.rp-tabela td {
+  padding: 10px;
+  border-bottom: 1px solid #ead8ee;
+}
+
+.rp-celula-pessoa {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.rp-status {
+  padding: 6px 11px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.rp-status.rascunho {
+  background: #fff0cc;
+  color: #925916;
+}
+
+.rp-status.finalizado {
+  background: #dff3e5;
+  color: #23713c;
+}
+
+.rp-abrir {
+  color: #6a228c;
+  padding: 6px 12px;
+  border: 1px solid #cba5dc;
+  background: #fcf5ff;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* =====================================================
+   FUNDO ESCURO DO POP-UP
+===================================================== */
+
+.rp-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: grid;
+  place-items: center;
+
+  padding: 24px;
+  background: rgba(28, 8, 39, 0.76);
+  backdrop-filter: blur(5px);
+}
+
+/* =====================================================
+   MODAL PRINCIPAL
+===================================================== */
+
+.rp-modal,
+.rp-detalhe-modal {
+  width: min(1260px, 100%);
+  max-height: calc(100dvh - 40px);
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+
+  border: 1px solid #e2c2ef;
+  border-radius: 24px;
+
+  background: linear-gradient(
+    155deg,
+    #fffaff,
+    #f5e7fc
+  );
+
+  box-shadow: 0 22px 70px #1c082d70;
+  color: #2a123b;
+}
+
+.rp-modal-topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  padding: 23px 29px 19px;
+  gap: 15px;
+
+  border-bottom: 1px solid #e2c9e9;
+
+  background: linear-gradient(
+    110deg,
+    #fffaff,
+    #f0d9fa
+  );
+}
+
+.rp-modal-topo h2 {
+  font-size: clamp(1.4rem, 2.2vw, 2rem);
+  font-family: Georgia, serif;
+}
+
+.rp-modal-topo p {
+  color: #684775;
+  font-size: 0.85rem;
+  margin-top: 5px;
+}
+
+.rp-modal-topo > button {
+  width: 38px;
+  height: 38px;
+  flex: none;
+
+  border: 0;
+  background: #e7c8f5;
+  border-radius: 50%;
+
+  font-size: 1.65rem;
+  color: #4d1a61;
+  cursor: pointer;
+}
+
+.rp-modal-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 22px 28px 12px;
+}
+
+/* =====================================================
+   LINHA COM PACIENTE / PROFISSIONAL / DATA
+===================================================== */
+
+.rp-dados {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr 1fr;
+  gap: 18px;
+  align-items: start;
+
+  margin-bottom: 20px;
+}
+
+.rp-campo-fixo {
+  min-height: 53px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  padding: 8px 13px;
+
+  background: #f0e2f8;
+  border: 1px solid #e1cbea;
+  border-radius: 12px;
+
+  font-size: 0.87rem;
+  font-weight: 700;
+}
+
+.rp-campo-fixo small {
+  color: #745786;
+  font-size: 0.72rem;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.rp-select-agenda {
+  margin-top: 7px;
+  width: 100%;
+  padding: 7px;
+
+  border: 1px solid #cda6de;
+  background: #fffaff;
+  border-radius: 8px;
+}
+
+.rp-auxiliar {
+  display: block;
+  color: #765b82;
+  margin-top: 5px;
+  font-size: 0.74rem;
+}
+
+/* =====================================================
+   ANOTAÇÕES À ESQUERDA / TRIAGEM À DIREITA
+===================================================== */
+
+.rp-corpo-duas-colunas {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.7fr)
+    minmax(280px, 1fr);
+
+  gap: 17px;
+}
+
+.rp-box-anotacoes,
+.rp-box-triagem {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  border: 1px solid #dec0ec;
+  border-radius: 16px;
+  padding: 15px;
+
+  background: #fcf7ff;
+}
+
+.rp-box-anotacoes h3,
+.rp-box-triagem h3 {
+  font-size: 1.13rem;
+  font-family: Georgia, serif;
+  margin: 0 0 12px;
+}
+
+.rp-box-anotacoes textarea {
+  flex: 1;
+  width: 100%;
+  min-height: 330px;
+
+  padding: 14px;
+  resize: vertical;
+
+  border: 1px solid #dbbce8;
+  border-radius: 12px;
+  outline: none;
+
+  background: #fffaff;
+  color: #2d153b;
+
+  line-height: 1.6;
+}
+
+.rp-box-anotacoes textarea:focus {
+  border-color: #9343b2;
+  box-shadow: 0 0 0 3px #b97bd027;
+}
+
+.rp-box-anotacoes > small {
+  align-self: flex-end;
+  color: #7a6685;
+  font-size: 0.73rem;
+  padding-top: 7px;
+}
+
+.rp-box-triagem {
+  background: #f5e9fb;
+}
+
+.rp-triagem-vazia {
+  flex: 1;
+
+  padding: 20px;
+
+  display: grid;
+  place-items: center;
+
+  text-align: center;
+  color: #6d517d;
+  line-height: 1.55;
+  font-size: 0.88rem;
+
+  border-radius: 12px;
+  background: #ecd9f6;
+}
+
+/* =====================================================
+   HISTÓRICO EXPANSÍVEL
+===================================================== */
+
+.rp-historico {
+  margin-top: 18px;
+  border-radius: 14px;
+  border: 1px solid #e1c2ed;
+  overflow: hidden;
+}
+
+.rp-historico > button {
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+
+  padding: 17px 21px;
+  border: 0;
+
+  color: #4f1c65;
+  font-weight: 800;
+  background: #f0def9;
+  text-align: left;
+  cursor: pointer;
+}
+
+.rp-historico-conteudo {
+  padding: 12px 16px;
+  background: #fcf7ff;
+}
+
+.rp-historico-conteudo > button {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 9px;
+
+  padding: 12px;
+
+  color: #45215a;
+  border: 0;
+  border-bottom: 1px solid #ebd9f3;
+  background: transparent;
+  cursor: pointer;
+}
+
+.rp-historico-conteudo > button:hover {
+  background: #f0e1f7;
+}
+
+.rp-historico-conteudo > p {
+  color: #735b81;
+  font-size: 0.83rem;
+}
+
+/* =====================================================
+   RODAPÉ DO MODAL
+===================================================== */
+
+.rp-rodape-modal {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+
+  gap: 11px;
+  padding: 15px 28px 21px;
+
+  border-top: 1px solid #e1c7eb;
+}
+
+/* =====================================================
+   VISUALIZAÇÃO DO RELATÓRIO
+===================================================== */
+
+.rp-detalhe-modal {
+  max-width: 680px;
+}
+
+.rp-detalhe-texto {
+  min-height: 160px;
+
+  white-space: pre-wrap;
+  line-height: 1.65;
+
+  padding: 25px;
+  overflow: auto;
+}
+
+/* =====================================================
+   RESPONSIVIDADE
+===================================================== */
+
+@media (max-width: 900px) {
+  .rp-dados {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .rp-dados .rp-seletor {
+    grid-column: 1 / -1;
+  }
+
+  .rp-corpo-duas-colunas {
+    grid-template-columns: 1fr;
+  }
+
+  .rp-box-anotacoes textarea {
+    min-height: 230px;
+  }
+
+  .rp-triagem-vazia {
+    min-height: 140px;
+  }
+}
+
+@media (max-width: 600px) {
+  .rp-overlay {
+    padding: 8px;
+  }
+
+  .rp-modal {
+    max-height: calc(100dvh - 16px);
+    border-radius: 17px;
+  }
+
+  .rp-modal-topo {
+    padding: 18px 15px;
+  }
+
+  .rp-modal-scroll {
+    padding: 16px 12px;
+  }
+
+  .rp-rodape-modal {
+    padding: 12px;
+    gap: 6px;
+  }
+
+  .rp-rodape-modal button {
+    padding: 10px;
+    flex: 1;
+    font-size: 0.78rem;
+  }
+
+  .rp-dados {
+    grid-template-columns: 1fr;
+  }
+
+  .rp-dados .rp-seletor {
+    grid-column: auto;
+  }
+
+  .rp-topo {
+    flex-wrap: wrap;
+  }
+
+  .rp-topo .rp-primario {
+    width: 100%;
+  }
+
+  .rp-painel {
+    padding: 15px;
+  }
+}

@@ -537,3 +537,108 @@
     width: 48vw;
   }
 }
+
+/* Confirmação de cadastro do paciente */
+
+.cadastro-elora-confirmacao {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  width: 100%;
+  max-width: 650px;
+  padding: 28px;
+  margin-top: 24px;
+
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #eef7ff 100%
+  );
+
+  border: 1px solid #c5e2fa;
+  border-radius: 22px;
+
+  box-shadow: 0 16px 40px rgba(23, 104, 185, 0.09);
+
+  animation: cadastroConfirmacaoEntrada 0.45s ease-out;
+}
+
+.cadastro-elora-confirmacao-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+
+  background: #e0f4e9;
+  color: #238653;
+
+  border-radius: 50%;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.cadastro-elora-confirmacao-conteudo {
+  min-width: 0;
+}
+
+.cadastro-elora-confirmacao-etiqueta {
+  display: block;
+  margin-bottom: 8px;
+
+  color: var(--cad-cor);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+}
+
+.cadastro-elora-confirmacao h2 {
+  margin: 0 0 12px;
+
+  color: var(--cad-texto);
+  font-size: clamp(24px, 3vw, 30px);
+  line-height: 1.2;
+}
+
+.cadastro-elora-confirmacao p {
+  margin: 0 0 18px;
+
+  color: var(--cad-secundario);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.cadastro-elora-confirmacao-aguarde {
+  display: inline-block;
+
+  color: var(--cad-cor);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+@keyframes cadastroConfirmacaoEntrada {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 520px) {
+  .cadastro-elora-confirmacao {
+    flex-direction: column;
+    padding: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cadastro-elora-confirmacao {
+    animation: none;
+  }
+}

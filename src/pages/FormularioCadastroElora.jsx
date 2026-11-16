@@ -1,8 +1,7 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import RequisitosSenha, { requisitosSenha } from "./RequisitosSenha";
 import "./CadastroElora.css";
-import { Link, useNavigate } from "react-router-dom";
 
 const nome = {
   name: "nome",
@@ -64,10 +63,22 @@ const senhas = [
   },
 ];
 
-const camposPaciente = [nome, cpf, nascimento, email, telefone, ...senhas];
+const camposPaciente = [
+  nome,
+  cpf,
+  nascimento,
+  email,
+  telefone,
+  ...senhas,
+];
 
 const camposPsicologo = [
-  { name: "crp", label: "CRP", placeholder: "00/00000", maxLength: 10 },
+  {
+    name: "crp",
+    label: "CRP",
+    placeholder: "00/00000",
+    maxLength: 10,
+  },
   cpf,
   nome,
   nascimento,
@@ -85,8 +96,18 @@ const camposEndereco = [
     autoComplete: "postal-code",
     maxLength: 9,
   },
-  { name: "rua", label: "Rua", autoComplete: "address-line1", maxLength: 150 },
-  { name: "numero", label: "Número", placeholder: "Ex.: 123 ou S/N", maxLength: 20 },
+  {
+    name: "rua",
+    label: "Rua",
+    autoComplete: "address-line1",
+    maxLength: 150,
+  },
+  {
+    name: "numero",
+    label: "Número",
+    placeholder: "Ex.: 123 ou S/N",
+    maxLength: 20,
+  },
   {
     name: "complemento",
     label: "Complemento (opcional)",
@@ -94,30 +115,51 @@ const camposEndereco = [
     maxLength: 120,
     opcional: true,
   },
-  { name: "bairro", label: "Bairro", maxLength: 100 },
-  { name: "cidade", label: "Cidade", autoComplete: "address-level2", maxLength: 100 },
+  {
+    name: "bairro",
+    label: "Bairro",
+    maxLength: 100,
+  },
+  {
+    name: "cidade",
+    label: "Cidade",
+    autoComplete: "address-level2",
+    maxLength: 100,
+  },
 ];
 
 const estados = [
-  "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO",
-  "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI",
-  "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO",
+  "AC", "AL", "AP", "AM", "BA", "CE", "DF",
+  "ES", "GO", "MA", "MT", "MS", "MG", "PA",
+  "PB", "PR", "PE", "PI", "RJ", "RN", "RS",
+  "RO", "RR", "SC", "SP", "SE", "TO",
 ];
 
 const numeros = (valor) => valor.replace(/\D/g, "");
 
 function cpfValido(valor) {
-  if (valor.length !== 11 || /^(\d)\1{10}$/.test(valor)) return false;
+  if (
+    valor.length !== 11 ||
+    /^(\d)\1{10}$/.test(valor)
+  ) {
+    return false;
+  }
 
   return [9, 10].every((posicao) => {
     let soma = 0;
 
     for (let i = 0; i < posicao; i += 1) {
-      soma += Number(valor[i]) * (posicao + 1 - i);
+      soma +=
+        Number(valor[i]) *
+        (posicao + 1 - i);
     }
 
     const resto = (soma * 10) % 11;
-    return (resto === 10 ? 0 : resto) === Number(valor[posicao]);
+
+    return (
+      (resto === 10 ? 0 : resto) ===
+      Number(valor[posicao])
+    );
   });
 }
 
@@ -151,36 +193,65 @@ function Campo({
     "cadastro-elora-field",
     largo && "campo-full",
     endereco && `endereco-${name}`,
-  ].filter(Boolean).join(" ");
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <div className={classe}>
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={id}>
+        {label}
+      </label>
 
-      <div className={ehSenha ? "cadastro-elora-password" : undefined}>
+      <div
+        className={
+          ehSenha
+            ? "cadastro-elora-password"
+            : undefined
+        }
+      >
         <input
           {...atributos}
           id={id}
           name={name}
-          type={ehSenha && visivel ? "text" : type}
+          type={
+            ehSenha && visivel
+              ? "text"
+              : type
+          }
           required={!opcional}
-          aria-describedby={mostraRequisitos ? "cadastro-requisitos-senha" : undefined}
-          onChange={mostraRequisitos ? (event) => setValorSenha(event.target.value) : undefined}
+          aria-describedby={
+            mostraRequisitos
+              ? "cadastro-requisitos-senha"
+              : undefined
+          }
+          onChange={
+            mostraRequisitos
+              ? (event) =>
+                  setValorSenha(event.target.value)
+              : undefined
+          }
         />
 
         {ehSenha && (
           <button
             type="button"
             aria-controls={id}
-            aria-label={`${visivel ? "Ocultar" : "Mostrar"} ${label.toLowerCase()}`}
-            onClick={() => setVisivel((atual) => !atual)}
+            aria-label={`${
+              visivel ? "Ocultar" : "Mostrar"
+            } ${label.toLowerCase()}`}
+            onClick={() =>
+              setVisivel((atual) => !atual)
+            }
           >
             {visivel ? "Ocultar" : "Mostrar"}
           </button>
         )}
       </div>
 
-      {mostraRequisitos && <RequisitosSenha senha={valorSenha} />}
+      {mostraRequisitos && (
+        <RequisitosSenha senha={valorSenha} />
+      )}
     </div>
   );
 }
@@ -191,25 +262,51 @@ export default function FormularioCadastroElora({
   mensagemSucesso,
   mensagemErro,
 }) {
-  const [informarEndereco, setInformarEndereco] = useState(false);
+  const navigate = useNavigate();
+
+  const [informarEndereco, setInformarEndereco] =
+    useState(false);
+
   const [enviando, setEnviando] = useState(false);
   const [sucesso, setSucesso] = useState(false);
   const [erro, setErro] = useState("");
 
-  const campos = profissional ? camposPsicologo : camposPaciente;
+  // Redirecionamento automático do paciente
+  useEffect(() => {
+    if (!sucesso || profissional) return;
+
+    const temporizador = setTimeout(() => {
+      navigate("/cliente", {
+        replace: true,
+      });
+    }, 2200);
+
+    return () => clearTimeout(temporizador);
+  }, [sucesso, profissional, navigate]);
+
+  const campos = profissional
+    ? camposPsicologo
+    : camposPaciente;
+
   const hoje = dataDeHoje();
 
   async function handleSubmit(event) {
     event.preventDefault();
+
     if (enviando || sucesso) return;
 
     const formulario = event.currentTarget;
     const form = new FormData(formulario);
-    const ler = (campo) => String(form.get(campo) ?? "").trim();
+
+    const ler = (campo) =>
+      String(form.get(campo) ?? "").trim();
 
     function falhar(campo, mensagem) {
       setErro(mensagem);
-      formulario.elements.namedItem(campo)?.focus();
+
+      formulario.elements
+        .namedItem(campo)
+        ?.focus();
     }
 
     setErro("");
@@ -223,58 +320,104 @@ export default function FormularioCadastroElora({
       senha: String(form.get("senha") ?? ""),
     };
 
+    // Validação do nome
     if (dados.nome.length < 3) {
-      return falhar("nome", "Informe seu nome completo.");
+      return falhar(
+        "nome",
+        "Informe seu nome completo."
+      );
     }
 
+    // Validação do CPF
     if (!cpfValido(dados.cpf)) {
-      return falhar("cpf", "Informe um CPF válido.");
+      return falhar(
+        "cpf",
+        "Informe um CPF válido."
+      );
     }
 
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(dados.nascimento) || dados.nascimento > hoje) {
-      return falhar("nascimento", "Informe uma data de nascimento válida.");
+    // Validação da data de nascimento
+    if (
+      !/^\d{4}-\d{2}-\d{2}$/.test(dados.nascimento) ||
+      dados.nascimento > hoje
+    ) {
+      return falhar(
+        "nascimento",
+        "Informe uma data de nascimento válida."
+      );
     }
 
+    // Validação do telefone
     if (![10, 11].includes(dados.telefone.length)) {
-      return falhar("telefone", "Informe um telefone com DDD.");
+      return falhar(
+        "telefone",
+        "Informe um telefone com DDD."
+      );
     }
 
-    const faltam = requisitosSenha.filter(({ atende }) => !atende(dados.senha));
+    // Validação dos requisitos de senha
+    const faltam = requisitosSenha.filter(
+      ({ atende }) => !atende(dados.senha)
+    );
 
     if (faltam.length > 0) {
       return falhar(
         "senha",
-        `Sua senha ainda precisa de: ${faltam.map(({ texto }) => texto.toLowerCase()).join("; ")}.`,
+        `Sua senha ainda precisa de: ${faltam
+          .map(({ texto }) => texto.toLowerCase())
+          .join("; ")}.`
       );
     }
 
-    if (dados.senha !== form.get("confirmarSenha")) {
-      return falhar("confirmarSenha", "As senhas não coincidem.");
+    // Confirmação da senha
+    if (
+      dados.senha !== form.get("confirmarSenha")
+    ) {
+      return falhar(
+        "confirmarSenha",
+        "As senhas não coincidem."
+      );
     }
 
+    // Campos exclusivos do psicólogo
     if (profissional) {
       dados.crp = ler("crp");
       dados.endereco = null;
 
       if (!/^\d{2}\/\d{4,7}$/.test(dados.crp)) {
-        return falhar("crp", "Informe o CRP no formato 00/00000.");
+        return falhar(
+          "crp",
+          "Informe o CRP no formato 00/00000."
+        );
       }
 
       if (informarEndereco) {
         const cep = numeros(ler("cep"));
 
         if (cep.length !== 8) {
-          return falhar("cep", "Informe um CEP com 8 dígitos.");
+          return falhar(
+            "cep",
+            "Informe um CEP com 8 dígitos."
+          );
         }
 
         for (const campo of camposEndereco) {
-          if (!campo.opcional && !ler(campo.name)) {
-            return falhar(campo.name, `Preencha o campo ${campo.label}.`);
+          if (
+            !campo.opcional &&
+            !ler(campo.name)
+          ) {
+            return falhar(
+              campo.name,
+              `Preencha o campo ${campo.label}.`
+            );
           }
         }
 
         if (!estados.includes(ler("uf"))) {
-          return falhar("uf", "Selecione o estado.");
+          return falhar(
+            "uf",
+            "Selecione o estado."
+          );
         }
 
         dados.endereco = {
@@ -292,7 +435,10 @@ export default function FormularioCadastroElora({
     setEnviando(true);
 
     try {
+      // Aguarda Firebase Auth e Firestore
       await onCadastrar(dados);
+
+      // Mostra confirmação somente após sucesso
       setSucesso(true);
     } catch (falha) {
       setErro(mensagemErro(falha));
@@ -304,42 +450,117 @@ export default function FormularioCadastroElora({
   return (
     <main
       className={`cadastro-elora-page ${
-        profissional ? "cadastro-psicologo" : "cadastro-paciente"
+        profissional
+          ? "cadastro-psicologo"
+          : "cadastro-paciente"
       }`}
     >
       <img
         className="cadastro-elora-sofa"
-        src={profissional ? "/images/sofa-roxo.png" : "/images/sofa-azul-transparente.png"}
+        src={
+          profissional
+            ? "/images/sofa-roxo.png"
+            : "/images/sofa-azul-transparente.png"
+        }
         alt=""
       />
 
       <header className="cadastro-elora-topbar">
-        <Link to="/" className="cadastro-elora-brand" aria-label="Elora — início">
-          <img src="/images/logo-elora.png" alt="" />
+        <Link
+          to="/"
+          className="cadastro-elora-brand"
+          aria-label="Elora — início"
+        >
+          <img
+            src="/images/logo-elora.png"
+            alt=""
+          />
           <span>elora</span>
         </Link>
 
-        <span className="cadastro-elora-divider" aria-hidden="true" />
-        <strong>{profissional ? "Psicólogo(a)" : "Paciente"}</strong>
+        <span
+          className="cadastro-elora-divider"
+          aria-hidden="true"
+        />
+
+        <strong>
+          {profissional
+            ? "Psicólogo(a)"
+            : "Paciente"}
+        </strong>
       </header>
 
-      <section className="cadastro-elora-shell" aria-labelledby="titulo-cadastro">
+      <section
+        className="cadastro-elora-shell"
+        aria-labelledby="titulo-cadastro"
+      >
         <div className="cadastro-elora-heading">
           <span className="cadastro-elora-eyebrow">
-            {profissional ? "Área do psicólogo" : "Área do paciente"}
+            {profissional
+              ? "Área do psicólogo"
+              : "Área do paciente"}
           </span>
 
           <h1 id="titulo-cadastro">
-            {profissional ? "Crie sua conta profissional" : "Crie sua conta"}
+            {profissional
+              ? "Crie sua conta profissional"
+              : "Crie sua conta"}
           </h1>
 
-          {!profissional && <p>Encontre apoio no seu ritmo.</p>}
+          {!profissional && (
+            <p>
+              Encontre apoio no seu ritmo.
+            </p>
+          )}
         </div>
 
         {sucesso ? (
-          <p className="cadastro-elora-mensagem" role="status">
-            {mensagemSucesso}
-          </p>
+          profissional ? (
+            <p
+              className="cadastro-elora-mensagem"
+              role="status"
+            >
+              {mensagemSucesso}
+            </p>
+          ) : (
+            <section
+              className="cadastro-elora-confirmacao"
+              role="status"
+              aria-live="polite"
+            >
+              <div
+                className="cadastro-elora-confirmacao-icone"
+                aria-hidden="true"
+              >
+                ✓
+              </div>
+
+              <span className="cadastro-elora-confirmacao-etiqueta">
+                BEM-VINDO(A) AO ELORA
+              </span>
+
+              <h2>
+                Conta criada com sucesso!
+              </h2>
+
+              <p>
+                Seu cadastro foi concluído.
+                Seu espaço está pronto para você
+                começar a explorar.
+              </p>
+
+              <span className="cadastro-elora-confirmacao-aguarde">
+                Redirecionando para sua área...
+              </span>
+
+              <div
+                className="cadastro-elora-confirmacao-progresso"
+                aria-hidden="true"
+              >
+                <span />
+              </div>
+            </section>
+          )
         ) : (
           <form
             className="cadastro-elora-form"
@@ -351,7 +572,11 @@ export default function FormularioCadastroElora({
               <Campo
                 key={campo.name}
                 {...campo}
-                max={campo.type === "date" ? hoje : undefined}
+                max={
+                  campo.type === "date"
+                    ? hoje
+                    : undefined
+                }
               />
             ))}
 
@@ -362,8 +587,14 @@ export default function FormularioCadastroElora({
               >
                 <div className="cadastro-elora-address-heading">
                   <div>
-                    <h2 id="titulo-endereco">Deseja informar seu endereço?</h2>
-                    <p>É opcional. Podemos usá-lo no futuro para enviar conquistas.</p>
+                    <h2 id="titulo-endereco">
+                      Deseja informar seu endereço?
+                    </h2>
+
+                    <p>
+                      É opcional. Podemos usá-lo
+                      no futuro para enviar conquistas.
+                    </p>
                   </div>
 
                   <div
@@ -377,7 +608,9 @@ export default function FormularioCadastroElora({
                         name="informarEndereco"
                         value="sim"
                         checked={informarEndereco}
-                        onChange={() => setInformarEndereco(true)}
+                        onChange={() =>
+                          setInformarEndereco(true)
+                        }
                       />
                       Sim
                     </label>
@@ -388,7 +621,9 @@ export default function FormularioCadastroElora({
                         name="informarEndereco"
                         value="nao"
                         checked={!informarEndereco}
-                        onChange={() => setInformarEndereco(false)}
+                        onChange={() =>
+                          setInformarEndereco(false)
+                        }
                       />
                       Não
                     </label>
@@ -398,11 +633,18 @@ export default function FormularioCadastroElora({
                 {informarEndereco && (
                   <div className="cadastro-elora-address-grid">
                     {camposEndereco.map((campo) => (
-                      <Campo key={campo.name} {...campo} endereco />
+                      <Campo
+                        key={campo.name}
+                        {...campo}
+                        endereco
+                      />
                     ))}
 
                     <div className="cadastro-elora-field endereco-uf">
-                      <label htmlFor="cadastro-uf">UF</label>
+                      <label htmlFor="cadastro-uf">
+                        UF
+                      </label>
+
                       <select
                         id="cadastro-uf"
                         name="uf"
@@ -410,9 +652,20 @@ export default function FormularioCadastroElora({
                         defaultValue=""
                         required
                       >
-                        <option value="" disabled>UF</option>
+                        <option
+                          value=""
+                          disabled
+                        >
+                          UF
+                        </option>
+
                         {estados.map((uf) => (
-                          <option key={uf} value={uf}>{uf}</option>
+                          <option
+                            key={uf}
+                            value={uf}
+                          >
+                            {uf}
+                          </option>
                         ))}
                       </select>
                     </div>
@@ -422,7 +675,10 @@ export default function FormularioCadastroElora({
             )}
 
             {erro && (
-              <p className="cadastro-elora-mensagem campo-full mensagem-erro" role="alert">
+              <p
+                className="cadastro-elora-mensagem campo-full mensagem-erro"
+                role="alert"
+              >
                 {erro}
               </p>
             )}
@@ -443,12 +699,28 @@ export default function FormularioCadastroElora({
 
         <p className="cadastro-elora-login">
           Já tem conta?{" "}
-          <Link to={profissional ? "/login/psicologo" : "/login"}>Entrar</Link>
+          <Link
+            to={
+              profissional
+                ? "/login/psicologo"
+                : "/login"
+            }
+          >
+            Entrar
+          </Link>
         </p>
 
         <p className="cadastro-elora-other">
-          <Link to={profissional ? "/cadastro" : "/cadastro/psicologo"}>
-            {profissional ? "Sou paciente" : "Sou psicólogo(a)"}
+          <Link
+            to={
+              profissional
+                ? "/cadastro"
+                : "/cadastro/psicologo"
+            }
+          >
+            {profissional
+              ? "Sou paciente"
+              : "Sou psicólogo(a)"}
           </Link>
         </p>
       </section>
