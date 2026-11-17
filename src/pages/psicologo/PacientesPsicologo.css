@@ -1,0 +1,981 @@
+
+/* ==========================================
+   ELORA — MEUS PACIENTES
+   VISUAL BASEADO NO MOCKUP
+========================================== */
+
+.pp-pagina {
+  --pp-roxo: #74379d;
+  --pp-roxo-escuro: #3d194f;
+  --pp-lilas: #f3e7fa;
+  --pp-texto: #352044;
+  --pp-borda: #e8d8ef;
+
+  width: 100%;
+  min-width: 0;
+  color: var(--pp-texto);
+}
+
+.pp-pagina,
+.pp-pagina * {
+  box-sizing: border-box;
+}
+
+.pp-pagina button,
+.pp-pagina input {
+  font: inherit;
+}
+
+.pp-pagina button {
+  cursor: pointer;
+}
+
+.pp-pagina button:disabled {
+  cursor: not-allowed;
+}
+
+.pp-pagina :is(button, input):focus-visible {
+  outline: 3px solid #a675ce;
+  outline-offset: 2px;
+}
+
+/* ==========================================
+   CABEÇALHO
+========================================== */
+
+.pp-pagina .pp-topo {
+  padding: 2px 0 0;
+  margin: 0 0 26px;
+}
+
+.pp-pagina .pp-topo h2 {
+  color: #fff;
+
+  font:
+    700 clamp(27px, 2.7vw, 35px)/1.18
+    Georgia, "Times New Roman", serif;
+
+  text-shadow: 0 2px 8px #240b2e40;
+  margin: 0 0 7px;
+}
+
+.pp-pagina .pp-topo p {
+  color: #f3eaf6;
+  font-size: 13px;
+  margin: 0;
+}
+
+/* ==========================================
+   CONTAINER PRINCIPAL
+========================================== */
+
+.pp-pagina .pp-painel {
+  width: 100%;
+  overflow: visible;
+
+  border: 1px solid #ead7ef;
+  border-radius: 22px;
+
+  background: #fdfaff;
+  box-shadow: 0 18px 42px #2b0a371e;
+}
+
+/* ==========================================
+   BUSCAR NOVO PACIENTE
+========================================== */
+
+.pp-pagina .pp-busca-global {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 25px;
+  padding: 21px 25px;
+
+  border-radius: 21px 21px 0 0;
+
+  background: linear-gradient(
+    100deg,
+    #f1ddf7 0%,
+    #f6e9fa 58%,
+    #f2dff7 100%
+  );
+
+  border-bottom: 1px solid #ead5f0;
+}
+
+.pp-busca-apresentacao {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 250px;
+}
+
+.pp-busca-simbolo {
+  display: inline-flex;
+  color: #803b9d;
+}
+
+.pp-pagina .pp-busca-global h3 {
+  color: #351843;
+  font-weight: 800;
+  font-size: 17px;
+  margin: 0 0 4px;
+}
+
+.pp-pagina .pp-busca-global p {
+  color: #76617f;
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.pp-busca-direita {
+  position: relative;
+  flex: 1;
+  max-width: 630px;
+  min-width: 0;
+}
+
+/* CAMPOS DE PESQUISA */
+
+.pp-pagina .pp-campo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  width: 100%;
+  height: 44px;
+  padding: 0 13px;
+
+  border: 1px solid #d8bfe5;
+  border-radius: 10px;
+
+  background: #fff;
+  color: #8e5bab;
+
+  box-shadow: inset 0 1px 2px #3a1d4608;
+}
+
+.pp-pagina .pp-campo:focus-within {
+  border-color: #a96ac7;
+  box-shadow: 0 0 0 3px #aa7bcb22;
+}
+
+.pp-pagina .pp-campo input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+  color: #3f264c;
+  font-size: 13px;
+}
+
+.pp-pagina .pp-campo input::placeholder {
+  color: #947da0;
+}
+
+/* FEEDBACK DO FIREBASE */
+
+.pp-feedback {
+  margin-top: 7px !important;
+  font-size: 11px !important;
+}
+
+.pp-feedback--erro {
+  color: #ad3854 !important;
+}
+
+/* RESULTADOS DA BUSCA */
+
+.pp-pagina .pp-resultados {
+  position: absolute;
+  top: calc(100% + 7px);
+
+  left: 0;
+  right: 0;
+  z-index: 10;
+
+  background: white;
+  padding: 6px;
+
+  border: 1px solid var(--pp-borda);
+  border-radius: 12px;
+
+  box-shadow: 0 14px 28px #37143b29;
+}
+
+.pp-pagina .pp-resultados button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  width: 100%;
+  text-align: left;
+  padding: 10px;
+
+  border: 0;
+  border-radius: 9px;
+
+  background: #fff;
+  color: #6d4a81;
+}
+
+.pp-pagina .pp-resultados button:hover {
+  background: #f6effa;
+}
+
+.pp-resultados button span:nth-child(2) {
+  flex: 1;
+}
+
+.pp-resultados strong,
+.pp-resultados small {
+  display: block;
+}
+
+.pp-resultados strong {
+  font-size: 12px;
+  color: #3e244d;
+}
+
+.pp-resultados small {
+  font-size: 11px;
+  color: #86778e;
+}
+
+.pp-estado {
+  margin: 0;
+  padding: 10px;
+  color: #796781;
+  font-size: 12px;
+}
+
+/* ==========================================
+   CONTEÚDO DE PACIENTES
+========================================== */
+
+.pp-pagina .pp-conteudo {
+  padding: 22px 25px 24px;
+}
+
+.pp-secao-titulo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding-bottom: 17px;
+  border-bottom: 1px solid #eaddeb;
+
+  color: #7c389c;
+}
+
+.pp-pagina .pp-secao-titulo h3 {
+  margin: 0;
+  color: #351942;
+  font-size: 19px;
+  font-weight: 800;
+}
+
+/* ==========================================
+   ABAS
+========================================== */
+
+.pp-pagina .pp-abas {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+
+  margin: 16px 0 20px;
+}
+
+.pp-pagina .pp-abas button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  min-height: 38px;
+  padding: 8px 16px;
+
+  border-radius: 30px;
+  border: 1px solid #e6d6ed;
+
+  background: #fbf7ff;
+  color: #5d436d;
+
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+
+  box-shadow: 0 1px 4px #401a4c0a;
+}
+
+.pp-pagina .pp-abas button:hover {
+  background: #f0e2f7;
+}
+
+.pp-pagina .pp-abas button.ativo {
+  background: linear-gradient(
+    135deg,
+    #8d3fa7,
+    #6d258e
+  );
+
+  border-color: #763096;
+  color: #fff;
+
+  box-shadow: 0 3px 8px #7d338e26;
+}
+
+.pp-contador {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+
+  border-radius: 20px;
+
+  background: #eadbf1;
+  color: #6c3b80;
+
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.pp-pagina .pp-abas button.ativo .pp-contador {
+  background: #fff;
+  color: #79369a;
+}
+
+/* ==========================================
+   BARRA DA ABA SELECIONADA
+========================================== */
+
+.pp-pagina .pp-barra-aba {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 15px;
+
+  margin: 0 0 13px;
+}
+
+.pp-pagina .pp-barra-aba h4 {
+  color: #452755;
+  font-size: 14px;
+  font-weight: 800;
+  margin: 0 0 4px;
+}
+
+.pp-pagina .pp-barra-aba p {
+  color: #947fa0;
+  font-size: 11px;
+  margin: 0;
+}
+
+.pp-pagina .pp-campo--local {
+  max-width: 320px;
+  height: 39px;
+}
+
+/* ==========================================
+   COLUNAS
+========================================== */
+
+.pp-pagina .pp-colunas {
+  display: grid;
+
+  grid-template-columns:
+    minmax(250px, 0.78fr)
+    minmax(430px, 1.52fr);
+
+  align-items: stretch;
+  gap: 17px;
+}
+
+.pp-pagina .pp-lista,
+.pp-pagina .pp-perfil {
+  min-width: 0;
+  min-height: 380px;
+
+  border: 1px solid #e5d4eb;
+  border-radius: 15px;
+
+  background: #fff;
+  box-shadow: 0 3px 12px #3b17480a;
+}
+
+/* ==========================================
+   LISTA DE PACIENTES
+========================================== */
+
+.pp-pagina .pp-lista {
+  padding: 12px;
+}
+
+.pp-pagina .pp-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  width: 100%;
+  padding: 10px 11px;
+  margin: 0 0 7px;
+
+  border: 1px solid #e8dbed;
+  border-radius: 11px;
+
+  background: #fdfaff;
+  text-align: left;
+  color: #76468b;
+
+  box-shadow: 0 1px 3px #3e194608;
+}
+
+.pp-pagina .pp-item:hover {
+  background: #f4e6fa;
+}
+
+.pp-pagina .pp-item.selecionado {
+  background: #f0d9f9;
+  border-color: #ce9be3;
+}
+
+.pp-item-textos {
+  display: block;
+  flex: 1;
+  min-width: 0;
+}
+
+.pp-pagina .pp-item strong {
+  display: block;
+
+  color: #3e234b;
+  font-size: 12px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pp-pagina .pp-item small {
+  display: block;
+  margin-top: 4px;
+
+  color: #7b6987;
+  font-size: 11px;
+}
+
+/* ==========================================
+   AVATARES
+========================================== */
+
+.pp-pagina .pp-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 44px;
+
+  width: 44px;
+  height: 44px;
+
+  background: linear-gradient(
+    135deg,
+    #9c5aae,
+    #6a2d8a
+  );
+
+  color: #fff;
+  border-radius: 50%;
+
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.pp-pagina .pp-avatar--grande {
+  flex-basis: 106px;
+
+  width: 106px;
+  height: 106px;
+
+  border-radius: 19px;
+  border: 3px solid #f6e7fc;
+
+  font-size: 28px;
+}
+
+/* ==========================================
+   PACIENTE DA BUSCA GERAL
+========================================== */
+
+.pp-resultado-selecionado {
+  padding: 2px 0 9px;
+
+  border-bottom: 1px solid #eaddeb;
+  margin-bottom: 11px;
+}
+
+.pp-lista-legenda {
+  display: block;
+  margin: 0 0 9px;
+
+  color: #71448a;
+
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.pp-pagina .pp-limpar {
+  display: block;
+
+  margin: 6px 0 0 auto;
+  padding: 4px 0;
+
+  border: 0;
+  background: transparent;
+
+  color: #7d4698;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* ==========================================
+   ESTADOS VAZIOS
+========================================== */
+
+.pp-pagina .pp-vazio,
+.pp-pagina .pp-perfil-sem-selecao {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 290px;
+
+  text-align: center;
+  padding: 30px 22px;
+}
+
+.pp-vazio-simbolo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 54px;
+  height: 54px;
+
+  border-radius: 50%;
+  color: #8b52a4;
+  background: #f3e8fa;
+
+  margin-bottom: 15px;
+}
+
+.pp-pagina .pp-vazio strong,
+.pp-pagina .pp-perfil-sem-selecao strong {
+  color: #5c386b;
+  font-size: 13px;
+}
+
+.pp-pagina .pp-vazio p,
+.pp-pagina .pp-perfil-sem-selecao p {
+  color: #918098;
+  font-size: 12px;
+
+  max-width: 290px;
+  line-height: 1.5;
+
+  margin: 6px 0 0;
+}
+
+/* ==========================================
+   PERFIL LATERAL
+========================================== */
+
+.pp-pagina .pp-perfil {
+  overflow: hidden;
+}
+
+.pp-pagina .pp-perfil-cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  padding: 22px;
+
+  background: linear-gradient(
+    115deg,
+    #f6e8fc,
+    #fcf8ff
+  );
+}
+
+.pp-perfil-nome {
+  min-width: 0;
+}
+
+.pp-pagina .pp-perfil-nome h3 {
+  color: #351943;
+  margin: 0 0 9px;
+
+  font:
+    700 clamp(20px, 2.2vw, 27px)/1.15
+    Georgia, "Times New Roman", serif;
+
+  word-break: break-word;
+}
+
+.pp-pagina .pp-status {
+  display: inline-block;
+
+  padding: 6px 12px;
+  border-radius: 25px;
+
+  color: #773898;
+  background: #ecd3f8;
+
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* ==========================================
+   DADOS DO PACIENTE
+========================================== */
+
+.pp-pagina .pp-dados {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  gap: 0;
+  margin: 20px 21px;
+  padding-bottom: 20px;
+
+  border-bottom: 1px solid #ede2f0;
+}
+
+.pp-dado {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  padding: 0 12px;
+  min-width: 0;
+
+  border-right: 1px solid #ede2f0;
+}
+
+.pp-dado:first-child {
+  padding-left: 0;
+}
+
+.pp-dado:last-child {
+  border-right: 0;
+  padding-right: 0;
+}
+
+.pp-dado-icone {
+  flex: 0 0 auto;
+  color: #8c50a8;
+}
+
+.pp-dado small {
+  display: block;
+
+  color: #8b7893;
+  font-size: 10px;
+
+  margin-bottom: 5px;
+}
+
+.pp-dado strong {
+  display: block;
+
+  color: #342042;
+  font-size: 11px;
+  font-weight: 800;
+
+  overflow-wrap: anywhere;
+}
+
+/* ==========================================
+   CARDS DE FUNCIONALIDADES
+========================================== */
+
+.pp-pagina .pp-recursos {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 10px;
+  padding: 0 20px 15px;
+}
+
+.pp-pagina .pp-recurso {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+
+  min-height: 112px;
+  padding: 14px 12px;
+
+  border: 1px solid #e8d5ef;
+  border-radius: 12px;
+
+  background: #fbf5ff;
+  text-align: left;
+
+  color: #7e429c;
+}
+
+.pp-pagina .pp-recurso:not(:disabled):hover {
+  background: #f1e3f9;
+  border-color: #c99cdd;
+}
+
+.pp-pagina .pp-recurso--bloqueado {
+  opacity: 1;
+  color: #8e7b98;
+  background: #f4edf7;
+}
+
+.pp-recurso-icone {
+  flex: 0 0 auto;
+  margin-top: 2px;
+}
+
+.pp-recurso-texto {
+  flex: 1;
+  min-width: 0;
+}
+
+.pp-pagina .pp-recurso strong {
+  display: block;
+
+  color: #3e244c;
+  font-size: 12px;
+  line-height: 1.2;
+
+  margin-bottom: 8px;
+}
+
+.pp-pagina .pp-recurso small {
+  display: block;
+
+  font-size: 10px;
+  color: #8a7694;
+  line-height: 1.45;
+}
+
+/* ==========================================
+   AVISO DE PRIVACIDADE
+========================================== */
+
+.pp-pagina .pp-aviso {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+
+  margin: 0 20px 20px;
+  padding: 11px 12px;
+
+  border: 1px solid #efddf5;
+  border-radius: 9px;
+
+  background: #f7eafa;
+  color: #654272;
+
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.pp-aviso svg {
+  flex: 0 0 auto;
+}
+
+/* ==========================================
+   RESPONSIVIDADE
+========================================== */
+
+@media (max-width: 1050px) {
+  .pp-pagina .pp-colunas {
+    grid-template-columns:
+      minmax(240px, 0.9fr)
+      minmax(340px, 1.3fr);
+  }
+
+  .pp-pagina .pp-dados {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 16px;
+  }
+
+  .pp-dado:nth-child(2) {
+    border-right: 0;
+  }
+
+  .pp-dado:nth-child(3) {
+    padding-left: 0;
+  }
+
+  .pp-pagina .pp-recursos {
+    grid-template-columns: 1fr;
+  }
+
+  .pp-pagina .pp-recurso {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 760px) {
+  .pp-pagina .pp-topo {
+    margin-bottom: 18px;
+  }
+
+  .pp-pagina .pp-busca-global {
+    flex-direction: column;
+    align-items: stretch;
+
+    gap: 15px;
+    padding: 19px;
+  }
+
+  .pp-busca-apresentacao {
+    min-width: 0;
+  }
+
+  .pp-busca-direita {
+    max-width: none;
+  }
+
+  .pp-pagina .pp-conteudo {
+    padding: 18px 15px;
+  }
+
+  .pp-pagina .pp-colunas {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pp-pagina .pp-lista,
+  .pp-pagina .pp-perfil {
+    min-height: 0;
+  }
+
+  .pp-pagina .pp-vazio {
+    min-height: 170px;
+  }
+
+  .pp-pagina .pp-recursos {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+
+  .pp-pagina .pp-barra-aba {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .pp-pagina .pp-campo--local {
+    max-width: none;
+  }
+}
+
+@media (max-width: 570px) {
+  .pp-pagina .pp-abas {
+    gap: 7px;
+  }
+
+  .pp-pagina .pp-abas button {
+    padding: 8px 11px;
+    font-size: 11px;
+  }
+
+  .pp-pagina .pp-perfil-cabecalho {
+    padding: 17px;
+  }
+
+  .pp-pagina .pp-avatar--grande {
+    flex-basis: 80px;
+    width: 80px;
+    height: 80px;
+  }
+
+  .pp-pagina .pp-dados {
+    margin: 16px;
+  }
+
+  .pp-pagina .pp-recursos {
+    grid-template-columns: 1fr;
+    padding: 0 16px 15px;
+  }
+
+  .pp-pagina .pp-aviso {
+    margin: 0 16px 16px;
+  }
+}
+
+/* ==========================================
+   BOTÃO SOLICITAR ACOMPANHAMENTO
+========================================== */
+
+.pp-pagina .pp-acompanhamento {
+  display: flex;
+  padding: 0 20px 15px;
+}
+
+.pp-pagina .pp-btn-acompanhamento {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  min-height: 42px;
+  padding: 10px 24px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: linear-gradient(
+    135deg,
+    #9140ae,
+    #72258e
+  );
+
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+
+  box-shadow: 0 4px 10px #6c288b20;
+}
+
+/* Mantém o visual roxo mesmo desativado */
+.pp-pagina .pp-btn-acompanhamento:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+/* Responsividade */
+
+@media (max-width: 570px) {
+  .pp-pagina .pp-acompanhamento {
+    padding: 0 16px 15px;
+  }
+
+  .pp-pagina .pp-btn-acompanhamento {
+    width: 100%;
+  }
+}

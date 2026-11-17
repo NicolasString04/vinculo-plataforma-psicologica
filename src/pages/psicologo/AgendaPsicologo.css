@@ -1,0 +1,1020 @@
+
+/* =====================================================
+   ELORA — AGENDA DO PSICÓLOGO
+   Prefixo exclusivo: ag-
+===================================================== */
+
+.ag-pagina {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  min-width: 0;
+  color: #30123e;
+}
+
+.ag-pagina,
+.ag-pagina * {
+  box-sizing: border-box;
+}
+
+.ag-pagina button,
+.ag-pagina input,
+.ag-pagina select {
+  font: inherit;
+}
+
+.ag-pagina button {
+  cursor: pointer;
+}
+
+.ag-pagina button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =====================================================
+   INTRODUÇÃO
+===================================================== */
+
+.ag-introducao {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: white;
+}
+
+.ag-introducao p {
+  margin: 0;
+  font-size: 0.94rem;
+}
+
+.ag-introducao small {
+  display: block;
+  margin-top: 5px;
+  color: #ead2f1;
+  font-size: 0.78rem;
+}
+
+.ag-botao-primario {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 20px;
+  border: 0;
+  border-radius: 13px;
+  background: linear-gradient(110deg, #9738b8, #65147e);
+  color: white;
+  font-weight: 800;
+  box-shadow: 0 6px 14px #4210562a;
+  transition: filter 0.2s, transform 0.2s;
+}
+
+.ag-botao-primario:hover:not(:disabled) {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.ag-botao-cancelar {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 18px;
+  border: 1px solid #cba8db;
+  border-radius: 13px;
+  background: #fcf5ff;
+  color: #632980;
+  font-weight: 750;
+}
+
+/* =====================================================
+   NAVEGAÇÃO SEMANAL
+===================================================== */
+
+.ag-semana {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 42px 170px;
+  align-items: stretch;
+  gap: 12px;
+  padding: 17px;
+  border: 1px solid #ffffffbd;
+  border-radius: 23px;
+  background: #f3e2fbeb;
+  box-shadow: 0 10px 28px #250d3526;
+}
+
+.ag-seta {
+  display: grid;
+  place-items: center;
+  align-self: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid #ebd6f2;
+  border-radius: 50%;
+  background: #fff8ff;
+  color: #57246f;
+}
+
+.ag-seta:hover {
+  background: #e9cff4;
+}
+
+.ag-semana-dias {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.ag-dia-semana {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  min-height: 83px;
+  padding: 10px 5px;
+  border: 1px solid #e8d0f3;
+  border-radius: 15px;
+  background: #fff8ff9c;
+  color: #4a2460;
+  transition: 0.2s;
+}
+
+.ag-dia-semana:hover:not(.selecionado) {
+  background: #e9d0f4;
+}
+
+.ag-dia-semana > span:not(.ag-hoje-label) {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.ag-dia-semana > strong {
+  font-size: 0.94rem;
+}
+
+.ag-dia-semana.selecionado {
+  border-color: #8529af;
+  background: linear-gradient(140deg, #9d44bf, #63127f);
+  color: white;
+  box-shadow: 0 5px 14px #7c30914d;
+}
+
+.ag-hoje-label {
+  position: absolute;
+  top: -11px;
+  padding: 3px 11px;
+  border-radius: 20px;
+  background: #dfb0fa;
+  color: #61227d;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.ag-dia-indicador {
+  position: absolute;
+  bottom: 7px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #af56d3;
+}
+
+.ag-dia-semana.selecionado .ag-dia-indicador {
+  background: #fff;
+}
+
+.ag-calendario-botao {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  border-left: 1px solid #d8b9e7;
+  background: transparent;
+  color: #411951;
+  font-weight: 750;
+  text-align: left;
+}
+
+.ag-calendario-botao svg {
+  padding: 6px;
+  box-sizing: content-box;
+  border-radius: 13px;
+  background: #fff5ff;
+  color: #772ca0;
+  box-shadow: 0 3px 9px #45215522;
+}
+
+/* =====================================================
+   PAINÉIS PRINCIPAIS
+===================================================== */
+
+.ag-paineis {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.15fr);
+  align-items: start;
+  gap: 17px;
+}
+
+.ag-card {
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid #ffffffcc;
+  border-radius: 23px;
+  background: #fff9ffed;
+  box-shadow: 0 10px 28px #290d3d29;
+}
+
+.ag-card-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 21px;
+}
+
+.ag-card-cabecalho h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: Georgia, serif;
+  font-size: 1.38rem;
+  color: #2c103a;
+}
+
+.ag-card-cabecalho h2 svg {
+  color: #7e2aa0;
+}
+
+.ag-card-cabecalho p {
+  margin: 7px 0 0 35px;
+  color: #6f5380;
+  font-size: 0.81rem;
+  text-transform: capitalize;
+}
+
+.ag-contagem {
+  padding: 8px 13px;
+  border-radius: 30px;
+  background: #efd9f7;
+  color: #582070;
+  font-size: 0.76rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* =====================================================
+   LISTA DE ATENDIMENTOS
+===================================================== */
+
+.ag-lista-itens {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.ag-atendimento {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 85px;
+  padding: 12px;
+  border: 1px solid #ecdbf3;
+  border-radius: 16px;
+  background: #fffaff;
+  color: #32123c;
+  text-align: left;
+  box-shadow: 0 3px 9px #3b174016;
+  transition: 0.2s;
+}
+
+.ag-atendimento:hover {
+  border-color: #ba83d2;
+  background: #fbf0ff;
+}
+
+.ag-atendimento.ativo {
+  border: 2px solid #933bc3;
+  background: #f4dffa;
+  box-shadow: 0 4px 13px #802baa29;
+}
+
+.ag-atendimento.cancelado {
+  opacity: 0.65;
+}
+
+.ag-hora {
+  display: grid;
+  place-items: center;
+  min-width: 70px;
+  height: 55px;
+  padding: 6px;
+  border-radius: 12px;
+  background: #efdef9;
+  color: #4c175f;
+  font-size: 1.12rem;
+}
+
+.ag-atendimento-info {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  flex: 1;
+  min-width: 0;
+}
+
+.ag-atendimento-info > strong {
+  font-size: 0.93rem;
+  line-height: 1.3;
+}
+
+.ag-atendimento-info > small {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #715783;
+  font-size: 0.76rem;
+}
+
+.ag-atendimento > svg {
+  flex: none;
+  color: #70228e;
+}
+
+.ag-status-cancelado {
+  color: #ad3434;
+  font-size: 0.74rem;
+  font-weight: 750;
+}
+
+/* =====================================================
+   STATUS DE PAGAMENTO
+===================================================== */
+
+.ag-pagamento {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: fit-content;
+  padding: 8px 10px;
+  border-radius: 30px;
+  font-size: 0.71rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.ag-pagamento.aprovado {
+  background: #dff5e4;
+  color: #176332;
+}
+
+.ag-pagamento.pendente {
+  background: #ffe2e6;
+  color: #a6223b;
+}
+
+.ag-pagamento-aviso {
+  margin: 12px 0 0;
+  color: #9c3b4d;
+  font-size: 0.8rem;
+}
+
+/* =====================================================
+   DETALHES DO PACIENTE
+===================================================== */
+
+.ag-detalhes {
+  min-height: 405px;
+}
+
+.ag-paciente-cabecalho {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.ag-avatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 79px;
+  height: 79px;
+  border: 4px solid #fff;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #d59ce7, #742496);
+  color: white;
+  font-size: 1.35rem;
+  font-weight: 850;
+  box-shadow: 0 4px 10px #42165325;
+}
+
+.ag-paciente-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ag-paciente-info h2 {
+  margin: 4px 0 12px;
+  font-family: Georgia, serif;
+  color: #281036;
+  font-size: clamp(1.3rem, 2.2vw, 1.8rem);
+}
+
+.ag-paciente-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ag-paciente-acoes button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 12px;
+  border: 1px solid #cda7dd;
+  border-radius: 30px;
+  background: #fcf5ff;
+  color: #5b2174;
+  font-size: 0.79rem;
+  font-weight: 800;
+}
+
+.ag-paciente-acoes button:hover {
+  background: #efd9f7;
+}
+
+/* =====================================================
+   TRIAGEM / HISTÓRICO
+===================================================== */
+
+.ag-bloco-expandido {
+  margin-top: 15px;
+  padding: 15px;
+  border: 1px solid #dec0e9;
+  border-radius: 13px;
+  background: #f2e2fa;
+}
+
+.ag-bloco-expandido > strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #4f1b66;
+}
+
+.ag-bloco-expandido p {
+  margin: 0 0 8px;
+  color: #523a62;
+  font-size: 0.84rem;
+  line-height: 1.6;
+}
+
+.ag-bloco-expandido small {
+  color: #805d91;
+  font-size: 0.72rem;
+}
+
+.ag-historico-lista {
+  padding: 0;
+  margin: 0 0 9px;
+  list-style: none;
+}
+
+.ag-historico-lista li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 0;
+  border-bottom: 1px solid #e3c6ed;
+  font-size: 0.8rem;
+}
+
+.ag-historico-lista svg {
+  color: #712b96;
+  flex: none;
+}
+
+/* =====================================================
+   DIVISORES E MÉTRICAS
+===================================================== */
+
+.ag-divisor {
+  width: 100%;
+  height: 1px;
+  margin: 20px 0;
+  background: #d8b7e7;
+}
+
+.ag-detalhes-metricas {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.ag-detalhes-metricas > div {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.ag-detalhes-metricas svg {
+  flex: none;
+  color: #772b98;
+}
+
+.ag-detalhes-metricas span {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: #735582;
+  font-size: 0.73rem;
+}
+
+.ag-detalhes-metricas strong {
+  color: #321341;
+  font-size: 0.82rem;
+}
+
+.ag-pagamento-linha {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.ag-pagamento-linha > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ag-pagamento-linha svg {
+  color: #722990;
+}
+
+.ag-status-atendimento {
+  margin-bottom: 17px;
+  font-size: 0.82rem;
+  color: #654675;
+}
+
+.ag-feedback {
+  margin-bottom: 13px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #e9dcf4;
+  color: #512565;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.ag-botoes-finais {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.ag-botoes-finais button {
+  min-height: 48px;
+}
+
+/* =====================================================
+   CALENDÁRIO MENSAL
+===================================================== */
+
+.ag-calendario-pagina {
+  padding: 25px;
+  border: 1px solid #fff;
+  border-radius: 24px;
+  background: #fff9ffef;
+  box-shadow: 0 10px 28px #280d3a25;
+}
+
+.ag-calendario-topo {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  flex-wrap: wrap;
+}
+
+.ag-calendario-topo h2 {
+  font-family: Georgia, serif;
+  font-size: 1.75rem;
+  color: #30133f;
+}
+
+.ag-calendario-topo p {
+  margin-top: 4px;
+  font-size: 0.84rem;
+  color: #765c83;
+}
+
+.ag-voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border: 1px solid #d6b9e4;
+  border-radius: 12px;
+  background: #f6eafa;
+  color: #5d2676;
+  font-weight: 700;
+}
+
+.ag-calendario-controles {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+  margin: 24px 0;
+}
+
+.ag-calendario-controles button {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid #d3a9e4;
+  border-radius: 50%;
+  background: #f9f1ff;
+  color: #682587;
+}
+
+.ag-calendario-controles h3 {
+  min-width: 210px;
+  text-align: center;
+  text-transform: capitalize;
+  color: #4b1c62;
+  font-size: 1.16rem;
+}
+
+.ag-mes-grade {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.ag-dia-cabecalho {
+  padding: 9px;
+  text-align: center;
+  font-size: 0.77rem;
+  font-weight: 800;
+  color: #65327e;
+}
+
+.ag-dia-vazio {
+  min-height: 88px;
+}
+
+.ag-dia-mes {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+  min-height: 88px;
+  padding: 12px;
+  border: 1px solid #ead5f1;
+  border-radius: 13px;
+  background: #fffaff;
+  color: #4a1d60;
+  text-align: left;
+}
+
+.ag-dia-mes:hover {
+  border-color: #a44fc1;
+  background: #f2e0f9;
+}
+
+.ag-dia-mes.hoje {
+  border-color: #a65ac7;
+}
+
+.ag-dia-mes.selecionado {
+  background: #e9ccf5;
+  border: 2px solid #8130a7;
+}
+
+.ag-dia-mes > strong {
+  font-size: 1.07rem;
+}
+
+.ag-marcador-mes {
+  display: inline-flex;
+  padding: 5px 7px;
+  border-radius: 9px;
+  background: #e4c4f2;
+  color: #55206b;
+  font-size: 0.69rem;
+  font-weight: 800;
+}
+
+.ag-sem-marcador {
+  color: #d5bedc;
+}
+
+.ag-legenda {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 21px;
+  color: #725781;
+  font-size: 0.79rem;
+}
+
+.ag-legenda > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ag-legenda-ponto {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #a34ec5;
+}
+
+/* =====================================================
+   ESTADOS VAZIOS
+===================================================== */
+
+.ag-estado-vazio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  min-height: 240px;
+  color: #765a84;
+  text-align: center;
+}
+
+.ag-estado-vazio strong {
+  color: #4e2660;
+}
+
+.ag-estado-vazio p {
+  max-width: 300px;
+  line-height: 1.5;
+  font-size: 0.84rem;
+}
+
+/* =====================================================
+   MODAIS
+===================================================== */
+
+.ag-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: #1a0629b8;
+  backdrop-filter: blur(5px);
+}
+
+.ag-modal {
+  width: min(620px, 100%);
+  max-height: calc(100dvh - 36px);
+  overflow-y: auto;
+  border: 1px solid #e6c9f0;
+  border-radius: 22px;
+  background: #fcf6ff;
+  color: #32113e;
+  box-shadow: 0 20px 60px #19052560;
+}
+
+.ag-modal-pequeno {
+  width: min(520px, 100%);
+}
+
+.ag-modal-topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 22px;
+  border-bottom: 1px solid #e8d0f1;
+  background: #f2def9;
+}
+
+.ag-modal-topo h2 {
+  font-family: Georgia, serif;
+  font-size: 1.5rem;
+}
+
+.ag-modal-topo p {
+  margin-top: 7px;
+  color: #72547e;
+  font-size: 0.84rem;
+}
+
+.ag-modal-topo > button {
+  width: 33px;
+  height: 33px;
+  border: 0;
+  border-radius: 50%;
+  background: #e3c6f0;
+  color: #52236a;
+  font-size: 1.45rem;
+}
+
+.ag-formulario {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 22px;
+}
+
+.ag-formulario label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.ag-formulario select,
+.ag-formulario input {
+  width: 100%;
+  min-height: 43px;
+  padding: 9px 11px;
+  border: 1px solid #d4afe4;
+  border-radius: 10px;
+  outline: none;
+  background: #fffaff;
+  color: #3c1d4c;
+}
+
+.ag-formulario select:focus,
+.ag-formulario input:focus {
+  border-color: #9c40c1;
+}
+
+.ag-form-nota {
+  grid-column: 1 / -1;
+  padding: 12px;
+  border-radius: 10px;
+  background: #f0def9;
+  color: #6a4b7b;
+  font-size: 0.79rem;
+}
+
+.ag-modal-rodape {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 11px;
+  padding: 16px 22px 22px;
+  border-top: 1px solid #e8d0f1;
+}
+
+.ag-confirmar-cancelamento {
+  padding: 12px 17px;
+  border: 0;
+  border-radius: 12px;
+  background: #b83253;
+  color: white;
+  font-weight: 800;
+}
+
+/* =====================================================
+   RESPONSIVIDADE
+===================================================== */
+
+@media (max-width: 1250px) {
+  .ag-semana {
+    grid-template-columns: 38px minmax(0, 1fr) 38px;
+  }
+
+  .ag-calendario-botao {
+    grid-column: 1 / -1;
+    padding: 12px;
+    border-left: 0;
+    border-top: 1px solid #d8b9e7;
+  }
+
+  .ag-paineis {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .ag-introducao {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ag-semana {
+    grid-template-columns: 30px minmax(0, 1fr) 30px;
+    padding: 10px;
+    gap: 5px;
+  }
+
+  .ag-seta {
+    width: 30px;
+    height: 36px;
+  }
+
+  .ag-semana-dias {
+    gap: 3px;
+  }
+
+  .ag-dia-semana {
+    min-height: 68px;
+    padding: 8px 2px;
+  }
+
+  .ag-dia-semana > span:not(.ag-hoje-label) {
+    font-size: 0.67rem;
+  }
+
+  .ag-dia-semana > strong {
+    font-size: 0.67rem;
+    text-align: center;
+  }
+
+  .ag-hoje-label {
+    font-size: 0.6rem;
+    padding: 2px 5px;
+  }
+
+  .ag-card {
+    padding: 15px;
+  }
+
+  .ag-atendimento {
+    flex-wrap: wrap;
+  }
+
+  .ag-atendimento .ag-pagamento {
+    margin-left: auto;
+  }
+
+  .ag-detalhes-metricas {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ag-paciente-cabecalho {
+    flex-direction: column;
+  }
+
+  .ag-botoes-finais {
+    grid-template-columns: 1fr;
+  }
+
+  .ag-calendario-pagina {
+    padding: 13px;
+  }
+
+  .ag-mes-grade {
+    gap: 3px;
+  }
+
+  .ag-dia-mes,
+  .ag-dia-vazio {
+    min-height: 59px;
+  }
+
+  .ag-dia-mes {
+    padding: 6px;
+    border-radius: 7px;
+  }
+
+  .ag-marcador-mes {
+    font-size: 0.58rem;
+    padding: 3px;
+  }
+
+  .ag-formulario {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mensagens de erro do formulário de agendamento */
+
+.ag-form-erro {
+  margin: 0 22px 12px;
+  padding: 12px;
+  border: 1px solid #f0b8c4;
+  border-radius: 10px;
+  background: #ffe5e9;
+  color: #963047;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}

@@ -1,23 +1,53 @@
-import { useEffect, useMemo, useState } from "react";
+
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
 import { auth, db } from "../../firebase";
+import AgendaPsicologo from "./AgendaPsicologo";
+import PacientesPsicologo from "./PacientesPsicologo";
 import RelatoriosPsicologo from "./RelatoriosPsicologo";
-
 import "./PsicologoHome.css";
 
-// ======================================================
-// DADOS FICTÍCIOS — SOMENTE PARA CONTA DE TESTE
-// ======================================================
-
+// Dados exclusivos da conta de demonstração.
+// Não são gravados no Firestore.
 const ATENDIMENTOS_EXEMPLO = [
-  { id: "s1", dia: 0, hora: "14:00", paciente: "João P.", formato: "Online" },
-  { id: "s2", dia: 0, hora: "15:00", paciente: "Mariana S.", formato: "Presencial" },
-  { id: "s3", dia: 0, hora: "16:30", paciente: "Lucas R.", formato: "Online" },
-  { id: "s4", dia: 1, hora: "10:00", paciente: "Ana C.", formato: "Online" },
-  { id: "s5", dia: 1, hora: "11:30", paciente: "Rafael M.", formato: "Presencial" },
+  {
+    id: "s1",
+    dia: 0,
+    hora: "14:00",
+    paciente: "João P.",
+    formato: "Online",
+  },
+  {
+    id: "s2",
+    dia: 0,
+    hora: "15:00",
+    paciente: "Mariana S.",
+    formato: "Presencial",
+  },
+  {
+    id: "s3",
+    dia: 0,
+    hora: "16:30",
+    paciente: "Lucas R.",
+    formato: "Online",
+  },
+  {
+    id: "s4",
+    dia: 1,
+    hora: "10:00",
+    paciente: "Ana C.",
+    formato: "Online",
+  },
+  {
+    id: "s5",
+    dia: 1,
+    hora: "11:30",
+    paciente: "Rafael M.",
+    formato: "Presencial",
+  },
 ];
 
 const SOLICITACOES_EXEMPLO = [
@@ -39,14 +69,6 @@ const SOLICITACOES_EXEMPLO = [
     detalhe: "Solicitou disponibilidade para atendimento presencial.",
     quando: "Há 6 horas",
   },
-];
-
-const PACIENTES_EXEMPLO = [
-  "João P.",
-  "Mariana S.",
-  "Lucas R.",
-  "Ana C.",
-  "Rafael M.",
 ];
 
 const HORARIOS_EXEMPLO = [
@@ -71,9 +93,9 @@ const MENU = [
   { id: "configuracoes", titulo: "Configurações", icone: "settings" },
 ];
 
-// ======================================================
-// ÍCONES
-// ======================================================
+// ==========================================
+// ÍCONES DO PAINEL
+// ==========================================
 
 function Icone({ nome, tamanho = 21, className = "" }) {
   const formas = {
@@ -81,12 +103,6 @@ function Icone({ nome, tamanho = 21, className = "" }) {
       <>
         <path d="m3 10 9-7 9 7" />
         <path d="M5 9v12h14V9M9 21v-7h6v7" />
-      </>
-    ),
-    search: (
-      <>
-        <circle cx="11" cy="11" r="7" />
-        <path d="m16 16 5 5" />
       </>
     ),
     calendar: (
@@ -122,13 +138,15 @@ function Icone({ nome, tamanho = 21, className = "" }) {
     ),
     bell: (
       <>
-        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" />
+        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
+        <path d="M10 21h4" />
       </>
     ),
     message: <path d="M4 4h16v13H8l-4 4z" />,
     file: (
       <>
-        <path d="M6 2h9l5 5v15H6zM15 2v5h5M9 12h8M9 16h8" />
+        <path d="M6 2h9l5 5v15H6zM15 2v5h5" />
+        <path d="M9 12h8M9 16h8" />
       </>
     ),
     settings: (
@@ -140,27 +158,15 @@ function Icone({ nome, tamanho = 21, className = "" }) {
     star: (
       <path d="m12 2 3.1 6.4 7.1 1-5.1 5 .9 7-6-3.3-6 3.3.9-7-5.1-5 7.1-1z" />
     ),
-    clock: (
-      <>
-        <circle cx="12" cy="12" r="9" />
-        <path d="M12 7v5l4 3" />
-      </>
-    ),
     arrow: <path d="M4 12h16m-6-6 6 6-6 6" />,
-    left: <path d="m15 18-6-6 6-6" />,
     right: <path d="m9 18 6-6-6-6" />,
     check: <path d="m4 12 5 5L20 6" />,
     x: <path d="M5 5l14 14M19 5 5 19" />,
     chevron: <path d="m6 9 6 6 6-6" />,
-    edit: (
-      <path d="m4 20 4-.8L20 7a2 2 0 0 0-3-3L5 16z" />
-    ),
-    crown: (
-      <path d="m3 8 4 4 5-7 5 7 4-4-2 12H5z" />
-    ),
+    edit: <path d="m4 20 4-.8L20 7a2 2 0 0 0-3-3L5 16z" />,
     shield: (
       <>
-        <path d="m12 2 9 4v6c0 6-4.5 9-9 10-4.5-1-9-4-9-10V6z" />
+        <path d="m12 2 9 4v6c0 6-4.5 9-9 10-4.5-1-9-4-9-9-10V6z" />
         <path d="m8 12 3 3 5-6" />
       </>
     ),
@@ -179,7 +185,8 @@ function Icone({ nome, tamanho = 21, className = "" }) {
     ),
     logout: (
       <>
-        <path d="M10 17l5-5-5-5M15 12H3M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7" />
+        <path d="M10 17l5-5-5-5M15 12H3" />
+        <path d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7" />
       </>
     ),
     headset: (
@@ -210,29 +217,21 @@ function Icone({ nome, tamanho = 21, className = "" }) {
   );
 }
 
-// ======================================================
-// UTILITÁRIOS
-// ======================================================
-
 function iniciais(nome = "") {
-  const partes = nome.trim().split(/\s+/).filter(Boolean);
-
   return (
-    partes
+    String(nome)
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
       .slice(0, 2)
-      .map((item) => item[0])
+      .map((parte) => parte[0])
       .join("") || "EL"
   ).toUpperCase();
 }
 
-function dataRelativa(deslocamento = 0) {
+function rotuloDia(deslocamento) {
   const data = new Date();
   data.setDate(data.getDate() + deslocamento);
-  return data;
-}
-
-function rotuloDia(deslocamento = 0) {
-  const data = dataRelativa(deslocamento);
 
   const semana = new Intl.DateTimeFormat("pt-BR", {
     weekday: "short",
@@ -246,12 +245,16 @@ function rotuloDia(deslocamento = 0) {
   };
 }
 
+// ==========================================
+// COMPONENTES DO DASHBOARD
+// ==========================================
+
 function CardMetrica({ icone, valor, titulo, detalhe }) {
   return (
     <article className="ps-card-metrica">
-      <div className="ps-metrica-icone">
-        <Icone nome={icone} tamanho={35} />
-      </div>
+      <span className="ps-metrica-icone">
+        <Icone nome={icone} tamanho={32} />
+      </span>
 
       <div className="ps-metrica-texto">
         <strong>{valor}</strong>
@@ -265,16 +268,142 @@ function CardMetrica({ icone, valor, titulo, detalhe }) {
 function CartaoVazio({ titulo, texto }) {
   return (
     <div className="ps-vazio">
-      <Icone nome="calendar" tamanho={30} />
+      <Icone nome="calendar" tamanho={29} />
       <strong>{titulo}</strong>
       <p>{texto}</p>
     </div>
   );
 }
 
-// ======================================================
-// HOME DO PSICÓLOGO
-// ======================================================
+function ResumoAgenda({ atendimentos }) {
+  if (!atendimentos.length) {
+    return (
+      <CartaoVazio
+        titulo="Nenhum atendimento próximo"
+        texto="Os agendamentos reais serão integrados posteriormente."
+      />
+    );
+  }
+
+  const dias = [
+    ...new Set(atendimentos.map((item) => item.dia)),
+  ];
+
+  return (
+    <div className="ps-agenda-corpo">
+      {dias.map((deslocamento) => {
+        const dia = rotuloDia(deslocamento);
+
+        return (
+          <div className="ps-dia-grupo" key={deslocamento}>
+            <div className="ps-dia-caixa">
+              <span>{dia.semana}</span>
+              <strong>{dia.numero}</strong>
+            </div>
+
+            <div className="ps-dia-itens">
+              {atendimentos
+                .filter((item) => item.dia === deslocamento)
+                .map((item) => (
+                  <div
+                    className="ps-agenda-item"
+                    key={item.id}
+                  >
+                    <strong className="ps-hora">
+                      {item.hora}
+                    </strong>
+
+                    <span className="ps-agenda-paciente">
+                      <Icone nome="user" tamanho={17} />
+                      Atendimento — {item.paciente}
+                    </span>
+
+                    <span
+                      className={`ps-modalidade ${
+                        item.formato === "Online" ? "online" : ""
+                      }`}
+                    >
+                      <Icone
+                        nome={
+                          item.formato === "Online"
+                            ? "check"
+                            : "pin"
+                        }
+                        tamanho={14}
+                      />
+                      {item.formato}
+                    </span>
+                  </div>
+                ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function ResumoSolicitacoes({
+  solicitacoes,
+  contaTeste,
+  onDecisao,
+}) {
+  if (!solicitacoes.length) {
+    return (
+      <div className="ps-solicitacoes-lista">
+        <CartaoVazio
+          titulo="Nenhuma solicitação pendente"
+          texto="Novos pedidos aparecerão aqui após a integração."
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="ps-solicitacoes-lista">
+      {solicitacoes.map((item) => (
+        <article className="ps-solicitacao" key={item.id}>
+          <span className="ps-solicitacao-avatar">
+            {iniciais(item.nome)}
+          </span>
+
+          <div className="ps-solicitacao-info">
+            <strong>{item.nome}</strong>
+            <span>{item.detalhe}</span>
+          </div>
+
+          <small>{item.quando}</small>
+
+          <div className="ps-solicitacao-acoes">
+            <button
+              type="button"
+              className="ps-aceitar"
+              disabled={!contaTeste}
+              onClick={() => onDecisao(item.id, "aceita")}
+            >
+              <Icone nome="check" tamanho={15} />
+              Aceitar
+            </button>
+
+            <button
+              type="button"
+              className="ps-recusar"
+              disabled={!contaTeste}
+              aria-label={`Recusar solicitação de ${item.nome}`}
+              onClick={() => onDecisao(item.id, "recusada")}
+            >
+              <Icone nome="x" tamanho={16} />
+            </button>
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+// ==========================================
+// HOME PRINCIPAL DO PSICÓLOGO
+// ==========================================
 
 export default function PsicologoHome() {
   const navigate = useNavigate();
@@ -286,7 +415,6 @@ export default function PsicologoHome() {
   const [profissional, setProfissional] = useState(null);
 
   const [secao, setSecao] = useState("painel");
-
   const [menuContaAberto, setMenuContaAberto] = useState(false);
   const [notificacoesAbertas, setNotificacoesAbertas] =
     useState(false);
@@ -295,19 +423,11 @@ export default function PsicologoHome() {
     useState(SOLICITACOES_EXEMPLO);
 
   const [mensagemDemo, setMensagemDemo] = useState("");
-  const [diaSelecionado, setDiaSelecionado] = useState(0);
-  const [buscaPaciente, setBuscaPaciente] = useState("");
 
-  const [horariosDisponiveis, setHorariosDisponiveis] = useState([
-    "09:00",
-    "11:30",
-    "15:00",
-  ]);
+  const [horariosDisponiveis, setHorariosDisponiveis] =
+    useState(["09:00", "11:30", "15:00"]);
 
-  // ====================================================
-  // AUTENTICAÇÃO FIREBASE
-  // ====================================================
-
+  // Mantém as leituras originais do Firebase.
   useEffect(() => {
     let ativo = true;
 
@@ -320,6 +440,9 @@ export default function PsicologoHome() {
           });
           return;
         }
+
+        setCarregando(true);
+        setErro("");
 
         try {
           const [cadastro, perfil] = await Promise.all([
@@ -360,26 +483,33 @@ export default function PsicologoHome() {
           setProfissional(perfil.data());
         } catch (falha) {
           console.error(
-            "Não foi possível abrir o portal profissional:",
+            "Erro ao abrir portal profissional:",
             falha
           );
 
           if (ativo) {
             setErro(
               falha.code === "permission-denied"
-                ? "O Firestore não permitiu consultar o perfil. Confira as regras de leitura das coleções usuarios e psicologos."
-                : "Não foi possível carregar seu perfil. Verifique a conexão e tente novamente."
+                ? "O Firestore não autorizou a leitura do seu perfil. Confira as regras de usuarios e psicologos."
+                : "Não foi possível carregar seu perfil. Verifique sua conexão."
             );
           }
         } finally {
-          if (ativo) setCarregando(false);
+          if (ativo) {
+            setCarregando(false);
+          }
         }
       },
       (falha) => {
-        console.error("Falha de autenticação:", falha);
+        console.error(
+          "Falha de autenticação:",
+          falha
+        );
 
         if (ativo) {
-          setErro("Não foi possível confirmar sua sessão.");
+          setErro(
+            "Não foi possível confirmar sua sessão."
+          );
           setCarregando(false);
         }
       }
@@ -391,16 +521,12 @@ export default function PsicologoHome() {
     };
   }, [navigate]);
 
-  // ====================================================
-  // DADOS DO PROFISSIONAL
-  // ====================================================
-
   const contaTeste = profissional?.contaTeste === true;
-
   const nomeCompleto =
     usuario?.nome || "Profissional Elora";
 
-  const primeiroNome = nomeCompleto.trim().split(/\s+/)[0];
+  const primeiroNome =
+    nomeCompleto.trim().split(/\s+/)[0];
 
   const verificacao =
     profissional?.statusVerificacao || "pendente";
@@ -408,63 +534,34 @@ export default function PsicologoHome() {
   const crp =
     profissional?.crp || "Não informado";
 
-  const solicitacoes = contaTeste ? solicitacoesDemo : [];
+  const solicitacoes =
+    contaTeste ? solicitacoesDemo : [];
 
-  const atendimentos = contaTeste
-    ? ATENDIMENTOS_EXEMPLO
-    : [];
+  const atendimentosResumo =
+    contaTeste ? ATENDIMENTOS_EXEMPLO : [];
 
-  const pacientes = useMemo(
-    () => (contaTeste ? PACIENTES_EXEMPLO : []),
-    [contaTeste]
-  );
-
-  const pacientesFiltrados = useMemo(() => {
-    return pacientes.filter((nome) =>
-      nome
-        .toLocaleLowerCase("pt-BR")
-        .includes(
-          buscaPaciente.toLocaleLowerCase("pt-BR")
-        )
-    );
-  }, [pacientes, buscaPaciente]);
-
-  // ====================================================
-  // PREENCHIMENTO DO PERFIL
-  // ====================================================
-
+  // Progresso do perfil: preserva os campos originais.
   const perfilCampos = [
     Boolean(usuario?.nome),
     Boolean(usuario?.email),
-
     Boolean(
       profissional?.crp &&
       profissional.crp !== "TESTE"
     ),
-
     Boolean(profissional?.biografia),
-
     Array.isArray(profissional?.especialidades) &&
       profissional.especialidades.length > 0,
-
     Array.isArray(profissional?.abordagens) &&
       profissional.abordagens.length > 0,
-
     Array.isArray(profissional?.modalidades) &&
       profissional.modalidades.length > 0,
-
     Boolean(profissional?.fotoURL),
   ];
 
   const progressoPerfil = Math.round(
     (perfilCampos.filter(Boolean).length /
-      perfilCampos.length) *
-      100
+      perfilCampos.length) * 100
   );
-
-  // ====================================================
-  // NAVEGAÇÃO
-  // ====================================================
 
   function irPara(destino) {
     setSecao(destino);
@@ -504,224 +601,16 @@ export default function PsicologoHome() {
   async function sair() {
     try {
       await signOut(auth);
-
       navigate("/login/psicologo", {
         replace: true,
       });
     } catch (falha) {
       console.error("Erro ao sair:", falha);
-
       setMensagemDemo(
-        "Não foi possível encerrar sua sessão. Tente novamente."
+        "Não foi possível encerrar sua sessão."
       );
     }
   }
-
-  // ====================================================
-  // AGENDA
-  // ====================================================
-
-  function BlocoAgenda({ completa = false }) {
-    const lista = completa
-      ? atendimentos.filter(
-          (item) => item.dia === diaSelecionado
-        )
-      : atendimentos.filter(
-          (item) => item.dia === 0 || item.dia === 1
-        );
-
-    const agrupados = [
-      ...new Set(lista.map((item) => item.dia)),
-    ];
-
-    return (
-      <div className="ps-agenda-corpo">
-        {completa && (
-          <div className="ps-seletor-dia">
-            <button
-              type="button"
-              aria-label="Dia anterior"
-              onClick={() =>
-                setDiaSelecionado((d) => d - 1)
-              }
-            >
-              <Icone nome="left" />
-            </button>
-
-            <strong>
-              {new Intl.DateTimeFormat("pt-BR", {
-                dateStyle: "full",
-              }).format(dataRelativa(diaSelecionado))}
-            </strong>
-
-            <button
-              type="button"
-              aria-label="Próximo dia"
-              onClick={() =>
-                setDiaSelecionado((d) => d + 1)
-              }
-            >
-              <Icone nome="right" />
-            </button>
-
-            <button
-              className="ps-hoje"
-              type="button"
-              onClick={() => setDiaSelecionado(0)}
-            >
-              Hoje
-            </button>
-          </div>
-        )}
-
-        {agrupados.length === 0 ? (
-          <CartaoVazio
-            titulo="Nenhum atendimento nesta data"
-            texto={
-              contaTeste
-                ? "Escolha outro dia para ver os horários de exemplo."
-                : "Sua agenda será preenchida quando os agendamentos forem integrados."
-            }
-          />
-        ) : (
-          agrupados.map((deslocamento) => {
-            const dia = rotuloDia(deslocamento);
-
-            return (
-              <div
-                className="ps-dia-grupo"
-                key={deslocamento}
-              >
-                <div className="ps-dia-caixa">
-                  <span>{dia.semana}</span>
-                  <strong>{dia.numero}</strong>
-                </div>
-
-                <div className="ps-dia-itens">
-                  {lista
-                    .filter(
-                      (item) =>
-                        item.dia === deslocamento
-                    )
-                    .map((item) => (
-                      <div
-                        className="ps-agenda-item"
-                        key={item.id}
-                      >
-                        <strong className="ps-hora">
-                          {item.hora}
-                        </strong>
-
-                        <span className="ps-agenda-paciente">
-                          <Icone
-                            nome="user"
-                            tamanho={18}
-                          />
-                          Atendimento — {item.paciente}
-                        </span>
-
-                        <span
-                          className={`ps-modalidade ${
-                            item.formato === "Online"
-                              ? "online"
-                              : ""
-                          }`}
-                        >
-                          <Icone
-                            nome={
-                              item.formato === "Online"
-                                ? "check"
-                                : "pin"
-                            }
-                            tamanho={14}
-                          />
-                          {item.formato}
-                        </span>
-                      </div>
-                    ))}
-                </div>
-              </div>
-            );
-          })
-        )}
-      </div>
-    );
-  }
-
-  // ====================================================
-  // SOLICITAÇÕES
-  // ====================================================
-
-  function BlocoSolicitacoes() {
-    return (
-      <div className="ps-solicitacoes-lista">
-        {solicitacoes.length === 0 ? (
-          <CartaoVazio
-            titulo="Nenhuma solicitação pendente"
-            texto="Novos pedidos de agendamento aparecerão aqui após a integração das solicitações."
-          />
-        ) : (
-          solicitacoes.map((item) => (
-            <article
-              className="ps-solicitacao"
-              key={item.id}
-            >
-              <span className="ps-solicitacao-avatar">
-                {iniciais(item.nome)}
-              </span>
-
-              <div className="ps-solicitacao-info">
-                <strong>{item.nome}</strong>
-                <span>{item.detalhe}</span>
-              </div>
-
-              <small>{item.quando}</small>
-
-              <div className="ps-solicitacao-acoes">
-                <button
-                  type="button"
-                  className="ps-aceitar"
-                  onClick={() =>
-                    tratarSolicitacao(
-                      item.id,
-                      "aceita"
-                    )
-                  }
-                >
-                  <Icone
-                    nome="check"
-                    tamanho={16}
-                  />
-                  Aceitar
-                </button>
-
-                <button
-                  type="button"
-                  className="ps-recusar"
-                  aria-label={`Recusar solicitação de ${item.nome}`}
-                  onClick={() =>
-                    tratarSolicitacao(
-                      item.id,
-                      "recusada"
-                    )
-                  }
-                >
-                  <Icone
-                    nome="x"
-                    tamanho={17}
-                  />
-                </button>
-              </div>
-            </article>
-          ))
-        )}
-      </div>
-    );
-  }
-
-  // ====================================================
-  // CARREGAMENTO E ERROS
-  // ====================================================
 
   if (carregando) {
     return (
@@ -759,15 +648,9 @@ export default function PsicologoHome() {
     );
   }
 
-  // ====================================================
-  // INTERFACE PRINCIPAL
-  // ====================================================
-
   return (
     <div className="ps-root">
-
       {/* CABEÇALHO SUPERIOR */}
-
       <header className="ps-topbar">
         <Link
           to="/psicologo"
@@ -787,32 +670,24 @@ export default function PsicologoHome() {
         >
           {[
             ["painel", "Início", "home"],
-            ["pacientes", "Buscar Paciente", "search"],
             ["agenda", "Agenda", "calendar"],
             ["pacientes", "Pacientes", "users"],
             ["relatorios", "Relatórios", "chart"],
-          ].map(([id, titulo, icone], indice) => (
+          ].map(([id, titulo, icone]) => (
             <button
-              key={`${id}-${indice}`}
+              key={id}
               type="button"
-              className={
-                secao === id ? "ativo" : ""
-              }
+              className={secao === id ? "ativo" : ""}
               onClick={() => irPara(id)}
             >
-              <Icone
-                nome={icone}
-                tamanho={22}
-              />
+              <Icone nome={icone} tamanho={20} />
               {titulo}
             </button>
           ))}
         </nav>
 
         <div className="ps-topbar-acoes">
-
-          {/* NOTIFICAÇÕES */}
-
+          {/* Notificações */}
           <div className="ps-menu-ancora">
             <button
               type="button"
@@ -821,16 +696,12 @@ export default function PsicologoHome() {
               aria-expanded={notificacoesAbertas}
               onClick={() => {
                 setNotificacoesAbertas(
-                  (v) => !v
+                  (valor) => !valor
                 );
                 setMenuContaAberto(false);
               }}
             >
-              <Icone
-                nome="bell"
-                tamanho={23}
-              />
-
+              <Icone nome="bell" tamanho={22} />
               {solicitacoes.length > 0 && (
                 <span className="ps-bolinha" />
               )}
@@ -839,7 +710,6 @@ export default function PsicologoHome() {
             {notificacoesAbertas && (
               <div className="ps-popover">
                 <strong>Notificações</strong>
-
                 <p>
                   {solicitacoes.length
                     ? `${solicitacoes.length} solicitação(ões) de exemplo para revisar.`
@@ -849,17 +719,16 @@ export default function PsicologoHome() {
             )}
           </div>
 
-          {/* PERFIL */}
-
+          {/* Conta profissional */}
           <div className="ps-menu-ancora">
             <button
               type="button"
               className="ps-perfil-botao"
-              aria-expanded={menuContaAberto}
               aria-label="Abrir menu da conta"
+              aria-expanded={menuContaAberto}
               onClick={() => {
                 setMenuContaAberto(
-                  (v) => !v
+                  (valor) => !valor
                 );
                 setNotificacoesAbertas(false);
               }}
@@ -867,7 +736,6 @@ export default function PsicologoHome() {
               <span className="ps-mini-avatar">
                 {iniciais(nomeCompleto)}
               </span>
-
               <Icone
                 nome="chevron"
                 tamanho={16}
@@ -883,10 +751,7 @@ export default function PsicologoHome() {
                   type="button"
                   onClick={() => irPara("perfil")}
                 >
-                  <Icone
-                    nome="user"
-                    tamanho={17}
-                  />
+                  <Icone nome="user" tamanho={17} />
                   Meu perfil
                 </button>
 
@@ -894,10 +759,7 @@ export default function PsicologoHome() {
                   type="button"
                   onClick={sair}
                 >
-                  <Icone
-                    nome="logout"
-                    tamanho={17}
-                  />
+                  <Icone nome="logout" tamanho={17} />
                   Sair
                 </button>
               </div>
@@ -906,16 +768,9 @@ export default function PsicologoHome() {
         </div>
       </header>
 
-      {/* SIDEBAR + CONTEÚDO */}
-
       <div className="ps-layout">
-
-        {/* SIDEBAR */}
-
+        {/* BARRA LATERAL: CONTAINER ÚNICO */}
         <aside className="ps-sidebar">
-
-          {/* IDENTIDADE PROFISSIONAL */}
-
           <div className="ps-identidade">
             <div className="ps-foto-wrapper">
               {profissional.fotoURL ? (
@@ -932,15 +787,12 @@ export default function PsicologoHome() {
 
               <button
                 type="button"
-                onClick={() => irPara("perfil")}
-                title="Ver perfil profissional"
-                aria-label="Ver perfil profissional"
                 className="ps-editar-foto"
+                aria-label="Ver perfil profissional"
+                title="Ver perfil profissional"
+                onClick={() => irPara("perfil")}
               >
-                <Icone
-                  nome="edit"
-                  tamanho={15}
-                />
+                <Icone nome="edit" tamanho={15} />
               </button>
             </div>
 
@@ -969,7 +821,7 @@ export default function PsicologoHome() {
             >
               <Icone
                 nome={contaTeste ? "info" : "shield"}
-                tamanho={17}
+                tamanho={16}
               />
 
               {contaTeste
@@ -979,8 +831,6 @@ export default function PsicologoHome() {
                   : "Verificação pendente"}
             </span>
           </div>
-
-          {/* MENU LATERAL */}
 
           <nav
             className="ps-menu-lateral"
@@ -997,7 +847,7 @@ export default function PsicologoHome() {
               >
                 <Icone
                   nome={item.icone}
-                  tamanho={23}
+                  tamanho={21}
                 />
 
                 <span>{item.titulo}</span>
@@ -1012,12 +862,11 @@ export default function PsicologoHome() {
             ))}
           </nav>
 
-          {/* SUPORTE */}
-
+          {/* Suporte dentro do mesmo card */}
           <div className="ps-ajuda">
             <Icone
               nome="headset"
-              tamanho={29}
+              tamanho={26}
             />
 
             <div>
@@ -1034,12 +883,8 @@ export default function PsicologoHome() {
           </div>
         </aside>
 
-        {/* CONTEÚDO PRINCIPAL */}
-
         <main className="ps-main">
-
-          {/* SAUDAÇÃO */}
-
+          {/* TÍTULO DA SEÇÃO */}
           <section className="ps-bem-vindo">
             <span
               className="ps-traco"
@@ -1063,91 +908,61 @@ export default function PsicologoHome() {
               <p>
                 {secao === "painel"
                   ? "Aqui está um resumo da sua atuação na Elora."
-                  : "Seu espaço profissional, organizado em um só lugar."}
+                  : secao === "agenda"
+                    ? "Gerencie seus atendimentos e acompanhe sua rotina profissional."
+                    : "Seu espaço profissional, organizado em um só lugar."}
               </p>
             </div>
           </section>
 
-          {/* MODO DE TESTE */}
-
+          {/* AVISO DE TESTES */}
           {contaTeste && (
             <div
               className="ps-aviso-teste"
               role="status"
             >
-              <Icone
-                nome="info"
-                tamanho={18}
-              />
-
+              <Icone nome="info" tamanho={18} />
               <span>
                 <strong>Modo de teste:</strong>{" "}
-                agenda, pacientes, indicadores
-                e solicitações do dashboard são exemplos.
+                agenda, pacientes, indicadores e
+                solicitações do dashboard são exemplos.
                 As ações demonstrativas não são salvas
                 no Firebase.
               </span>
             </div>
           )}
 
-          {/* VERIFICAÇÃO DE CRP */}
-
+          {/* VERIFICAÇÃO DO CRP */}
           {verificacao !== "aprovado" && (
             <div className="ps-aviso-pendente">
-              <Icone
-                nome="shield"
-                tamanho={17}
-              />
-
+              <Icone nome="shield" tamanho={17} />
               <span>
-                CRP com verificação pendente.
-                O acesso ao painel não significa
-                aprovação ou publicação do perfil.
+                CRP com verificação pendente. O acesso ao
+                painel não significa aprovação ou
+                publicação do perfil.
               </span>
             </div>
           )}
 
-          {/* FEEDBACK DAS AÇÕES */}
-
+          {/* FEEDBACK DE AÇÕES DE TESTE */}
           {mensagemDemo && (
             <div
               className="ps-feedback"
               role="status"
             >
-              <Icone
-                nome="check"
-                tamanho={18}
-              />
+              <Icone nome="check" tamanho={18} />
               {mensagemDemo}
             </div>
           )}
 
-          {/* ======================================
-              DASHBOARD
-          ====================================== */}
-
           {secao === "painel" ? (
             <>
-
-              {/* MÉTRICAS */}
-
+              {/* DOIS INDICADORES */}
               <div className="ps-metricas">
                 <CardMetrica
                   icone="calendar"
                   valor={contaTeste ? "12" : "0"}
                   titulo="Atendimentos na semana"
-                />
-
-                <CardMetrica
-                  icone="users"
-                  valor={contaTeste ? "48" : "0"}
-                  titulo="Pacientes ativos"
-                />
-
-                <CardMetrica
-                  icone="clock"
-                  valor={contaTeste ? "198h" : "0h"}
-                  titulo="Horas de atendimento"
                 />
 
                 <CardMetrica
@@ -1163,7 +978,6 @@ export default function PsicologoHome() {
               </div>
 
               {/* AGENDA E SOLICITAÇÕES */}
-
               <div className="ps-dois-paineis">
                 <section
                   className="ps-card ps-card-agenda"
@@ -1173,7 +987,7 @@ export default function PsicologoHome() {
                     <h2>
                       <Icone
                         nome="calendar"
-                        tamanho={28}
+                        tamanho={25}
                       />
                       Agenda da Semana
                     </h2>
@@ -1185,12 +999,14 @@ export default function PsicologoHome() {
                       Ver agenda completa
                       <Icone
                         nome="arrow"
-                        tamanho={17}
+                        tamanho={16}
                       />
                     </button>
                   </div>
 
-                  <BlocoAgenda />
+                  <ResumoAgenda
+                    atendimentos={atendimentosResumo}
+                  />
                 </section>
 
                 <section
@@ -1201,53 +1017,16 @@ export default function PsicologoHome() {
                     <h2>
                       <Icone
                         nome="userPlus"
-                        tamanho={28}
+                        tamanho={25}
                       />
                       Solicitações Recentes
                     </h2>
 
                     <button
                       type="button"
-                      onClick={() =>
-                        irPara("solicitacoes")
-                      }
+                      onClick={() => irPara("solicitacoes")}
                     >
                       Ver todas
-                      <Icone
-                        nome="arrow"
-                        tamanho={17}
-                      />
-                    </button>
-                  </div>
-
-                  <BlocoSolicitacoes />
-                </section>
-              </div>
-
-              {/* CARDS INFERIORES */}
-
-              <div className="ps-tres-paineis">
-
-                {/* PACIENTES */}
-
-                <section
-                  className="ps-card ps-resumo"
-                  id="ps-pacientes"
-                >
-                  <div className="ps-card-titulo">
-                    <h2>
-                      <Icone
-                        nome="users"
-                        tamanho={27}
-                      />
-                      Meus Pacientes
-                    </h2>
-
-                    <button
-                      type="button"
-                      onClick={() => irPara("pacientes")}
-                    >
-                      Ver todos
                       <Icone
                         nome="arrow"
                         tamanho={16}
@@ -1255,113 +1034,65 @@ export default function PsicologoHome() {
                     </button>
                   </div>
 
-                  <div className="ps-resumo-conteudo">
-                    <span className="ps-resumo-icone">
-                      <Icone
-                        nome="users"
-                        tamanho={34}
-                      />
-                    </span>
-
-                    <div>
-                      <strong>
-                        {contaTeste ? "48" : "0"}
-                      </strong>
-
-                      <p>
-                        Pacientes em acompanhamento
-                      </p>
-                    </div>
-                  </div>
-                </section>
-
-                {/* AVALIAÇÕES */}
-
-                <section className="ps-card ps-resumo">
-                  <div className="ps-card-titulo">
-                    <h2>
-                      <Icone
-                        nome="star"
-                        tamanho={27}
-                      />
-                      Avaliações
-                    </h2>
-                  </div>
-
-                  <div className="ps-resumo-conteudo">
-                    <span className="ps-resumo-icone estrela">
-                      <Icone
-                        nome="star"
-                        tamanho={35}
-                      />
-                    </span>
-
-                    <div>
-                      <strong>
-                        {contaTeste ? "4,9" : "—"}
-                        <small> / 5</small>
-                      </strong>
-
-                      <p>
-                        {contaTeste
-                          ? "Baseado em 36 avaliações simuladas"
-                          : "Ainda sem avaliações"}
-                      </p>
-                    </div>
-                  </div>
-                </section>
-
-                {/* PROGRESSO DO PERFIL */}
-
-                <section className="ps-card ps-resumo">
-                  <div className="ps-card-titulo">
-                    <h2>
-                      <Icone
-                        nome="user"
-                        tamanho={27}
-                      />
-                      Perfil Profissional
-                    </h2>
-                  </div>
-
-                  <div className="ps-perfil-progresso">
-                    <div className="ps-barra">
-                      <span
-                        style={{
-                          width: `${progressoPerfil}%`,
-                        }}
-                      />
-                    </div>
-
-                    <strong>
-                      {progressoPerfil}%
-                    </strong>
-                  </div>
-
-                  <button
-                    type="button"
-                    className="ps-texto-acao"
-                    onClick={() => irPara("perfil")}
-                  >
-                    Complete seu perfil para aumentar
-                    sua visibilidade.
-
-                    <Icone
-                      nome="right"
-                      tamanho={17}
-                    />
-                  </button>
+                  <ResumoSolicitacoes
+                    solicitacoes={solicitacoes}
+                    contaTeste={contaTeste}
+                    onDecisao={tratarSolicitacao}
+                  />
                 </section>
               </div>
 
-              {/* AÇÕES RÁPIDAS */}
+              {/* PERFIL HORIZONTAL */}
+              <section className="ps-card ps-perfil-wide">
+                <div className="ps-card-titulo">
+                  <h2>
+                    <Icone
+                      nome="user"
+                      tamanho={25}
+                    />
+                    Perfil Profissional
+                  </h2>
+                </div>
 
+                <div className="ps-perfil-progresso">
+                  <div
+                    className="ps-barra"
+                    role="progressbar"
+                    aria-valuenow={progressoPerfil}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-label="Preenchimento do perfil"
+                  >
+                    <span
+                      style={{
+                        width: `${progressoPerfil}%`,
+                      }}
+                    />
+                  </div>
+
+                  <strong>
+                    {progressoPerfil}%
+                  </strong>
+                </div>
+
+                <button
+                  type="button"
+                  className="ps-texto-acao"
+                  onClick={() => irPara("perfil")}
+                >
+                  Complete seu perfil para aumentar sua
+                  visibilidade.
+                  <Icone nome="right" tamanho={17} />
+                </button>
+              </section>
+
+              {/* QUATRO AÇÕES RÁPIDAS */}
               <section className="ps-card ps-acoes-rapidas">
                 <div className="ps-card-titulo">
                   <h2>
                     <Icone
                       nome="bolt"
-                      tamanho={27}
+                      tamanho={25}
                     />
                     Ações Rápidas
                   </h2>
@@ -1369,53 +1100,56 @@ export default function PsicologoHome() {
 
                 <div className="ps-acoes-grade">
                   {[
-                    ["agenda", "Minha agenda", "calendar"],
-                    ["prontuarios", "Prontuários", "file"],
-                    ["pacientes", "Pacientes", "userPlus"],
-                    ["relatorios", "Relatórios", "chart"],
-                    ["solicitacoes", "Solicitações", "message"],
-                    ["configuracoes", "Configurações", "settings"],
+                    [
+                      "agenda",
+                      "Agendar atendimento",
+                      "calendar",
+                    ],
+                    [
+                      "pacientes",
+                      "Cadastrar paciente",
+                      "userPlus",
+                    ],
+                    [
+                      "relatorios",
+                      "Criar relatório",
+                      "file",
+                    ],
+                    [
+                      "perfil",
+                      "Editar perfil profissional",
+                      "user",
+                    ],
                   ].map(([id, titulo, icone]) => (
                     <button
                       type="button"
                       key={id}
                       onClick={() => irPara(id)}
                     >
-                      <Icone
-                        nome={icone}
-                        tamanho={31}
-                      />
+                      <span className="ps-acao-icone">
+                        <Icone
+                          nome={icone}
+                          tamanho={24}
+                        />
+                      </span>
 
-                      <span>{titulo}</span>
+                      <span className="ps-acao-texto">
+                        {titulo}
+                      </span>
+
+                      <Icone
+                        nome="right"
+                        tamanho={16}
+                        className="ps-acao-seta"
+                      />
                     </button>
                   ))}
                 </div>
               </section>
             </>
-
           ) : secao === "agenda" ? (
-
-            /* ======================================
-                AGENDA
-            ====================================== */
-
-            <section className="ps-card ps-pagina-interna">
-              <div className="ps-card-titulo">
-                <h2>
-                  <Icone nome="calendar" />
-                  Minha Agenda
-                </h2>
-              </div>
-
-              <BlocoAgenda completa />
-            </section>
-
+            <AgendaPsicologo />
           ) : secao === "solicitacoes" ? (
-
-            /* ======================================
-                SOLICITAÇÕES
-            ====================================== */
-
             <section className="ps-card ps-pagina-interna">
               <div className="ps-card-titulo">
                 <h2>
@@ -1424,69 +1158,15 @@ export default function PsicologoHome() {
                 </h2>
               </div>
 
-              <BlocoSolicitacoes />
+              <ResumoSolicitacoes
+                solicitacoes={solicitacoes}
+                contaTeste={contaTeste}
+                onDecisao={tratarSolicitacao}
+              />
             </section>
-
           ) : secao === "pacientes" ? (
-
-            /* ======================================
-                PACIENTES — DEMONSTRAÇÃO
-            ====================================== */
-
-            <section className="ps-card ps-pagina-interna">
-              <div className="ps-card-titulo">
-                <h2>
-                  <Icone nome="users" />
-                  Meus Pacientes
-                </h2>
-              </div>
-
-              <label className="ps-pesquisa">
-                <Icone nome="search" />
-
-                <input
-                  value={buscaPaciente}
-                  onChange={(evento) =>
-                    setBuscaPaciente(evento.target.value)
-                  }
-                  placeholder="Buscar em seus pacientes de exemplo..."
-                  aria-label="Buscar pacientes"
-                />
-              </label>
-
-              {pacientesFiltrados.length === 0 ? (
-                <CartaoVazio
-                  titulo="Nenhum paciente encontrado"
-                  texto="Os pacientes reais aparecerão após a integração dos atendimentos."
-                />
-              ) : (
-                <div className="ps-pacientes-grade">
-                  {pacientesFiltrados.map((item) => (
-                    <div
-                      className="ps-paciente"
-                      key={item}
-                    >
-                      <span className="ps-solicitacao-avatar">
-                        {iniciais(item)}
-                      </span>
-
-                      <strong>{item}</strong>
-
-                      <small>
-                        Perfil fictício para teste
-                      </small>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </section>
-
+            <PacientesPsicologo />
           ) : secao === "perfil" ? (
-
-            /* ======================================
-                PERFIL PROFISSIONAL
-            ====================================== */
-
             <section className="ps-card ps-pagina-interna">
               <div className="ps-card-titulo">
                 <h2>
@@ -1525,27 +1205,19 @@ export default function PsicologoHome() {
 
                 <div>
                   <span>Perfil preenchido</span>
-                  <strong>
-                    {progressoPerfil}%
-                  </strong>
+                  <strong>{progressoPerfil}%</strong>
                 </div>
               </div>
 
               <p className="ps-nota-interna">
                 Estes dados são lidos do Firestore.
                 A edição do perfil será implementada
-                em uma etapa separada; o status de
-                verificação não poderá ser alterado
-                pelo próprio psicólogo.
+                separadamente. O status de verificação
+                não poderá ser alterado pelo próprio
+                psicólogo.
               </p>
             </section>
-
           ) : secao === "configuracoes" ? (
-
-            /* ======================================
-                CONFIGURAÇÕES
-            ====================================== */
-
             <section className="ps-card ps-pagina-interna">
               <div className="ps-card-titulo">
                 <h2>
@@ -1555,10 +1227,9 @@ export default function PsicologoHome() {
               </div>
 
               <p className="ps-nota-interna">
-                Selecione horários para testar
-                a interface. Esta seleção fica apenas
-                na memória da página e ainda não
-                grava no Firebase.
+                Selecione horários para testar a interface.
+                Esta seleção fica apenas na memória
+                da página e ainda não grava no Firebase.
               </p>
 
               <div className="ps-horarios">
@@ -1566,39 +1237,25 @@ export default function PsicologoHome() {
                   <label key={horario}>
                     <input
                       type="checkbox"
-                      checked={horariosDisponiveis.includes(
-                        horario
-                      )}
+                      checked={
+                        horariosDisponiveis.includes(horario)
+                      }
                       onChange={() =>
                         alternarHorario(horario)
                       }
                     />
-
                     {horario}
                   </label>
                 ))}
               </div>
             </section>
-
           ) : secao === "relatorios" ? (
-
-            /* ======================================
-                NOVA PÁGINA DE RELATÓRIOS
-                INTEGRAÇÃO DO PASSO 4
-            ====================================== */
-
             <RelatoriosPsicologo
               psicologoUid={usuario.uid}
               nomeProfissional={nomeCompleto}
               crp={crp}
             />
-
           ) : (
-
-            /* ======================================
-                PRONTUÁRIOS / SUPORTE
-            ====================================== */
-
             <section className="ps-card ps-pagina-interna ps-em-breve">
               <Icone
                 nome={
@@ -1621,16 +1278,12 @@ export default function PsicologoHome() {
                   : "O canal de suporte será configurado futuramente."}
               </p>
             </section>
-
           )}
-
-          {/* RODAPÉ */}
 
           <footer className="ps-rodape">
             Elora · Área Profissional
             {contaTeste && " · Ambiente de testes"}
           </footer>
-
         </main>
       </div>
     </div>
