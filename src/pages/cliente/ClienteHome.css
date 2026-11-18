@@ -1,75 +1,40 @@
-/* ======================================================
-   ELORA — ÁREA DO PACIENTE
-====================================================== */
+
+/* =====================================================
+   ELORA | HOME DO PACIENTE
+   Layout em lavanda, filtros e perfis
+===================================================== */
 
 .eh-page {
-  --eh-navy: #17143f;
-  --eh-purple: #641080;
-  --eh-purple-dark: #310d3c;
-  --eh-purple-medium: #8b51a1;
-  --eh-purple-light: #ead5f1;
-  --eh-lavender: #f2e5f7;
-  --eh-pink: #e5a4f2;
-  --eh-muted: #74627e;
-  --eh-border: #e3c8eb;
-  --eh-paper: #fffaff;
+  --eh-escuro: #32153f;
+  --eh-roxo: #7c278f;
+  --eh-roxo-medio: #973ca9;
+  --eh-lavanda: #f3e6fa;
+  --eh-borda: #dec9e9;
+  --eh-texto: #4f3960;
+  --eh-papel: #fffcff;
 
   min-height: 100vh;
-  width: 100%;
-  overflow-x: hidden;
 
-  color: var(--eh-navy);
+  color: var(--eh-escuro);
 
-  background:
-    radial-gradient(
-      ellipse at 15% 70%,
-      rgba(222, 190, 239, 0.22),
-      transparent 42%
-    ),
-    linear-gradient(
-      135deg,
-      #faf5f9 0%,
-      #f6edf8 50%,
-      #f8f3f6 100%
-    );
+  background: linear-gradient(
+    145deg,
+    #fdf9ff 0%,
+    #f8f0fc 48%,
+    #f9f2fb 100%
+  );
 
   font-family: var(
     --elora-body-font,
-    system-ui,
+    Arial,
     sans-serif
   );
 }
 
-.eh-page,
 .eh-page *,
 .eh-page *::before,
 .eh-page *::after {
   box-sizing: border-box;
-}
-
-.eh-page h1,
-.eh-page h2,
-.eh-page h3,
-.eh-brand span,
-.eh-footer span {
-  margin: 0;
-
-  font-family: var(
-    --elora-heading-font,
-    Georgia,
-    serif
-  );
-
-  line-height: 1.08;
-}
-
-.eh-page p {
-  margin: 0;
-  line-height: 1.55;
-}
-
-.eh-page a {
-  color: inherit;
 }
 
 .eh-page button,
@@ -78,529 +43,464 @@
   font: inherit;
 }
 
-.eh-page section[id] {
-  scroll-margin-top: 24px;
+.eh-page button {
+  cursor: pointer;
 }
 
-.eh-page [hidden] {
-  display: none !important;
+.eh-page a {
+  color: inherit;
 }
 
-/* ======================================================
-   TOPO
-   Agrupa o cabeçalho e o banner.
-====================================================== */
+.eh-page :is(
+  button,
+  a,
+  input,
+  select
+):focus-visible {
+  outline: 3px solid #b46cd1;
+  outline-offset: 3px;
+}
+
+.eh-visualmente-oculto {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  margin: -1px;
+  padding: 0;
+
+  overflow: hidden;
+  clip-path: inset(50%);
+
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
 
 .eh-topo {
   position: relative;
-  isolation: isolate;
-
-  width: 100%;
-  min-height: 360px;
 }
 
-/* ======================================================
-   CABEÇALHO
-   A camada externa é totalmente transparente.
-   Somente a camada interna recebe o fundo roxo.
-====================================================== */
-
 .eh-header {
-  position: absolute;
+  position: relative;
+  z-index: 5;
 
-  top: 0;
-  left: 0;
-  right: 0;
+  color: #fff;
 
-  z-index: 20;
-
-  width: 100%;
-
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-
-  padding: 0 20px;
-
-  background: transparent !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
+  background: linear-gradient(
+    105deg,
+    #572166,
+    #32113f 78%
+  );
 }
 
 .eh-header-inner {
-  position: relative;
-
-  width: min(1280px, 100%);
-  min-height: 78px;
-
-  margin-inline: auto;
-  padding: 10px 22px;
-
   display: flex;
   align-items: center;
-  justify-content: space-between;
 
-  gap: 20px;
+  gap: clamp(20px, 3vw, 45px);
 
-  /* Mais opaco, reduzindo a transparência anterior. */
-  background: rgba(43, 11, 53, 0.94);
+  width: min(1460px, calc(100% - 64px));
+  min-height: 70px;
 
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-top: 0;
-
-  /* Somente os cantos inferiores são arredondados. */
-  border-radius: 0 0 19px 19px;
-
-  box-shadow:
-    0 12px 32px rgba(22, 5, 31, 0.24);
-
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  margin: auto;
 }
 
-/* ======================================================
-   LOGOTIPO
-====================================================== */
+/* LOGO */
 
 .eh-brand {
   display: inline-flex;
   align-items: center;
+
+  gap: 8px;
+
   flex-shrink: 0;
-
-  gap: 9px;
-
-  color: #fff !important;
   text-decoration: none;
-
-  white-space: nowrap;
 }
 
 .eh-brand img {
-  display: block;
-
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
 
   object-fit: contain;
+
+  filter: brightness(0) invert(1);
 }
 
 .eh-brand span {
   color: #fff;
 
-  font-size: clamp(2rem, 2.6vw, 2.75rem);
+  font-family: var(
+    --elora-heading-font,
+    Georgia,
+    serif
+  );
+
+  font-size: 43px;
   font-weight: 700;
-  letter-spacing: -0.055em;
+
+  line-height: 1;
+  letter-spacing: -1.8px;
 }
 
-/* ======================================================
-   NAVEGAÇÃO
-====================================================== */
+/* NAVEGAÇÃO */
 
 .eh-nav {
-  flex: 1;
-  min-width: 0;
-
   display: flex;
   align-items: center;
   justify-content: center;
 
-  gap: 4px;
+  flex: 1;
+
+  gap: clamp(8px, 1.5vw, 19px);
 }
 
 .eh-nav a {
-  min-height: 42px;
-
   display: inline-flex;
   align-items: center;
-  justify-content: center;
 
-  gap: 8px;
+  gap: 7px;
 
-  padding: 9px 12px;
+  padding: 11px 12px;
 
-  border-radius: 12px;
+  border-radius: 999px;
 
-  color: rgba(255, 255, 255, 0.96) !important;
-
-  font-size: 0.86rem;
-  font-weight: 650;
+  color: #fff;
 
   text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+
   white-space: nowrap;
 
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease;
+  transition: background 0.2s ease;
 }
 
 .eh-nav a:hover {
   background: rgba(255, 255, 255, 0.13);
 }
 
-.eh-nav a:active {
-  transform: scale(0.98);
+.eh-nav .eh-nav-ativo {
+  background: rgba(172, 73, 191, 0.66);
 }
 
-.eh-nav a.eh-nav-ativo {
-  background: rgba(255, 255, 255, 0.88);
-  color: #35133f !important;
-}
-
-.eh-icon {
-  display: block;
-
-  width: 19px;
-  height: 19px;
-
-  flex-shrink: 0;
-}
-
-/* ======================================================
-   AÇÕES DO CABEÇALHO
-====================================================== */
+/* AÇÕES */
 
 .eh-header-actions {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
 
-  gap: 13px;
-
-  flex-shrink: 0;
-}
-
-.eh-popover-wrap {
-  position: relative;
-
-  display: flex;
-  align-items: center;
+  gap: 14px;
 }
 
 .eh-icon-button,
-.eh-avatar-button {
+.eh-avatar-button,
+.eh-menu-mobile {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
+  padding: 0;
+
   border: 0;
   background: transparent;
 
-  color: white;
-
-  cursor: pointer;
+  color: #fff;
 }
 
 .eh-icon-button {
-  position: relative;
+  width: 38px;
+  height: 38px;
 
-  width: 39px;
-  height: 42px;
-
-  border-radius: 12px;
-
-  transition: background 0.2s ease;
+  border-radius: 50%;
 }
 
 .eh-icon-button:hover,
 .eh-avatar-button:hover {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.eh-icon-button .eh-icon {
-  width: 22px;
-  height: 22px;
-}
-
-.eh-notificacao-ponto {
-  position: absolute;
-
-  top: 7px;
-  right: 7px;
-
-  width: 8px;
-  height: 8px;
-
-  border-radius: 50%;
-
-  background: #e9a0f3;
-  border: 1px solid #40114b;
+  background: rgba(255, 255, 255, 0.11);
 }
 
 .eh-avatar-button {
-  gap: 9px;
-
-  padding: 4px 7px;
-
-  border-radius: 30px;
-
-  transition: background 0.2s ease;
+  gap: 8px;
+  border-radius: 24px;
 }
 
 .eh-avatar-header {
-  width: 39px;
-  height: 39px;
-
   display: grid;
   place-items: center;
 
+  width: 39px;
+  height: 39px;
+
+  border: 1px solid #c68ed8;
   border-radius: 50%;
 
-  background: linear-gradient(
-    145deg,
-    #a23cc2,
-    #70228e
-  );
-
-  border: 1px solid rgba(255, 255, 255, 0.35);
-
+  background: #9040ac;
   color: #fff;
 
-  font-size: 0.82rem;
+  font-size: 13px;
   font-weight: 800;
 }
 
-.eh-chevron {
-  color: #fff;
-  font-size: 1rem;
-}
+/* POPOVERS */
 
-/* ======================================================
-   MENUS FLUTUANTES
-====================================================== */
+.eh-popover-wrap {
+  position: relative;
+}
 
 .eh-popover {
   position: absolute;
 
-  top: calc(100% + 13px);
+  top: calc(100% + 12px);
   right: 0;
 
-  z-index: 50;
+  z-index: 30;
 
-  width: 290px;
+  width: 278px;
+  max-width: calc(100vw - 24px);
 
-  padding: 18px;
+  padding: 16px;
 
-  border: 1px solid rgba(226, 203, 237, 0.9);
+  border: 1px solid #e9d6ee;
   border-radius: 16px;
 
-  background: #fffaff;
-
-  color: var(--eh-navy);
+  background: #fff;
+  color: #382046;
 
   box-shadow:
-    0 15px 40px rgba(34, 12, 47, 0.18);
-
-  animation: eh-popover-entrada 0.18s ease;
+    0 12px 32px rgba(42, 15, 57, 0.19);
 }
 
-.eh-popover strong {
-  display: block;
+.eh-popover p,
+.eh-popover small {
+  margin: 8px 0 0;
 
-  margin-bottom: 9px;
+  color: #77637e;
 
-  font-size: 0.98rem;
-  font-weight: 800;
+  font-size: 12px;
+  line-height: 1.5;
 }
 
-.eh-popover p {
-  color: var(--eh-muted);
-  font-size: 0.86rem;
-}
-
-.eh-menu-perfil > span {
-  display: block;
-
-  margin-bottom: 15px;
-
-  color: var(--eh-muted);
-  font-size: 0.8rem;
-
-  overflow-wrap: anywhere;
+.eh-menu-perfil {
+  display: grid;
+  gap: 10px;
 }
 
 .eh-menu-perfil a,
 .eh-menu-perfil button {
-  width: 100%;
-
   display: flex;
   align-items: center;
 
-  gap: 10px;
+  gap: 9px;
 
-  padding: 11px 9px;
+  padding: 10px 5px;
 
   border: 0;
-  border-radius: 9px;
+  border-radius: 8px;
 
-  background: transparent;
-
-  color: var(--eh-navy);
-
-  font-size: 0.88rem;
-  font-weight: 650;
+  background: none;
 
   text-decoration: none;
   text-align: left;
 
-  cursor: pointer;
+  color: #542466;
+  font-size: 13px;
 }
 
 .eh-menu-perfil a:hover,
 .eh-menu-perfil button:hover {
-  background: #f3e8f7;
+  background: #f6edfb;
 }
 
-@keyframes eh-popover-entrada {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.eh-menu-mobile {
+  display: none;
 }
 
-/* ======================================================
+/* =====================================================
    BANNER PRINCIPAL
-   FULL WIDTH — COMEÇA NO TOPO DA PÁGINA
-====================================================== */
+===================================================== */
 
 .eh-hero {
   position: relative;
-
-  width: 100%;
-  min-height: 370px;
+  isolation: isolate;
 
   display: flex;
   align-items: center;
 
-  padding: 116px 28px 38px;
+  width: 100%;
+  min-height: 285px;
 
   overflow: hidden;
+
+  background: linear-gradient(
+    110deg,
+    #fffaff 0%,
+    #f5e6fb 63%,
+    #ead1f5 100%
+  );
+}
+
+/* DECORAÇÃO LEVE */
+
+.eh-hero::before {
+  position: absolute;
+
+  inset: -35% auto auto -8%;
+
+  width: 58%;
+  height: 150%;
+
+  border-radius: 50%;
+
+  background: radial-gradient(
+    ellipse,
+    rgba(227, 196, 246, 0.49),
+    rgba(240, 223, 249, 0) 72%
+  );
+
+  content: "";
+  pointer-events: none;
+}
+
+/* TEXTO */
+
+.eh-hero-conteudo {
+  position: relative;
+  z-index: 2;
+
+  width: min(1460px, calc(100% - 64px));
+
+  margin: 0 auto;
+  padding: 32px 0 37px;
+}
+
+.eh-hero-conteudo > * {
+  max-width: 660px;
+}
+
+.eh-eyebrow {
+  margin: 0 0 11px;
+
+  color: #a33cba;
+
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.eh-hero h1 {
+  margin: 0 0 14px;
+
+  color: #4b245f;
+
+  font-family: var(
+    --elora-heading-font,
+    Georgia,
+    serif
+  );
+
+  font-size: clamp(34px, 3.7vw, 57px);
+  font-weight: 400;
+
+  line-height: 1.04;
+  letter-spacing: -1.4px;
+}
+
+.eh-hero h1 em {
+  color: #9a42b2;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.eh-hero-conteudo > p:last-child {
+  max-width: 535px;
+
+  margin: 0;
+
+  color: #5e446c;
+
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+/* FOTO LATERAL */
+
+.eh-hero-foto {
+  position: absolute;
+  z-index: 1;
+
+  inset: 0 0 0 43%;
 
   background-image:
     linear-gradient(
       90deg,
-      rgba(35, 9, 47, 0.91) 0%,
-      rgba(43, 13, 55, 0.76) 42%,
-      rgba(39, 13, 53, 0.30) 100%
+      #f5e6fb 0%,
+      rgba(245, 230, 251, 0.18) 33%,
+      rgba(66, 21, 75, 0.05) 100%
     ),
     url("/images/login-paciente.png");
 
-  background-position: center 55%;
+  background-position: center 49%;
   background-size: cover;
-  background-repeat: no-repeat;
 
-  border-radius: 0 0 16px 16px;
-
-  box-shadow:
-    0 12px 30px rgba(39, 13, 50, 0.12);
+  clip-path: ellipse(
+    92% 112% at 97% 51%
+  );
 }
 
-.eh-hero-conteudo {
-  position: relative;
-  z-index: 1;
+.eh-hero-foto::before {
+  position: absolute;
+  inset: 0;
 
-  width: min(1260px, 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(234, 198, 246, 0.34),
+    transparent 64%
+  );
 
-  margin-inline: auto;
-
-  padding: 0;
+  content: "";
 }
 
-.eh-page .eh-eyebrow {
-  margin-bottom: 12px;
-
-  color: #dca2ec;
-
-  font-size: 0.73rem;
-  font-weight: 800;
-
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.eh-hero h1 {
-  max-width: 760px;
-
-  color: #fff;
-
-  font-size: clamp(2.7rem, 4.3vw, 4.35rem);
-  font-weight: 700;
-
-  line-height: 0.99;
-  letter-spacing: -0.045em;
-}
-
-.eh-hero h1 em {
-  color: #e7a5f1;
-  font-style: normal;
-}
-
-.eh-hero-conteudo > p:last-child {
-  max-width: 570px;
-
-  margin-top: 18px;
-
-  color: rgba(255, 255, 255, 0.95);
-
-  font-size: clamp(0.94rem, 1.1vw, 1.08rem);
-  line-height: 1.55;
-}
-
-/* ======================================================
+/* =====================================================
    CONTEÚDO PRINCIPAL
-====================================================== */
+===================================================== */
 
 .eh-container {
-  width: min(1260px, calc(100% - 56px));
+  width: min(1480px, calc(100% - 64px));
 
-  margin-inline: auto;
-
-  padding: 24px 0 60px;
+  margin: 0 auto;
+  padding: 26px 0 48px;
 }
-
-/* ======================================================
-   LAYOUT DE DESCOBERTA
-====================================================== */
 
 .eh-discovery-layout {
   display: grid;
 
-  grid-template-columns: 250px minmax(0, 1fr);
+  grid-template-columns:
+    minmax(245px, 315px)
+    minmax(0, 1fr);
 
+  gap: 27px;
   align-items: start;
-
-  gap: 18px;
 }
 
-/* ======================================================
-   SIDEBAR — FILTROS
-====================================================== */
+/* =====================================================
+   CARD DE FILTROS
+===================================================== */
 
 .eh-sidebar {
-  min-width: 0;
+  padding: 22px 21px;
 
-  padding: 19px 17px;
+  border: 1px solid #e7d3f0;
+  border-radius: 24px;
 
-  border: 1px solid rgba(255, 255, 255, 0.34);
-  border-radius: 20px;
-
-  background: linear-gradient(
-    150deg,
-    #9863a9 0%,
-    #89529e 55%,
-    #804a98 100%
-  );
-
-  color: #fff;
+  background: rgba(255, 252, 255, 0.96);
 
   box-shadow:
-    0 10px 28px rgba(75, 30, 93, 0.13);
+    0 12px 24px rgba(103, 40, 123, 0.11);
 }
 
 .eh-sidebar-top {
@@ -610,515 +510,18 @@
 
   gap: 8px;
 
-  margin-bottom: 15px;
+  margin-bottom: 16px;
   padding-bottom: 13px;
 
-  border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+  border-bottom: 1px solid #e7d6ef;
 }
 
-.eh-sidebar-top h2 {
-  display: flex;
-  align-items: center;
-
-  gap: 8px;
-
-  color: #fff;
-
-  font-size: 2rem;
-  font-weight: 700;
-
-  letter-spacing: -0.035em;
-}
-
-.eh-sidebar-top h2 .eh-icon {
-  width: 20px;
-  height: 20px;
-}
-
-.eh-limpar {
-  flex-shrink: 0;
-
-  padding: 5px 2px;
-
-  border: 0;
-
-  background: transparent;
-
-  color: rgba(255, 255, 255, 0.95);
-
-  font-size: 0.84rem;
-  font-weight: 650;
-
-  cursor: pointer;
-}
-
-.eh-limpar:hover {
-  color: #f2c3ff;
-  text-decoration: underline;
-}
-
-/* ======================================================
-   GRUPOS DE FILTROS
-====================================================== */
-
-.eh-filtro-grupo {
-  min-width: 0;
-
-  margin: 0;
-  padding: 13px 0;
-
-  border: 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
-}
-
-.eh-filtro-grupo legend {
-  display: block;
-
-  width: 100%;
-
-  margin-bottom: 11px;
-
-  color: #fff;
-
-  font-size: 0.88rem;
-  font-weight: 800;
-}
-
-.eh-opcoes {
-  display: grid;
-  gap: 8px;
-}
-
-.eh-opcao {
-  display: flex;
-  align-items: flex-start;
-
-  gap: 9px;
-
-  color: rgba(255, 255, 255, 0.96);
-
-  font-size: 0.82rem;
-  line-height: 1.35;
-
-  cursor: pointer;
-}
-
-.eh-opcao input {
-  flex-shrink: 0;
-
-  width: 15px;
-  height: 15px;
-
-  margin: 1px 0 0;
-
-  accent-color: #e4b2f0;
-
-  cursor: pointer;
-}
-
-.eh-opcao span {
-  min-width: 0;
-}
-
-.eh-opcao:hover span {
-  color: #f4d6ff;
-}
-
-/* ======================================================
-   BOTÕES
-====================================================== */
-
-.eh-button {
-  min-height: 43px;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 9px;
-
-  padding: 10px 19px;
-
-  border: 1px solid transparent;
-  border-radius: 11px;
-
-  font-size: 0.88rem;
-  font-weight: 750;
-
-  text-decoration: none;
-
-  cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.eh-button:hover {
-  transform: translateY(-1px);
-}
-
-.eh-button:active {
-  transform: translateY(0);
-}
-
-.eh-button .eh-icon {
-  width: 18px;
-  height: 18px;
-}
-
-.eh-button-primary {
-  background: linear-gradient(
-    110deg,
-    #74158f,
-    #4d096d
-  );
-
-  color: #fff !important;
-
-  box-shadow:
-    0 5px 15px rgba(83, 13, 111, 0.16);
-}
-
-.eh-button-primary:hover {
-  background: linear-gradient(
-    110deg,
-    #8523a2,
-    #5d117c
-  );
-
-  box-shadow:
-    0 7px 20px rgba(83, 13, 111, 0.22);
-}
-
-.eh-button-secondary {
-  background: #f6eafa;
-
-  border-color: #d7a9e5;
-
-  color: #55116f !important;
-}
-
-.eh-button-secondary:hover {
-  background: #eddbf4;
-  border-color: #bb7dce;
-}
-
-.eh-aplicar {
-  width: 100%;
-
-  margin-top: 15px;
-}
-
-/* ======================================================
-   ÁREA DE RESULTADOS
-====================================================== */
-
-.eh-resultados {
-  min-width: 0;
-  width: 100%;
-}
-
-.eh-busca-linha {
-  display: grid;
-
-  grid-template-columns: minmax(0, 1fr) auto;
-
-  align-items: center;
-
-  gap: 15px;
-
-  margin-bottom: 17px;
-}
-
-/* ======================================================
-   CAMPO DE BUSCA
-====================================================== */
-
-.eh-busca {
-  min-width: 0;
-  height: 47px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 11px;
-
-  padding: 0 16px;
-
-  border: 1px solid #c59bd1;
-  border-radius: 999px;
-
-  background: rgba(176, 126, 191, 0.68);
-
-  color: #fff;
-
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.eh-busca:focus-within {
-  border-color: #84349b;
-
-  box-shadow:
-    0 0 0 3px rgba(132, 52, 155, 0.13);
-}
-
-.eh-busca .eh-icon {
-  flex-shrink: 0;
-
-  width: 20px;
-  height: 20px;
-
-  color: #fff;
-}
-
-.eh-busca input {
-  width: 100%;
-  min-width: 0;
-  height: 100%;
-
-  padding: 0;
-
-  border: 0;
-  outline: 0;
-
-  background: transparent;
-
-  color: #fff;
-
-  font-size: 0.88rem;
-}
-
-.eh-busca input::placeholder {
-  color: rgba(255, 255, 255, 0.95);
-  opacity: 1;
-}
-
-.eh-busca input::-webkit-search-cancel-button {
-  cursor: pointer;
-}
-
-/* ======================================================
-   ORDENAÇÃO
-====================================================== */
-
-.eh-ordenar {
+.eh-sidebar h2 {
   display: flex;
   align-items: center;
 
   gap: 10px;
-
-  white-space: nowrap;
-}
-
-.eh-ordenar span {
-  color: var(--eh-navy);
-
-  font-size: 0.83rem;
-  font-weight: 750;
-}
-
-.eh-ordenar select {
-  min-width: 155px;
-  height: 43px;
-
-  padding: 0 13px;
-
-  border: 1px solid #c59bd1;
-  border-radius: 999px;
-
-  background: #ead8f0;
-
-  color: #351441;
-
-  font-size: 0.83rem;
-  font-weight: 700;
-
-  cursor: pointer;
-}
-
-/* ======================================================
-   TÍTULO DA LISTAGEM
-====================================================== */
-
-.eh-lista-topo {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-
-  flex-wrap: wrap;
-
-  gap: 8px 15px;
-
-  margin-bottom: 15px;
-}
-
-.eh-lista-topo h2 {
-  color: var(--eh-navy);
-
-  font-size: clamp(1.8rem, 2.7vw, 2.5rem);
-  letter-spacing: -0.035em;
-}
-
-.eh-lista-topo p {
-  color: var(--eh-muted);
-
-  font-size: 0.82rem;
-}
-
-/* ======================================================
-   ESTADO VAZIO
-====================================================== */
-
-.eh-empty {
-  min-height: 245px;
-
-  display: grid;
-
-  grid-template-columns:
-    minmax(0, 0.95fr)
-    minmax(0, 1.15fr);
-
-  align-items: center;
-
-  gap: 25px;
-
-  padding: 25px 28px;
-
-  border: 1px solid #e4c8ed;
-  border-radius: 22px;
-
-  background: linear-gradient(
-    120deg,
-    #fffaff 0%,
-    #f7eafa 55%,
-    #efdaf5 100%
-  );
-
-  box-shadow:
-    0 10px 25px rgba(72, 31, 88, 0.07);
-}
-
-.eh-empty-art {
-  min-width: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.eh-sala {
-  display: block;
-
-  width: 100%;
-  max-width: 470px;
-
-  max-height: 220px;
-
-  object-fit: contain;
-}
-
-.eh-empty-conteudo {
-  min-width: 0;
-  max-width: 510px;
-}
-
-.eh-empty-etiqueta {
-  display: inline-flex;
-  align-items: center;
-
-  padding: 6px 12px;
-
-  margin-bottom: 9px;
-
-  border-radius: 999px;
-
-  background: #ead1f1;
-
-  color: #681284;
-
-  font-size: 0.69rem;
-  font-weight: 850;
-
-  letter-spacing: 0.055em;
-}
-
-.eh-empty-conteudo h3 {
-  max-width: 490px;
-
-  margin-bottom: 7px;
-
-  color: var(--eh-navy);
-
-  font-size: clamp(1.55rem, 2.2vw, 2.1rem);
-  letter-spacing: -0.025em;
-}
-
-.eh-empty-conteudo p {
-  margin-bottom: 17px;
-
-  color: #74617e;
-
-  font-size: 0.87rem;
-  line-height: 1.6;
-}
-
-.eh-empty-conteudo .eh-button {
-  min-height: 43px;
-}
-
-/* ======================================================
-   LISTA DE PROFISSIONAIS
-====================================================== */
-
-.eh-lista {
-  display: grid;
-  gap: 12px;
-}
-
-.eh-profissional {
-  padding: 17px 19px;
-
-  border: 1px solid #e6d1eb;
-  border-radius: 19px;
-
-  background: #fffaff;
-
-  box-shadow:
-    0 5px 17px rgba(52, 21, 68, 0.055);
-}
-
-.eh-profissional-linha {
-  display: grid;
-
-  grid-template-columns: auto minmax(0, 1fr) auto;
-
-  align-items: center;
-
-  gap: 17px;
-}
-
-.eh-avatar-profissional {
-  width: 70px;
-  height: 70px;
-
-  display: grid;
-  place-items: center;
-
-  border-radius: 17px;
-
-  background: linear-gradient(
-    145deg,
-    #ead7f2,
-    #c9a8dc
-  );
-
-  color: #581472;
+  margin: 0;
 
   font-family: var(
     --elora-heading-font,
@@ -1126,87 +529,759 @@
     serif
   );
 
-  font-size: 1.35rem;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.eh-sidebar h2 svg {
+  color: #8d32a6;
+}
+
+.eh-limpar {
+  border: 0;
+  background: none;
+
+  color: #82369c;
+
+  text-decoration: underline;
+
+  font-size: 12px !important;
+  font-weight: 700 !important;
+
+  white-space: nowrap;
+}
+
+/* GRUPOS DE FILTRO */
+
+.eh-filtro-grupo {
+  min-width: 0;
+
+  margin: 0 0 19px;
+  padding: 0;
+
+  border: 0;
+}
+
+.eh-filtro-grupo legend,
+.eh-filtro-select {
+  display: block;
+  width: 100%;
+
+  color: #3f2251;
+
+  font-size: 13px;
   font-weight: 800;
+}
+
+.eh-filtro-grupo legend {
+  margin-bottom: 10px;
+}
+
+/* FILTRO HOMEM / MULHER */
+
+.eh-sexo-opcoes {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.eh-sexo-opcao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  min-height: 44px;
+
+  border: 1px solid #dbc2e9;
+  border-radius: 13px;
+
+  background: #fcf6ff;
+  color: #6d3086;
+
+  font-size: 13px !important;
+  font-weight: 700 !important;
+}
+
+.eh-sexo-opcao.eh-sexo-ativo {
+  border-color: #85349c;
+
+  background: #85349c;
+  color: #fff;
+}
+
+/* SELECTS */
+
+.eh-filtro-select {
+  margin-bottom: 19px;
+}
+
+.eh-filtro-select select {
+  display: block;
+
+  width: 100%;
+  min-height: 45px;
+
+  margin-top: 9px;
+  padding: 0 10px;
+
+  border: 1px solid #dec8e9;
+  border-radius: 12px;
+
+  background: #fff;
+  color: #5b4170;
+
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* CHECKBOXES */
+
+.eh-checks {
+  display: grid;
+  gap: 10px;
+}
+
+.eh-checks label {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  color: #4e355f;
+
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.eh-checks input {
+  width: 16px;
+  height: 16px;
+
+  accent-color: #87319e;
+}
+
+/* =====================================================
+   BOTÕES
+===================================================== */
+
+.eh-botao-roxo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  min-height: 41px;
+  padding: 10px 17px;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: linear-gradient(
+    115deg,
+    #a247b2,
+    #722185
+  );
+
+  color: #fff !important;
+
+  text-decoration: none;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+
+  box-shadow:
+    0 3px 9px rgba(115, 30, 142, 0.12);
+}
+
+.eh-botao-roxo:hover {
+  filter: brightness(1.06);
+}
+
+.eh-aplicar {
+  width: 100%;
+  min-height: 47px;
+
+  margin-top: 3px;
+}
+
+.eh-botao-contorno {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 40px;
+  padding: 9px 16px;
+
+  border: 1.5px solid #a95fc0;
+  border-radius: 999px;
+
+  background: #fff9ff;
+  color: #6c2985;
+
+  text-decoration: none;
+
+  font-size: 13px !important;
+  font-weight: 750 !important;
+}
+
+.eh-botao-contorno:hover:not(:disabled) {
+  background: #f3e1fc;
+}
+
+.eh-botao-contorno:disabled {
+  opacity: 0.52;
+  cursor: not-allowed;
+}
+
+/* =====================================================
+   BUSCA E ORDENAÇÃO
+===================================================== */
+
+.eh-resultados {
+  min-width: 0;
+  scroll-margin-top: 16px;
+}
+
+.eh-busca-linha {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+  gap: 17px;
+}
+
+.eh-busca {
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  min-height: 45px;
+  padding: 0 16px;
+
+  border: 1px solid #d4b3e0;
+  border-radius: 999px;
+
+  background: #e2c4ec;
+  color: #823e99;
+}
+
+.eh-busca input {
+  width: 100%;
+  min-width: 0;
+  height: 42px;
+
+  border: 0;
+  outline: 0;
+
+  background: none;
+  color: #40204e;
+
+  font-size: 13px;
+}
+
+.eh-busca input::placeholder {
+  color: #785784;
+  opacity: 1;
+}
+
+.eh-ordenar {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  color: #442354;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+.eh-ordenar select {
+  min-width: 151px;
+  height: 43px;
+
+  padding: 0 10px;
+
+  border: 1px solid #cfa9df;
+  border-radius: 999px;
+
+  background: #f9effd;
+  color: #452456;
+
+  font-size: 12px;
+  font-weight: 650;
+}
+
+/* =====================================================
+   AGENDAMENTO / ESPONTÂNEO
+===================================================== */
+
+.eh-abas {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  width: min(480px, 100%);
+
+  margin: 19px 0 17px;
+  padding: 3px;
+
+  border-radius: 999px;
+
+  background: #f0ddf8;
+}
+
+.eh-abas button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  min-height: 39px;
+  padding: 8px 12px;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: transparent;
+  color: #6e3184;
+
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.eh-abas .eh-aba-ativa {
+  background: linear-gradient(
+    110deg,
+    #a545b4,
+    #7b258f
+  );
+
+  color: #fff;
+
+  box-shadow:
+    0 4px 10px rgba(105, 45, 124, 0.12);
+}
+
+/* TÍTULO DA LISTA */
+
+.eh-lista-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.eh-lista-topo h2 {
+  margin: 0;
+
+  font-family: var(
+    --elora-heading-font,
+    Georgia,
+    serif
+  );
+
+  font-size: 32px;
+  font-weight: 700;
+
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+.eh-lista-topo p {
+  color: #876b93;
+  font-size: 12px;
+
+  white-space: nowrap;
+}
+
+/* =====================================================
+   CARDS DE PSICÓLOGOS
+===================================================== */
+
+.eh-lista {
+  display: grid;
+  gap: 12px;
+}
+
+.eh-profissional {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.15fr)
+    minmax(190px, 0.75fr)
+    minmax(120px, 150px);
+
+  align-items: center;
+  gap: 18px;
+
+  padding: 14px;
+
+  border: 1px solid #e5cdec;
+  border-radius: 21px;
+
+  background: rgba(255, 252, 255, 0.88);
+
+  box-shadow:
+    0 7px 18px rgba(108, 43, 132, 0.08);
+}
+
+/* FOTO E INFORMAÇÕES */
+
+.eh-perfil-basico {
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+  min-width: 0;
+}
+
+.eh-avatar-profissional {
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width: 92px;
+  height: 100px;
+
+  overflow: hidden;
+
+  border-radius: 16px;
+
+  background: #e9d1f2;
+  color: #75358b;
+
+  font-size: 29px;
+  font-weight: 800;
+}
+
+.eh-avatar-profissional img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
 }
 
 .eh-profissional-info {
   min-width: 0;
 }
 
-.eh-profissional-info h3 {
-  margin-bottom: 5px;
-
-  color: var(--eh-navy);
-
-  font-size: 1.35rem;
+.eh-nome-linha {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.eh-profissional-info p {
-  margin-top: 5px;
+.eh-nome-linha h3 {
+  margin: 0;
 
-  color: var(--eh-muted);
+  font-family: var(
+    --elora-heading-font,
+    Georgia,
+    serif
+  );
 
-  font-size: 0.87rem;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.2;
+
+  overflow-wrap: anywhere;
 }
+
+.eh-verificado {
+  display: inline-grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width: 19px;
+  height: 19px;
+
+  border-radius: 50%;
+
+  background: #963aad;
+  color: #fff;
+}
+
+.eh-crp {
+  margin: 4px 0;
+
+  color: #795784;
+  font-size: 12px;
+}
+
+.eh-online {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 5px;
+
+  color: #216d3b;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.eh-online i {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+  background: #2c9851;
+}
+
+.eh-abordagem {
+  margin: 5px 0;
+
+  color: #5c4667;
+
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+/* ESPECIALIDADES */
 
 .eh-tags {
   display: flex;
   flex-wrap: wrap;
 
-  gap: 6px;
-
-  margin-top: 9px;
+  gap: 5px;
+  margin-top: 7px;
 }
 
-.eh-tags span {
-  padding: 5px 10px;
+.eh-tags span,
+.eh-horarios span {
+  display: inline-flex;
+  align-items: center;
 
-  border: 1px solid #d5a9e1;
+  min-height: 23px;
+  padding: 4px 8px;
+
   border-radius: 999px;
 
-  background: #f5e9f9;
+  background: #f0ddf9;
+  color: #6f3c84;
 
-  color: #55116f;
-
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: 11px;
+  font-weight: 650;
 }
 
-.eh-profissional-linha > .eh-button {
-  white-space: nowrap;
+/* DISPONIBILIDADE */
+
+.eh-perfil-agenda {
+  align-self: stretch;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  min-width: 0;
+
+  padding-left: 15px;
+
+  border-left: 1px solid #ead8f0;
 }
+
+.eh-perfil-agenda strong {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  color: #4b265c;
+  font-size: 12px;
+}
+
+.eh-perfil-agenda p {
+  margin: 8px 0 0;
+
+  color: #796787;
+
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.eh-horarios {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.eh-formatos {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* AÇÕES */
+
+.eh-perfil-acoes {
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+.eh-perfil-acoes button {
+  width: 100%;
+}
+
+/* DETALHES EXPANDIDOS */
 
 .eh-detalhe {
-  margin-top: 15px;
-  padding: 15px;
+  grid-column: 1 / -1;
 
-  border-radius: 13px;
+  padding: 12px 16px;
 
-  background: #f5eafa;
+  border-top: 1px solid #ecdaf3;
+  border-radius: 0 0 12px 12px;
 
-  color: #51405b;
+  background: #fcf6ff;
 }
 
-.eh-detalhe p + p {
+.eh-detalhe p {
+  margin: 6px 0;
+
+  color: #654f70;
+
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* =====================================================
+   ESTADOS VAZIOS / ERROS
+===================================================== */
+
+.eh-feedback-busca,
+.eh-empty {
+  border: 1px solid #e4cdec;
+  border-radius: 23px;
+
+  background: linear-gradient(
+    120deg,
+    #fffcff,
+    #f2dff8
+  );
+
+  box-shadow:
+    0 7px 22px rgba(86, 35, 105, 0.07);
+}
+
+.eh-feedback-busca {
+  padding: 45px 28px;
+  text-align: center;
+}
+
+.eh-feedback-busca h3,
+.eh-empty h3 {
+  margin: 0 0 10px;
+
+  color: #3f1e52;
+
+  font-family: var(
+    --elora-heading-font,
+    Georgia,
+    serif
+  );
+
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.eh-feedback-busca p,
+.eh-empty p {
+  color: #705d7b;
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.eh-feedback-busca button {
+  margin-top: 10px;
+}
+
+/* CARD SEM PROFISSIONAIS */
+
+.eh-empty {
+  display: grid;
+
+  grid-template-columns:
+    38%
+    minmax(0, 1fr);
+
+  align-items: center;
+  gap: 16px;
+
+  padding: 20px;
+}
+
+.eh-empty-ilustracao {
+  height: 185px;
+
+  overflow: hidden;
+
+  border-radius: 16px;
+
+  background: #eee0f6;
+}
+
+.eh-empty-ilustracao img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.eh-empty-etiqueta {
+  display: inline-block;
+
+  margin-bottom: 8px;
+  padding: 6px 10px;
+
+  border-radius: 999px;
+
+  background: #e7caf4;
+  color: #83339a;
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.eh-empty button {
   margin-top: 8px;
 }
 
-/* ======================================================
+/* =====================================================
    MEUS ATENDIMENTOS
-====================================================== */
+===================================================== */
 
 .eh-atendimentos {
-  margin-top: 45px;
-  padding: 27px;
+  margin-top: 26px;
+  padding: 24px 27px;
 
-  border: 1px solid #e3d0e9;
-  border-radius: 21px;
+  border: 1px solid #ead6f0;
+  border-radius: 24px;
 
-  background: #fffaff;
+  background: #fffcff;
 
-  box-shadow:
-    0 8px 25px rgba(65, 27, 81, 0.06);
+  scroll-margin-top: 22px;
 }
 
 .eh-atendimentos-topo {
@@ -1214,355 +1289,281 @@
   align-items: center;
   justify-content: space-between;
 
-  gap: 20px;
-
-  margin-bottom: 23px;
+  color: #812c9a;
 }
 
 .eh-atendimentos-topo h2 {
-  margin-bottom: 8px;
+  margin: 2px 0 5px;
 
-  color: var(--eh-navy);
+  color: #3c1e50;
 
-  font-size: 2rem;
+  font-family: var(
+    --elora-heading-font,
+    Georgia,
+    serif
+  );
+
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
-.eh-atendimentos-topo p:last-child {
-  color: var(--eh-muted);
-  font-size: 0.9rem;
-}
+.eh-atendimentos-topo p {
+  margin: 0;
 
-.eh-atendimentos-topo > .eh-icon {
-  width: 39px;
-  height: 39px;
-
-  color: #8b4da2;
+  color: #77617f;
+  font-size: 13px;
 }
 
 .eh-atendimentos-vazio {
   display: flex;
   align-items: center;
 
-  gap: 16px;
+  gap: 14px;
 
-  padding: 19px;
+  margin-top: 18px;
+  padding: 17px;
 
-  border: 1px dashed #d8b9e1;
-  border-radius: 15px;
+  border-radius: 14px;
 
-  background: #faf3fc;
-}
-
-.eh-atendimento-icone {
-  width: 48px;
-  height: 48px;
-
-  display: grid;
-  place-items: center;
-
-  flex-shrink: 0;
-
-  border-radius: 13px;
-
-  background: #ead8f1;
-
-  color: #681284;
-}
-
-.eh-atendimento-icone .eh-icon {
-  width: 23px;
-  height: 23px;
+  background: #f8effc;
+  color: #6c307f;
 }
 
 .eh-atendimentos-vazio strong {
-  display: block;
-
-  margin-bottom: 5px;
-
-  color: var(--eh-navy);
-  font-size: 0.95rem;
+  color: #442456;
+  font-size: 14px;
 }
 
 .eh-atendimentos-vazio p {
-  color: var(--eh-muted);
-  font-size: 0.85rem;
+  margin: 5px 0 0;
+
+  color: #7d6c86;
+  font-size: 12px;
 }
 
-/* ======================================================
-   RODAPÉ
-====================================================== */
+/* =====================================================
+   RODAPÉ E ESTADOS DA PÁGINA
+===================================================== */
+
+.eh-erro-acao {
+  color: #a8244c;
+  font-size: 13px;
+}
 
 .eh-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  gap: 15px;
+  gap: 16px;
 
-  margin-top: 35px;
-  padding: 22px 0 5px;
+  padding:
+    24px
+    max(32px, calc((100vw - 1480px) / 2));
 
-  border-top: 1px solid #e5d4e9;
+  background: #efe0f6;
+  color: #654373;
 }
 
 .eh-footer span {
-  color: #55206a;
+  font-family: var(
+    --elora-heading-font,
+    Georgia,
+    serif
+  );
 
-  font-size: 1.9rem;
-  font-weight: 800;
-
-  letter-spacing: -0.05em;
+  font-size: 27px;
+  font-weight: 700;
 }
 
 .eh-footer p {
-  color: var(--eh-muted);
-  font-size: 0.82rem;
+  margin: 0;
+  font-size: 12px;
 }
 
-/* ======================================================
-   FEEDBACK E CARREGAMENTO
-====================================================== */
-
-.eh-loading {
-  min-height: 100vh;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.eh-pagina-estado {
+  display: grid;
+  place-content: center;
 
   gap: 16px;
 
-  color: var(--eh-navy);
-}
-
-.eh-loading-logo {
-  width: 65px;
-  height: 65px;
-
-  display: grid;
-  place-items: center;
-
-  border-radius: 50%;
-
-  background: linear-gradient(
-    145deg,
-    #a34ab8,
-    #57116f
-  );
-
-  color: white;
-
-  font-family: Georgia, serif;
-  font-size: 2.6rem;
-  font-weight: 800;
-
-  animation: eh-pulso 1.4s infinite ease-in-out;
-}
-
-.eh-loading p {
-  color: var(--eh-muted);
-  font-size: 0.92rem;
-}
-
-@keyframes eh-pulso {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-
-  50% {
-    transform: scale(1.08);
-    opacity: 0.75;
-  }
-}
-
-.eh-feedback {
-  width: min(480px, calc(100% - 32px));
-
-  margin: 12vh auto;
-  padding: 35px;
+  min-height: 100vh;
+  padding: 32px;
 
   text-align: center;
 
-  border: 1px solid var(--eh-border);
-  border-radius: 22px;
-
-  background: #fffaff;
-
-  box-shadow:
-    0 15px 40px rgba(52, 16, 69, 0.10);
+  background: #f9effd;
+  color: #4a235b;
 }
 
-.eh-feedback img {
-  width: 65px;
-  height: 65px;
+.eh-pagina-estado h1 {
+  font-family: var(
+    --elora-heading-font,
+    Georgia,
+    serif
+  );
 
-  object-fit: contain;
-
-  margin-bottom: 20px;
+  font-size: 31px;
+  font-weight: 700;
 }
 
-.eh-feedback h1 {
-  margin-bottom: 12px;
-
-  font-size: 1.9rem;
-}
-
-.eh-feedback p {
-  margin-bottom: 20px;
-
-  color: var(--eh-muted);
-  font-size: 0.9rem;
-}
-
-.eh-erro-acao {
-  margin-top: 15px;
-  padding: 13px 16px;
-
-  border: 1px solid #edb9c0;
-  border-radius: 11px;
-
-  background: #fff0f1;
-
-  color: #9c263a;
-
-  font-size: 0.88rem;
-}
-
-/* ======================================================
-   ACESSIBILIDADE
-====================================================== */
-
-.eh-page :is(
-  a,
-  button,
-  input,
-  select
-):focus-visible {
-  outline: 3px solid #dca1ed;
-  outline-offset: 3px;
-}
-
-/* ======================================================
-   RESPONSIVIDADE — NOTEBOOKS
-====================================================== */
+/* =====================================================
+   NOTEBOOKS
+===================================================== */
 
 @media (max-width: 1250px) {
   .eh-header-inner {
-    gap: 10px;
-    padding-inline: 15px;
-  }
-
-  .eh-brand span {
-    font-size: 2.15rem;
-  }
-
-  .eh-nav a {
-    gap: 6px;
-    padding-inline: 8px;
-    font-size: 0.79rem;
-  }
-
-  .eh-header-actions {
-    gap: 7px;
-  }
-
-  .eh-discovery-layout {
-    grid-template-columns: 225px minmax(0, 1fr);
-    gap: 14px;
-  }
-
-  .eh-container {
-    width: min(100% - 40px, 1260px);
-  }
-}
-
-/* ======================================================
-   RESPONSIVIDADE — TABLETS
-====================================================== */
-
-@media (max-width: 1000px) {
-  .eh-header-inner {
-    flex-wrap: wrap;
-    justify-content: space-between;
-
-    padding: 10px 17px 12px;
-  }
-
-  .eh-brand {
-    order: 1;
-  }
-
-  .eh-header-actions {
-    order: 2;
-    margin-left: auto;
+    width: calc(100% - 36px);
+    gap: 18px;
   }
 
   .eh-nav {
-    order: 3;
-
-    flex: 0 0 100%;
-    width: 100%;
-
-    justify-content: flex-start;
-
-    overflow-x: auto;
-
-    padding-top: 5px;
+    gap: 2px;
   }
 
   .eh-nav a {
-    flex-shrink: 0;
+    padding: 10px 8px;
+    font-size: 12px;
   }
 
-  .eh-hero {
-    min-height: 425px;
-    padding-top: 155px;
+  .eh-container {
+    width: calc(100% - 36px);
   }
 
   .eh-discovery-layout {
-    grid-template-columns: 215px minmax(0, 1fr);
+    grid-template-columns:
+      minmax(235px, 280px)
+      minmax(0, 1fr);
+
+    gap: 18px;
   }
 
-  .eh-busca-linha {
-    grid-template-columns: 1fr;
+  .eh-profissional {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(150px, 0.65fr);
   }
 
-  .eh-ordenar {
+  .eh-perfil-acoes {
+    grid-column: 1 / -1;
+
+    flex-direction: row;
     justify-content: flex-end;
   }
 
-  .eh-empty {
-    grid-template-columns: 1fr;
-    gap: 8px;
-    text-align: center;
-  }
-
-  .eh-empty-art .eh-sala {
-    max-width: 400px;
-    max-height: 185px;
-  }
-
-  .eh-empty-conteudo {
-    margin-inline: auto;
+  .eh-perfil-acoes button {
+    width: auto;
+    min-width: 160px;
   }
 }
 
-/* ======================================================
-   RESPONSIVIDADE — CELULARES
-====================================================== */
+/* =====================================================
+   TABLETS
+===================================================== */
 
-@media (max-width: 720px) {
-  .eh-header {
-    padding-inline: 10px;
+@media (max-width: 900px) {
+  .eh-menu-mobile {
+    display: inline-flex;
+    order: 4;
+
+    width: 38px;
+    height: 38px;
   }
 
   .eh-header-inner {
-    width: 100%;
-    gap: 7px;
+    flex-wrap: wrap;
+  }
 
-    border-radius: 0 0 15px 15px;
+  .eh-nav {
+    display: none;
+
+    order: 5;
+    flex: 0 0 100%;
+
+    flex-direction: column;
+    align-items: stretch;
+
+    padding: 9px 0 16px;
+  }
+
+  .eh-nav.eh-nav-aberto {
+    display: flex;
+  }
+
+  .eh-nav a {
+    padding: 13px 15px;
+  }
+
+  .eh-header-actions {
+    margin-left: auto;
+  }
+
+  .eh-hero {
+    min-height: 260px;
+  }
+
+  .eh-hero-conteudo {
+    width: calc(100% - 50px);
+  }
+
+  .eh-hero h1 {
+    max-width: 540px;
+  }
+
+  .eh-hero-foto {
+    inset: 0 0 0 48%;
+    opacity: 0.77;
+  }
+
+  .eh-discovery-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .eh-sidebar {
+    padding: 20px;
+  }
+
+  .eh-sidebar form {
+    display: grid;
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    column-gap: 20px;
+    align-items: end;
+  }
+
+  .eh-sidebar-top,
+  .eh-aplicar {
+    grid-column: 1 / -1;
+  }
+
+  .eh-profissional {
+    grid-template-columns:
+      minmax(0, 1.1fr)
+      minmax(170px, 0.7fr)
+      minmax(125px, 155px);
+  }
+
+  .eh-perfil-acoes {
+    grid-column: auto;
+    flex-direction: column;
+  }
+
+  .eh-perfil-acoes button {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* =====================================================
+   CELULARES
+===================================================== */
+
+@media (max-width: 650px) {
+  .eh-header-inner {
+    min-height: 62px;
   }
 
   .eh-brand img {
@@ -1571,203 +1572,231 @@
   }
 
   .eh-brand span {
-    font-size: 1.9rem;
-  }
-
-  .eh-nav {
-    gap: 3px;
-  }
-
-  .eh-nav a {
-    min-height: 38px;
-
-    padding: 8px 10px;
-
-    font-size: 0.76rem;
-  }
-
-  .eh-nav .eh-icon {
-    width: 16px;
-    height: 16px;
-  }
-
-  .eh-header-actions {
-    gap: 5px;
-  }
-
-  .eh-avatar-header {
-    width: 34px;
-    height: 34px;
+    font-size: 36px;
   }
 
   .eh-hero {
-    min-height: 410px;
+    min-height: 270px;
+  }
 
-    padding: 155px 22px 35px;
-
-    background-position: 58% center;
+  .eh-hero-conteudo {
+    width: calc(100% - 38px);
+    padding: 33px 0;
   }
 
   .eh-hero h1 {
-    font-size: clamp(2.3rem, 8vw, 3.4rem);
-    line-height: 1.02;
+    font-size: clamp(32px, 7vw, 44px);
+  }
+
+  .eh-hero h1 br {
+    display: none;
   }
 
   .eh-hero-conteudo > p:last-child {
-    max-width: 440px;
-    font-size: 0.91rem;
+    font-size: 13px;
+  }
+
+  .eh-hero-foto {
+    inset: 0 0 0 36%;
+
+    opacity: 0.32;
+    clip-path: none;
   }
 
   .eh-container {
-    width: calc(100% - 28px);
-    padding-top: 20px;
-  }
-
-  .eh-discovery-layout {
-    grid-template-columns: 1fr;
-    gap: 20px;
+    width: calc(100% - 24px);
+    padding-top: 18px;
   }
 
   .eh-sidebar {
     padding: 17px;
   }
 
-  .eh-sidebar-top h2 {
-    font-size: 1.75rem;
+  .eh-sidebar form {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .eh-opcoes {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 11px;
+  .eh-sidebar-top,
+  .eh-aplicar {
+    grid-column: auto;
   }
 
   .eh-busca-linha {
+    grid-template-columns: minmax(0, 1fr);
     gap: 12px;
   }
 
+  .eh-ordenar {
+    justify-content: flex-end;
+  }
+
   .eh-lista-topo {
-    align-items: flex-start;
+    flex-wrap: wrap;
   }
 
   .eh-lista-topo h2 {
-    font-size: 1.9rem;
+    font-size: 29px;
   }
 
-  .eh-empty {
-    padding: 20px 16px;
+  .eh-lista-topo p {
+    margin: 0;
   }
 
-  .eh-empty-art .eh-sala {
-    max-height: 170px;
+  .eh-profissional {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 13px;
   }
 
-  .eh-empty-conteudo h3 {
-    font-size: 1.55rem;
+  .eh-perfil-agenda {
+    padding: 13px 0 0;
+
+    border-left: none;
+    border-top: 1px solid #ead8f0;
   }
 
-  .eh-atendimentos {
-    margin-top: 30px;
-    padding: 19px;
-  }
-
-  .eh-atendimentos-topo h2 {
-    font-size: 1.7rem;
-  }
-}
-
-/* ======================================================
-   RESPONSIVIDADE — CELULARES PEQUENOS
-====================================================== */
-
-@media (max-width: 480px) {
-  .eh-header-inner {
-    padding-inline: 11px;
-  }
-
-  .eh-nav {
-    justify-content: flex-start;
-  }
-
-  .eh-nav a {
-    font-size: 0.71rem;
-  }
-
-  .eh-nav a .eh-icon {
-    width: 15px;
-    height: 15px;
-  }
-
-  .eh-hero {
-    min-height: 390px;
-    padding: 150px 18px 30px;
-  }
-
-  .eh-hero h1 {
-    font-size: 2.35rem;
-  }
-
-  .eh-page .eh-eyebrow {
-    font-size: 0.65rem;
-  }
-
-  .eh-ordenar {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .eh-ordenar select {
-    min-width: 0;
-    flex: 1;
-  }
-
-  .eh-opcoes {
-    grid-template-columns: 1fr;
-  }
-
-  .eh-profissional-linha {
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: 11px;
+  .eh-perfil-acoes {
+    flex-direction: row;
   }
 
   .eh-avatar-profissional {
-    width: 52px;
-    height: 52px;
-    border-radius: 13px;
-    font-size: 1rem;
+    width: 82px;
+    height: 86px;
   }
 
-  .eh-profissional-linha > .eh-button {
-    grid-column: 2;
-    justify-self: start;
+  .eh-empty {
+    grid-template-columns: 1fr;
   }
 
-  .eh-profissional-info h3 {
-    font-size: 1.12rem;
-  }
-
-  .eh-atendimentos-vazio {
-    align-items: flex-start;
-    padding: 13px;
+  .eh-empty-ilustracao {
+    height: 145px;
   }
 
   .eh-footer {
-    flex-direction: column;
-    align-items: flex-start;
+    padding: 20px;
   }
 }
 
-/* ======================================================
-   PREFERÊNCIA POR MENOS ANIMAÇÕES
-====================================================== */
+/* =====================================================
+   MOVIMENTO REDUZIDO
+===================================================== */
 
 @media (prefers-reduced-motion: reduce) {
-  .eh-page *,
-  .eh-page *::before,
-  .eh-page *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  .eh-page * {
+    transition: none !important;
     scroll-behavior: auto !important;
   }
 }
 
+
+/* ==========================================
+   ELORA — FOCO DA BARRA DE BUSCA
+========================================== */
+
+.eh-page .eh-busca input:focus,
+.eh-page .eh-busca input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Destaque discreto na barra inteira */
+
+.eh-page .eh-busca:focus-within {
+  border-color: #bc8bd1;
+  box-shadow: 0 0 0 3px rgba(156, 83, 185, 0.09);
+}
+
+
+/* ==========================================
+   ELORA — BANNER COM IMAGEM ESTENDIDA
+========================================== */
+
+.eh-hero {
+  position: relative;
+  min-height: 390px;
+
+  overflow: hidden;
+
+  background: linear-gradient(
+    105deg,
+    #fffaff 0%,
+    #f6e9fc 48%,
+    #efdef8 100%
+  );
+}
+
+/* Imagem maior, integrada ao fundo */
+
+.eh-hero-foto {
+  position: absolute;
+  z-index: 1;
+
+  /* Começa antes da metade da tela */
+  inset: 0 0 0 34%;
+
+  background-image: url("/images/login-paciente.png");
+
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+
+  clip-path: none;
+  opacity: 1;
+
+  /* Transição gradual do lilás para a fotografia */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.18) 22%,
+    rgba(0, 0, 0, 0.75) 43%,
+    black 62%
+  );
+
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.18) 22%,
+    rgba(0, 0, 0, 0.75) 43%,
+    black 62%
+  );
+}
+
+/* Remove sobreposição antiga */
+
+.eh-hero-foto::before {
+  display: none;
+}
+
+/* Mantém o texto acima da imagem */
+
+.eh-hero-conteudo {
+  position: relative;
+  z-index: 2;
+}
+
+/* NOTEBOOKS E TABLETS */
+
+@media (max-width: 900px) {
+  .eh-hero-foto {
+    inset: 0 0 0 30%;
+    background-position: 55% center;
+    opacity: 0.75;
+  }
+}
+
+/* CELULARES */
+
+@media (max-width: 650px) {
+  .eh-hero {
+    min-height: 320px;
+  }
+
+  .eh-hero-foto {
+    inset: 0;
+
+    background-position: center;
+    opacity: 0.25;
+
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}

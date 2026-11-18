@@ -1,0 +1,1363 @@
+
+/* =====================================================
+   ELORA — MINHA CONTA DO PACIENTE
+   Estilo roxo/lavanda
+===================================================== */
+
+.mc-pagina {
+  --mc-ameixa: #3f184f;
+  --mc-roxo: #78298d;
+  --mc-roxo-forte: #621d78;
+  --mc-lilas: #eacbf4;
+  --mc-borda: #e7d3ed;
+  --mc-texto: #694f73;
+
+  min-height: 100vh;
+  overflow-x: clip;
+
+  color: var(--mc-ameixa);
+
+  background: linear-gradient(
+    145deg,
+    #fffafd 0%,
+    #f8eefc 54%,
+    #fbf4ff 100%
+  );
+
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.mc-pagina *,
+.mc-pagina *::before,
+.mc-pagina *::after {
+  box-sizing: border-box;
+}
+
+.mc-pagina button,
+.mc-pagina input,
+.mc-pagina select {
+  font: inherit;
+}
+
+.mc-pagina button {
+  cursor: pointer;
+}
+
+.mc-pagina a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.mc-pagina :is(
+  button,
+  a,
+  input,
+  select
+):focus-visible {
+  outline: 3px solid #b56ac9;
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.mc-topbar {
+  position: relative;
+  z-index: 20;
+
+  color: #fff;
+
+  background: linear-gradient(
+    105deg,
+    #55205f 0%,
+    #3c1149 80%,
+    #431550 100%
+  );
+}
+
+.mc-topbar-interno {
+  display: flex;
+  align-items: center;
+
+  gap: clamp(14px, 2.5vw, 36px);
+
+  width: min(
+    1490px,
+    calc(100% - 70px)
+  );
+
+  min-height: 70px;
+  margin-inline: auto;
+}
+
+/* LOGO */
+
+.mc-logo {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.mc-logo img {
+  width: 39px;
+  height: 39px;
+
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+.mc-logo span {
+  color: #fff;
+
+  font-family: var(
+    --elora-heading-font,
+    Georgia,
+    serif
+  );
+
+  font-size: 43px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -1.5px;
+}
+
+/* NAVEGAÇÃO */
+
+.mc-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 1;
+  gap: clamp(5px, 1vw, 17px);
+  min-width: 0;
+}
+
+.mc-nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  min-height: 40px;
+  padding: 9px 13px;
+
+  border-radius: 999px;
+
+  color: #fff;
+
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+
+  transition: background 0.2s ease;
+}
+
+.mc-nav a:hover {
+  background: rgba(
+    255,
+    255,
+    255,
+    0.12
+  );
+}
+
+.mc-nav a.mc-nav-ativo {
+  color: #4d1b61;
+  background: #efcff6;
+
+  box-shadow:
+    0 5px 14px rgba(
+      32,
+      5,
+      41,
+      0.1
+    );
+}
+
+/* HEADER — AÇÕES */
+
+.mc-topbar-acoes {
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+  margin-left: auto;
+}
+
+.mc-notificacoes-wrap {
+  position: relative;
+}
+
+.mc-icone-topo {
+  display: grid;
+  place-items: center;
+
+  width: 38px;
+  height: 38px;
+
+  border: 0;
+  border-radius: 50%;
+
+  color: #fff;
+  background: transparent;
+}
+
+.mc-icone-topo:hover {
+  background: rgba(
+    255,
+    255,
+    255,
+    0.14
+  );
+}
+
+.mc-popover {
+  position: absolute;
+
+  top: calc(100% + 12px);
+  right: -38px;
+  z-index: 50;
+
+  width: 275px;
+  padding: 17px;
+
+  border: 1px solid #e6cce9;
+  border-radius: 15px;
+
+  background: #fff;
+
+  box-shadow:
+    0 12px 28px rgba(
+      43,
+      13,
+      53,
+      0.2
+    );
+
+  color: var(--mc-ameixa);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.mc-avatar-topo {
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width: 42px;
+  height: 42px;
+
+  border: 1px solid #d8a7e2;
+  border-radius: 50%;
+  overflow: hidden;
+
+  background: #a34bb6;
+  color: #fff;
+
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.mc-avatar-topo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mc-menu-mobile {
+  display: none;
+
+  color: #fff;
+  background: none;
+  border: 0;
+}
+
+/* =====================================================
+   BANNER
+===================================================== */
+
+.mc-hero {
+  position: relative;
+  isolation: isolate;
+
+  display: flex;
+  align-items: center;
+
+  min-height: 205px;
+  overflow: hidden;
+
+  background: #f6e8fa;
+}
+
+.mc-hero::before {
+  position: absolute;
+  z-index: -1;
+
+  inset: 0;
+  content: "";
+
+  background-image:
+    linear-gradient(
+      90deg,
+      #fdf8ff 0%,
+      #f9effc 31%,
+      rgba(247, 234, 251, 0.88) 43%,
+      rgba(247, 234, 251, 0.15) 69%,
+      rgba(247, 234, 251, 0) 85%
+    ),
+    url("/images/login-paciente.png");
+
+  background-size: cover;
+  background-position: center 53%;
+}
+
+.mc-hero-interior {
+  width: min(
+    1490px,
+    calc(100% - 70px)
+  );
+
+  margin-inline: auto;
+  padding: 33px 0 43px;
+}
+
+.mc-eyebrow {
+  margin: 0 0 12px;
+
+  color: #9d31ae;
+
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2.4px;
+}
+
+.mc-hero h1 {
+  margin: 0 0 14px;
+
+  font-family: var(
+    --elora-heading-font,
+    Georgia,
+    serif
+  );
+
+  font-size: clamp(
+    42px,
+    4.1vw,
+    64px
+  );
+
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -1.2px;
+}
+
+.mc-hero-interior > p:last-child {
+  max-width: 610px;
+
+  margin: 0;
+  padding-left: 15px;
+
+  border-left: 4px solid #a843bd;
+
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* =====================================================
+   LAYOUT
+===================================================== */
+
+.mc-container {
+  position: relative;
+  z-index: 2;
+
+  width: min(
+    1510px,
+    calc(100% - 48px)
+  );
+
+  margin: -10px auto 0;
+  padding-bottom: 54px;
+}
+
+.mc-layout {
+  display: grid;
+
+  grid-template-columns:
+    minmax(248px, 302px)
+    minmax(0, 1fr);
+
+  align-items: start;
+  gap: 20px;
+}
+
+.mc-sidebar,
+.mc-cartao {
+  border: 1px solid #ead9ef;
+  border-radius: 25px;
+
+  background: rgba(
+    255,
+    252,
+    255,
+    0.97
+  );
+
+  box-shadow:
+    0 9px 25px rgba(
+      79,
+      31,
+      93,
+      0.09
+    );
+}
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.mc-sidebar {
+  min-width: 0;
+  padding: 23px 19px;
+
+  background: linear-gradient(
+    160deg,
+    #fffcff 0%,
+    #fcf5ff 75%,
+    #f3e7fb 100%
+  );
+}
+
+.mc-identidade {
+  display: grid;
+  justify-items: center;
+
+  gap: 9px;
+
+  padding: 6px 0 20px;
+  text-align: center;
+}
+
+/* AVATAR */
+
+.mc-avatar-grande {
+  position: relative;
+
+  display: grid;
+  place-items: center;
+
+  width: 153px;
+  height: 153px;
+
+  margin-bottom: 6px;
+
+  border: 4px solid #fff;
+  border-radius: 50%;
+
+  background: #e6c9ed;
+  color: #692d7e;
+
+  box-shadow:
+    0 3px 14px rgba(
+      101,
+      54,
+      130,
+      0.15
+    );
+
+  font-family: Georgia, serif;
+  font-size: 46px;
+  overflow: visible;
+}
+
+.mc-avatar-grande img {
+  width: 100%;
+  height: 100%;
+
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.mc-alterar-avatar {
+  position: absolute;
+
+  bottom: 3px;
+  right: -4px;
+
+  display: grid;
+  place-items: center;
+
+  width: 42px;
+  height: 42px;
+
+  border: 1px solid #d3a2dd;
+  border-radius: 50%;
+
+  background: #fff;
+  color: #723086;
+
+  box-shadow:
+    0 3px 9px rgba(
+      90,
+      39,
+      111,
+      0.12
+    );
+}
+
+.mc-identidade h2 {
+  max-width: 100%;
+  margin: 0;
+
+  overflow-wrap: anywhere;
+
+  font-family: var(
+    --elora-heading-font,
+    Georgia,
+    serif
+  );
+
+  font-size: 27px;
+  line-height: 1.12;
+}
+
+.mc-identidade > p:not(.mc-mensagem) {
+  margin: 0;
+
+  color: #6a5375;
+  font-size: 13px;
+}
+
+.mc-link-foto {
+  padding: 4px 7px;
+
+  border: 0;
+  background: transparent;
+
+  color: #852f9a;
+
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  text-decoration: underline;
+}
+
+.mc-link-foto:disabled,
+.mc-alterar-avatar:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+/* MENU LATERAL */
+
+.mc-sidebar-menu {
+  display: grid;
+  gap: 5px;
+}
+
+.mc-sidebar-menu > button,
+.mc-item-indisponivel {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  width: 100%;
+  min-height: 51px;
+
+  padding: 12px 14px;
+
+  border: 0;
+  border-radius: 13px;
+
+  background: transparent;
+  color: #4d245e;
+
+  text-align: left;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.mc-sidebar-menu > button:hover {
+  background: #f2e1f8;
+}
+
+.mc-sidebar-menu > button.mc-item-ativo {
+  background: #eed3f6;
+  color: #622476;
+}
+
+.mc-item-indisponivel {
+  opacity: 0.62;
+  cursor: not-allowed;
+}
+
+.mc-item-indisponivel small {
+  margin-left: auto;
+
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.mc-menu-divisor {
+  width: 100%;
+  height: 1px;
+
+  margin: 8px 0;
+
+  background: #e4d3e9;
+}
+
+/* =====================================================
+   CARDS
+===================================================== */
+
+.mc-area-principal {
+  display: grid;
+  gap: 17px;
+  min-width: 0;
+}
+
+.mc-cartao {
+  min-width: 0;
+  padding: 25px 28px 23px;
+  scroll-margin-top: 20px;
+}
+
+.mc-cartao-cabecalho {
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+  margin-bottom: 24px;
+}
+
+.mc-titulo-icone {
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width: 49px;
+  height: 49px;
+
+  border-radius: 15px;
+
+  background: #f1def8;
+  color: #712585;
+}
+
+.mc-cartao-cabecalho h2 {
+  margin: 0 0 4px;
+
+  font-family: var(
+    --elora-heading-font,
+    Georgia,
+    serif
+  );
+
+  font-size: 29px;
+  line-height: 1.2;
+}
+
+.mc-cartao-cabecalho p {
+  margin: 0;
+
+  color: #695472;
+  font-size: 13px;
+}
+
+/* =====================================================
+   FORMULÁRIO DE DADOS
+===================================================== */
+
+.mc-campos {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 15px 22px;
+}
+
+.mc-campos label,
+.mc-form-senha label:not(.mc-mostrar-senha) {
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+  min-width: 0;
+
+  color: #442452;
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.mc-campos label > span:not(.mc-opcional) {
+  color: #9236a8;
+}
+
+.mc-campos input,
+.mc-campos select,
+.mc-form-senha input:not([type="checkbox"]) {
+  display: block;
+
+  width: 100%;
+  min-width: 0;
+  min-height: 45px;
+
+  padding: 10px 13px;
+
+  border: 1px solid #dfc8e8;
+  border-radius: 12px;
+
+  background: #fffdff;
+  color: #462456;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  outline: none;
+}
+
+.mc-campos :is(input, select):focus,
+.mc-form-senha input:not([type="checkbox"]):focus {
+  border-color: #a660b9;
+
+  box-shadow:
+    0 0 0 3px rgba(
+      161,
+      91,
+      190,
+      0.12
+    );
+}
+
+.mc-campos input[readonly] {
+  background: #f4ecf7;
+  color: #6e5a76;
+  cursor: not-allowed;
+}
+
+.mc-campos label > small {
+  color: #947e9b;
+
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.mc-localizacao {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    78px;
+
+  gap: 11px;
+}
+
+.mc-opcional {
+  color: #8b7792;
+  font-weight: 500;
+}
+
+/* BOTÕES DO FORMULÁRIO */
+
+.mc-form-acoes {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+
+  gap: 12px;
+
+  margin-top: 26px;
+  padding-top: 20px;
+
+  border-top: 1px solid #eddef1;
+}
+
+/* =====================================================
+   BOTÕES
+===================================================== */
+
+.mc-botao {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 9px;
+
+  min-height: 43px;
+  padding: 11px 23px;
+
+  border: 1px solid transparent;
+  border-radius: 999px;
+
+  text-align: center;
+  font-size: 13px;
+  font-weight: 800;
+
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.mc-botao-principal {
+  background: linear-gradient(
+    110deg,
+    #a14ab1,
+    #712585
+  );
+
+  color: #fff !important;
+
+  box-shadow:
+    0 5px 12px rgba(
+      104,
+      38,
+      126,
+      0.14
+    );
+}
+
+.mc-botao-contorno {
+  border-color: #bd83cb;
+
+  background: #fffafd;
+  color: #702984;
+}
+
+.mc-botao:disabled {
+  opacity: 0.56;
+  cursor: wait;
+}
+
+.mc-botao:not(:disabled):hover {
+  filter: brightness(1.035);
+}
+
+/* =====================================================
+   PREFERÊNCIAS E SEGURANÇA
+===================================================== */
+
+.mc-secoes-inferiores {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  align-items: start;
+  gap: 17px;
+}
+
+.mc-secoes-inferiores .mc-cartao {
+  padding: 23px 24px;
+}
+
+.mc-secoes-inferiores .mc-cartao-cabecalho {
+  margin-bottom: 14px;
+}
+
+.mc-secoes-inferiores h2 {
+  font-size: 25px;
+}
+
+/* LINHAS DE PREFERÊNCIAS */
+
+.mc-preferencia-linha {
+  display: grid;
+
+  grid-template-columns:
+    23px
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 12px;
+
+  min-height: 73px;
+  padding: 12px 0;
+
+  border-bottom: 1px solid #eddef2;
+}
+
+.mc-preferencia-linha > svg {
+  color: #752a88;
+}
+
+.mc-preferencia-linha strong {
+  font-size: 12px;
+}
+
+.mc-preferencia-linha p {
+  margin: 4px 0 0;
+
+  color: #785f82;
+
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+/* INTERRUPTORES */
+
+.mc-chave {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  flex-shrink: 0;
+
+  width: 45px;
+  height: 26px;
+
+  padding: 3px;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: #d5c7db;
+
+  transition: background 170ms ease;
+}
+
+.mc-chave span {
+  width: 20px;
+  height: 20px;
+
+  border-radius: 50%;
+
+  background: #fff;
+
+  box-shadow:
+    0 1px 4px rgba(
+      28,
+      16,
+      37,
+      0.13
+    );
+
+  transition: transform 170ms ease;
+}
+
+.mc-chave.mc-chave-ativa {
+  background: #8e36a2;
+}
+
+.mc-chave.mc-chave-ativa span {
+  transform: translateX(19px);
+}
+
+.mc-observacao {
+  margin: 14px 0 12px;
+
+  color: #856f8e;
+
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.mc-botao-preferencias {
+  width: 100%;
+}
+
+/* AÇÕES DE SEGURANÇA */
+
+.mc-acao-seguranca {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  width: 100%;
+  min-height: 68px;
+
+  padding: 11px 0;
+
+  border: 0;
+  border-bottom: 1px solid #eddef2;
+
+  background: transparent;
+  color: #552462;
+
+  text-align: left;
+}
+
+.mc-acao-seguranca > svg {
+  flex-shrink: 0;
+}
+
+.mc-acao-seguranca > span:nth-child(2) {
+  display: grid;
+
+  gap: 5px;
+
+  flex: 1;
+  min-width: 0;
+}
+
+.mc-acao-seguranca strong {
+  font-size: 12px;
+}
+
+.mc-acao-seguranca small {
+  color: #80698a;
+
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.mc-acao-seguranca > span:last-child {
+  font-size: 23px;
+}
+
+.mc-acao-seguranca:hover:not(.mc-acao-inativa) {
+  color: #983bae;
+}
+
+.mc-acao-inativa {
+  opacity: 0.75;
+  cursor: default;
+}
+
+.mc-acao-seguranca .mc-em-breve {
+  padding: 5px 7px;
+
+  border-radius: 999px;
+
+  background: #efdff6;
+
+  font-size: 10px !important;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* FORMULÁRIO DE SENHA */
+
+.mc-form-senha {
+  display: grid;
+  gap: 12px;
+
+  padding: 15px;
+
+  border: 1px solid #ead4ef;
+  border-radius: 15px;
+
+  background: #fdf7ff;
+}
+
+.mc-mostrar-senha {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+  font-size: 12px;
+}
+
+.mc-mostrar-senha input {
+  accent-color: #812b94;
+}
+
+.mc-form-senha .mc-botao {
+  width: 100%;
+}
+
+/* =====================================================
+   FEEDBACK
+===================================================== */
+
+.mc-mensagem {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+
+  border-radius: 12px;
+
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.mc-erro {
+  border: 1px solid #ecc1cb;
+
+  background: #fff0f3;
+  color: #a42846;
+}
+
+.mc-sucesso {
+  border: 1px solid #c7e4d2;
+
+  background: #effaf3;
+  color: #24683f;
+}
+
+.mc-estado {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+
+  gap: 14px;
+
+  min-height: 100vh;
+  padding: 30px;
+
+  text-align: center;
+
+  background: #fcf5ff;
+  color: #4f205e;
+}
+
+.mc-estado h1 {
+  font-family: var(
+    --elora-heading-font,
+    Georgia,
+    serif
+  );
+}
+
+/* =====================================================
+   RESPONSIVIDADE — NOTEBOOKS
+===================================================== */
+
+@media (max-width: 1290px) {
+  .mc-topbar-interno {
+    width: calc(100% - 36px);
+    gap: 13px;
+  }
+
+  .mc-nav {
+    gap: 2px;
+  }
+
+  .mc-nav a {
+    gap: 5px;
+    padding: 9px 8px;
+
+    font-size: 12px;
+  }
+
+  .mc-layout {
+    grid-template-columns:
+      minmax(230px, 270px)
+      minmax(0, 1fr);
+
+    gap: 14px;
+  }
+
+  .mc-container {
+    width: calc(100% - 32px);
+  }
+
+  .mc-secoes-inferiores {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* =====================================================
+   RESPONSIVIDADE — TABLETS
+===================================================== */
+
+@media (max-width: 910px) {
+  .mc-topbar-interno {
+    flex-wrap: wrap;
+    min-height: 68px;
+  }
+
+  .mc-menu-mobile {
+    display: grid;
+    place-items: center;
+
+    margin-left: auto;
+  }
+
+  .mc-topbar-acoes {
+    margin-left: 0;
+  }
+
+  .mc-nav {
+    display: none;
+    order: 5;
+
+    flex-basis: 100%;
+    flex-direction: column;
+    align-items: stretch;
+
+    padding-bottom: 14px;
+  }
+
+  .mc-nav.mc-nav-aberto {
+    display: flex;
+  }
+
+  .mc-nav a {
+    justify-content: flex-start;
+
+    padding: 12px 15px;
+    font-size: 13px;
+  }
+
+  .mc-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .mc-sidebar {
+    display: grid;
+
+    grid-template-columns:
+      185px
+      minmax(0, 1fr);
+
+    gap: 20px;
+  }
+
+  .mc-identidade {
+    padding-bottom: 0;
+  }
+
+  .mc-avatar-grande {
+    width: 125px;
+    height: 125px;
+  }
+
+  .mc-secoes-inferiores {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .mc-hero-interior {
+    width: calc(100% - 42px);
+  }
+}
+
+/* =====================================================
+   RESPONSIVIDADE — CELULARES
+===================================================== */
+
+@media (max-width: 700px) {
+  .mc-logo img {
+    width: 35px;
+    height: 35px;
+  }
+
+  .mc-logo span {
+    font-size: 38px;
+  }
+
+  .mc-hero {
+    min-height: 220px;
+  }
+
+  .mc-hero::before {
+    background-image:
+      linear-gradient(
+        90deg,
+        rgba(253, 247, 255, 0.98),
+        rgba(253, 247, 255, 0.93) 55%,
+        rgba(253, 247, 255, 0.55)
+      ),
+      url("/images/login-paciente.png");
+
+    background-position:
+      center,
+      58% center;
+  }
+
+  .mc-hero h1 {
+    font-size: clamp(
+      40px,
+      9vw,
+      53px
+    );
+  }
+
+  .mc-hero-interior > p:last-child {
+    font-size: 14px;
+  }
+
+  .mc-container {
+    width: calc(100% - 20px);
+  }
+
+  .mc-sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .mc-sidebar-menu {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .mc-sidebar-menu > button,
+  .mc-item-indisponivel {
+    padding: 10px;
+    gap: 8px;
+
+    font-size: 12px;
+  }
+
+  .mc-sidebar-menu .mc-menu-divisor {
+    grid-column: 1 / -1;
+  }
+
+  .mc-identidade {
+    padding-bottom: 15px;
+  }
+
+  .mc-campos {
+    grid-template-columns: 1fr;
+  }
+
+  .mc-cartao {
+    padding: 22px 19px;
+  }
+
+  .mc-secoes-inferiores {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 420px) {
+  .mc-topbar-acoes {
+    gap: 7px;
+  }
+
+  .mc-avatar-topo {
+    width: 36px;
+    height: 36px;
+  }
+
+  .mc-cartao-cabecalho h2 {
+    font-size: 25px;
+  }
+
+  .mc-form-acoes {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .mc-form-acoes .mc-botao {
+    width: 100%;
+  }
+
+  .mc-sidebar-menu {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =====================================================
+   ACESSIBILIDADE
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .mc-pagina *,
+  .mc-pagina *::before,
+  .mc-pagina *::after {
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

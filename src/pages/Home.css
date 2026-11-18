@@ -1,112 +1,254 @@
+
+/* =========================================================
+   ELORA — HOME | EDIÇÃO LAVANDA
+   Visual aprovado: roxo suave, branco e curvas orgânicas.
+   Não modifica rotas, autenticação ou lógica da busca.
+========================================================= */
+
+#conteudo {
+  --home-plum: #362048;
+  --home-purple: #7c309b;
+  --home-purple-dark: #5a2078;
+  --home-muted: #625471;
+  --home-border: #d9c6e7;
+  --home-lavender: #f0e4f8;
+
+  color: var(--home-plum);
+
+  background: linear-gradient(
+    180deg,
+    #fcf9ff 0%,
+    #f8f1fc 68%,
+    #faf7fd 100%
+  );
+}
+
+/* =========================================================
+   HERO: TEXTO + FOTO
+========================================================= */
+
 .elora-home-hero {
-  width: 100%;
   display: grid;
-  grid-template-columns: 47% 53%;
+  grid-template-columns:
+    minmax(0, 47%)
+    minmax(0, 53%);
+
   align-items: stretch;
+
+  width: 100%;
+  min-height: 550px;
+
+  overflow: hidden;
+  isolation: isolate;
+
+  background:
+    radial-gradient(
+      ellipse at 2% 0%,
+      rgba(215, 176, 246, 0.26),
+      transparent 42%
+    ),
+    radial-gradient(
+      ellipse at 53% 80%,
+      rgba(222, 191, 243, 0.18),
+      transparent 48%
+    ),
+    linear-gradient(
+      115deg,
+      #fffdff 0%,
+      #fbf6ff 52%,
+      #f1e5fa 100%
+    );
 }
 
 .elora-home-copy {
-  padding: 42px 34px 30px max(40px, calc((100vw - 1376px) / 2));
+  position: relative;
+  z-index: 2;
+
+  min-width: 0;
+
+  padding:
+    clamp(38px, 3.8vw, 62px)
+    26px
+    42px
+    max(36px, calc((100vw - 1410px) / 2));
 }
+
+/* SELO */
 
 .elora-eyebrow {
-  margin: 0 0 14px;
-  color: #337cb6;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 2.5px;
-}
-
-.elora-home-copy h1 {
-  max-width: 630px;
   margin: 0 0 16px;
 
-  color: var(--elora-navy);
-  font-family: var(--elora-heading-font);
-  font-size: clamp(42px, 4.05vw, 64px);
-  font-weight: 400;
-  line-height: 1.03;
-  letter-spacing: -2.2px;
+  color: #883aac;
+
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2.9px;
 }
+
+/* TÍTULO */
+
+.elora-home-copy h1 {
+  max-width: 660px;
+  margin: 0 0 18px;
+
+  color: #361c4c;
+
+  font-family: var(
+    --elora-heading-font,
+    Georgia,
+    serif
+  );
+
+  font-size: clamp(42px, 4.05vw, 68px);
+  font-weight: 400;
+
+  line-height: 1.045;
+  letter-spacing: -2.1px;
+  text-wrap: balance;
+}
+
+/* DESCRIÇÃO */
 
 .elora-home-description {
   margin: 0 0 24px;
-  color: var(--elora-text);
-  font-size: clamp(16px, 1.35vw, 21px);
-  line-height: 1.45;
+
+  color: #655875;
+
+  font-size: clamp(16px, 1.3vw, 20px);
+  line-height: 1.5;
 }
+
+/* =========================================================
+   CARD DE BUSCA
+========================================================= */
 
 .elora-search-card {
   width: 100%;
-  max-width: 610px;
-  padding: 0 20px 17px;
-  border-radius: 18px;
+  max-width: 600px;
 
-  background: white;
-  box-shadow: 0 4px 24px rgba(20, 45, 80, 0.07);
-  scroll-margin-top: 20px;
+  padding: 0 21px 19px;
+
+  border: 1px solid rgba(207, 177, 231, 0.46);
+  border-radius: 24px;
+
+  background: rgba(255, 255, 255, 0.96);
+
+  box-shadow:
+    0 12px 35px rgba(91, 47, 115, 0.12);
+
+  scroll-margin-top: 24px;
 }
+
+/* ABAS */
 
 .elora-service-switch {
   display: flex;
-  gap: 14px;
+  gap: 12px;
+
   margin-bottom: 13px;
-  border-bottom: 1px solid #edf0f5;
+
+  border-bottom: 1px solid #eadff0;
 }
 
 .elora-service-switch button {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 11px;
-  flex: 1;
 
-  min-height: 58px;
+  flex: 1;
+  gap: 10px;
+
+  min-width: 0;
+  min-height: 60px;
+
   padding: 10px 4px;
+
   border: 0;
   border-bottom: 2px solid transparent;
 
   background: transparent;
-  color: #536077;
+
+  color: #64566f;
+
+  font-family: inherit;
   font-size: 15px;
+
   cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.elora-service-switch button:hover {
+  color: var(--home-purple);
 }
 
 .elora-service-switch button.is-active {
-  border-bottom-color: #287bd1;
-  color: #1764b3;
-  font-weight: 600;
+  border-bottom-color: #8a3caa;
+
+  color: #742494;
+  font-weight: 700;
 }
+
+/* CAMPO DE ESPECIALIDADE */
 
 .elora-specialty-field {
   position: relative;
+
   display: flex;
   align-items: center;
 
   min-height: 52px;
-  border: 1px solid var(--elora-border);
-  border-radius: 11px;
+
+  border: 1px solid #d7c6e3;
+  border-radius: 12px;
+
+  background: #fff;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.elora-specialty-field:focus-within {
+  border-color: #8f46ae;
+
+  box-shadow:
+    0 0 0 3px rgba(143, 70, 174, 0.12);
 }
 
 .elora-specialty-field > svg {
   position: absolute;
   left: 16px;
-  color: #67717f;
+
+  color: #796688;
   pointer-events: none;
 }
 
 .elora-specialty-field select {
   width: 100%;
   min-height: 52px;
+
   padding: 12px 34px 12px 52px;
+
   border: 0;
-  border-radius: 11px;
+  border-radius: 12px;
 
   background: transparent;
-  color: #4d5664;
+  color: #51435f;
+
+  font-family: inherit;
   font-size: 14px;
+
   cursor: pointer;
 }
+
+.elora-specialty-field select:focus {
+  outline: none;
+}
+
+/* CAMPO DE DATA */
 
 .elora-date-field {
   margin-top: 14px;
@@ -114,218 +256,416 @@
 
 .elora-date-field label {
   display: block;
-  margin-bottom: 6px;
-  font-size: 12px;
-  color: var(--elora-text);
+
+  margin-bottom: 7px;
+
+  color: #564666;
+
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .elora-date-field input {
   width: 100%;
   min-height: 46px;
+
   padding: 10px 12px;
-  border: 1px solid var(--elora-border);
+
+  border: 1px solid #d7c6e3;
   border-radius: 10px;
 
-  background: white;
-  color: var(--elora-navy);
+  background: #fff;
+  color: #493158;
+
   font: inherit;
 }
+
+.elora-date-field input:focus-visible {
+  outline: 3px solid rgba(143, 70, 174, 0.20);
+  outline-offset: 1px;
+}
+
+/* BOTÃO ENCONTRAR */
 
 .elora-search-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+
+  gap: 15px;
 
   width: 100%;
   min-height: 52px;
+
   margin-top: 13px;
   padding: 12px 20px;
+
   border: 0;
   border-radius: 18px;
 
-  background: var(--elora-blue);
-  color: var(--elora-navy);
+  background: linear-gradient(
+    105deg,
+    #8c3cab,
+    #70218c
+  );
+
+  color: #fff;
+
+  font-family: inherit;
   font-size: 17px;
-  font-weight: 600;
+  font-weight: 700;
+
+  box-shadow:
+    0 7px 15px rgba(104, 40, 133, 0.13);
+
   cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .elora-search-button:hover {
-  background: #87bff0;
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 11px 24px rgba(104, 40, 133, 0.20);
 }
+
+.elora-search-button:active {
+  transform: translateY(0);
+}
+
+/* =========================================================
+   FOTO E ARCOS SUAVES
+========================================================= */
 
 .elora-home-visual {
   position: relative;
-  min-height: 480px;
+
+  min-width: 0;
+  min-height: 550px;
+
   overflow: hidden;
   isolation: isolate;
 }
 
+/* FAIXA ORGÂNICA ATRÁS DA FOTO */
+
+.elora-home-visual::before {
+  position: absolute;
+  z-index: 0;
+
+  inset: -3% -3% -3% -4%;
+
+  content: "";
+
+  background: linear-gradient(
+    135deg,
+    #e5c7f7 10%,
+    #b779dc 68%,
+    #dcc0f3 100%
+  );
+
+  clip-path: ellipse(
+    86% 94% at 98% 50%
+  );
+}
+
+/* FOTO PRINCIPAL */
+
 .elora-home-photo {
   position: absolute;
+  z-index: 1;
+
   inset: 0;
+
   width: 100%;
   height: 100%;
+
   object-fit: cover;
   object-position: 55% center;
+
+  clip-path: ellipse(
+    85% 92% at 99% 50%
+  );
 }
+
+/* CURVAS DECORATIVAS */
 
 .elora-hero-ribbon {
   position: absolute;
+  z-index: 2;
+
+  border-radius: 50%;
+
   pointer-events: none;
 }
 
 .elora-hero-ribbon-blue {
-  top: 2%;
-  right: 2%;
-  width: 85%;
-  height: 122%;
+  top: 4%;
+  right: -21%;
 
-  border: 34px solid #91c8f6;
-  border-bottom-color: transparent;
+  width: 70%;
+  height: 100%;
+
+  border:
+    clamp(17px, 2.3vw, 36px)
+    solid rgba(181, 110, 228, 0.80);
+
   border-left-color: transparent;
-  border-radius: 50%;
-  transform: rotate(-24deg);
+  border-bottom-color: transparent;
+
+  transform: rotate(-23deg);
 }
 
 .elora-hero-ribbon-lavender {
-  top: -22%;
-  left: -4%;
-  width: 92%;
-  height: 117%;
+  top: -29%;
+  left: -10%;
 
-  border: 29px solid #cdc3f5;
+  width: 100%;
+  height: 126%;
+
+  border:
+    clamp(21px, 3vw, 43px)
+    solid rgba(207, 162, 238, 0.70);
+
   border-top-color: transparent;
   border-right-color: transparent;
-  border-radius: 50%;
-  transform: rotate(-28deg);
+
+  transform: rotate(-29deg);
 }
 
-/* A faixa permanece diretamente abaixo do hero. */
-.elora-triage-banner {
-  width: calc(100% - 70px);
-  max-width: 1466px;
-  margin: 0 auto;
-  padding: 20px 35px;
+/* =========================================================
+   FAIXA DE TRIAGEM
+========================================================= */
 
+.elora-triage-banner {
   display: grid;
-  grid-template-columns: 76px minmax(0, 1fr) 225px minmax(270px, 0.8fr);
+
+  grid-template-columns:
+    75px
+    minmax(0, 1fr)
+    220px
+    minmax(255px, 0.75fr);
+
   align-items: center;
   gap: 22px;
 
-  border-radius: 25px;
-  background: var(--elora-lavender);
+  width: calc(100% - 72px);
+  max-width: 1480px;
+
+  margin: 27px auto 0;
+  padding: 22px 34px;
+
+  border: 1px solid rgba(213, 187, 231, 0.42);
+  border-radius: 27px;
+
+  background: linear-gradient(
+    110deg,
+    #efe5f9 0%,
+    #f3eafa 52%,
+    #eddef7 100%
+  );
 }
 
+/* LOGO DA FAIXA */
+
 .elora-triage-logo {
-  width: 76px;
-  height: 76px;
+  width: 75px;
+  height: 75px;
+
   object-fit: contain;
+
+  filter: hue-rotate(64deg) saturate(1.1);
 }
+
+/* TEXTO */
 
 .elora-triage-copy h2 {
   margin: 0 0 5px;
-  color: var(--elora-navy);
-  font-family: var(--elora-heading-font);
+
+  color: #39214d;
+
+  font-family: var(
+    --elora-heading-font,
+    Georgia,
+    serif
+  );
+
   font-size: 35px;
   font-weight: 400;
+
   line-height: 1.1;
   letter-spacing: -0.8px;
 }
 
 .elora-triage-copy p {
   margin: 0;
-  color: var(--elora-text);
+
+  color: #665672;
+
   font-size: 15px;
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
+/* BOTÃO TRIAGEM */
+
 .elora-triage-button {
-  min-height: 53px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 52px;
   padding: 12px 20px;
-  border: 1px solid var(--elora-navy);
+
+  border: 1.5px solid #71318f;
   border-radius: 999px;
 
-  background: transparent;
-  color: var(--elora-navy);
+  background: rgba(255, 255, 255, 0.30);
+  color: #622080;
+
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
+
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+
   cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
 .elora-triage-button:hover {
-  background: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.85);
+  transform: translateY(-1px);
 }
 
+/* AVISO TRIAGEM */
+
 .elora-triage-note {
-  padding-left: 28px;
-  border-left: 1px solid #c5bed7;
+  padding-left: 25px;
+  border-left: 1px solid #d1b8df;
 }
 
 .elora-triage-note p {
   margin: 0;
-  color: var(--elora-text);
+
+  color: #675577;
+
   font-size: 12px;
-  line-height: 1.7;
+  line-height: 1.65;
 }
 
+/* =========================================================
+   TRÊS PASSOS
+========================================================= */
+
 .elora-home-steps {
-  width: min(1376px, calc(100% - 120px));
-  margin: 0 auto;
-  padding: 30px 0 38px;
-  scroll-margin-top: 30px;
+  width: 100%;
+
+  margin: 24px 0 0;
+
+  padding:
+    35px
+    max(30px, calc((100vw - 1420px) / 2))
+    40px;
+
+  background: linear-gradient(
+    110deg,
+    #f4eafb 0%,
+    #f7effc 52%,
+    #efe3f8 100%
+  );
+
+  border-top: 1px solid #ead8f3;
+  border-bottom: 1px solid #ead8f3;
+
+  scroll-margin-top: 24px;
 }
 
 .elora-home-steps ol {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 35px;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 30px;
 
   margin: 0;
   padding: 0;
+
   list-style: none;
 }
 
 .elora-home-steps li {
   position: relative;
+
   display: flex;
   align-items: flex-start;
-  gap: 17px;
-  padding-right: 22px;
+
+  gap: 16px;
+
+  min-width: 0;
+  padding-right: 23px;
 }
 
 .elora-step-symbols {
   display: flex;
   align-items: center;
+
   flex-shrink: 0;
 }
+
+/* NÚMEROS E ÍCONES */
 
 .elora-step-number,
 .elora-step-icon {
   display: grid;
   place-items: center;
+
   border-radius: 50%;
-  background: #e8f2ff;
-  color: #1a65ad;
+
+  color: #742894;
 }
 
 .elora-step-number {
-  width: 34px;
-  height: 34px;
-  margin-right: -3px;
-  font-size: 16px;
+  width: 33px;
+  height: 33px;
+
+  margin-right: -2px;
+
+  background: #e9d2fa;
+
+  font-size: 15px;
+  font-weight: 800;
 }
 
 .elora-step-icon {
-  width: 57px;
-  height: 57px;
+  width: 59px;
+  height: 59px;
+
+  border: 1px solid #e6c7f6;
+
+  background: #e9cefa;
 }
 
+/* TEXTOS */
+
 .elora-step-copy h3 {
-  margin: 3px 0 7px;
-  color: var(--elora-navy);
-  font-family: var(--elora-heading-font);
+  margin: 3px 0 8px;
+
+  color: #39214d;
+
+  font-family: var(
+    --elora-heading-font,
+    Georgia,
+    serif
+  );
+
   font-size: 24px;
   font-weight: 400;
   line-height: 1.2;
@@ -333,47 +673,72 @@
 
 .elora-step-copy p {
   margin: 0;
-  color: var(--elora-text);
+
+  color: #64556f;
+
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.45;
 }
+
+/* SETAS */
 
 .elora-step-arrow {
   position: absolute;
+
   top: 18px;
-  right: -15px;
-  color: #8b96aa;
+  right: -14px;
+
+  color: #9a6aae;
 }
+
+/* =========================================================
+   RODAPÉ
+========================================================= */
 
 .elora-home-footer {
   display: flex;
   justify-content: space-between;
-  gap: 20px;
 
-  width: min(1376px, calc(100% - 120px));
+  gap: 18px;
+
+  width: 100%;
+
   margin: 0 auto;
-  padding: 18px 0;
-  border-top: 1px solid #edf0f5;
 
-  color: #627086;
+  padding:
+    22px
+    max(30px, calc((100vw - 1420px) / 2));
+
+  background: #fbf8fd;
+  color: #766985;
+
   font-size: 11px;
 }
 
-/* Avisos temporários enquanto as próximas páginas são construídas. */
+/* =========================================================
+   AVISOS EXISTENTES
+========================================================= */
+
 .elora-notice {
+  position: relative;
+
   width: min(500px, calc(100% - 32px));
   max-height: 90dvh;
+
   padding: 36px;
-  border: 1px solid var(--elora-border);
+
+  border: 1px solid #dec9eb;
   border-radius: 22px;
 
-  background: white;
-  color: var(--elora-navy);
-  box-shadow: 0 20px 80px rgba(20, 45, 80, 0.2);
+  background: #fff;
+  color: #3e2451;
+
+  box-shadow:
+    0 20px 80px rgba(66, 27, 84, 0.22);
 }
 
 .elora-notice::backdrop {
-  background: rgba(20, 45, 80, 0.4);
+  background: rgba(47, 20, 65, 0.42);
 }
 
 .elora-notice > img {
@@ -384,49 +749,79 @@
 
 .elora-notice h2 {
   margin: 20px 0 12px;
-  font-family: var(--elora-heading-font);
+
+  font-family: var(
+    --elora-heading-font,
+    Georgia,
+    serif
+  );
+
   font-size: 30px;
   font-weight: 400;
   line-height: 1.2;
 }
 
 .elora-notice p {
-  color: var(--elora-text);
+  color: #635572;
   font-size: 15px;
   line-height: 1.6;
 }
 
 .elora-notice-close {
   position: absolute;
+
   top: 10px;
   right: 14px;
+
   padding: 5px 10px;
+
   border: 0;
   background: transparent;
-  color: var(--elora-navy);
+
+  color: #432351;
+
   font-size: 28px;
   cursor: pointer;
 }
 
 .elora-notice-button {
   min-height: 44px;
+
   margin-top: 12px;
   padding: 10px 25px;
+
   border: 0;
   border-radius: 12px;
-  background: var(--elora-blue);
-  color: var(--elora-navy);
-  font-weight: 600;
+
+  background: #79319b;
+  color: #fff;
+
+  font-size: 14px;
+  font-weight: 700;
+
   cursor: pointer;
 }
 
+/* ACESSIBILIDADE */
+
+#conteudo button:focus-visible,
+#conteudo a:focus-visible,
+#conteudo select:focus-visible {
+  outline: 3px solid #a463c2;
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   RESPONSIVIDADE — TABLETS
+========================================================= */
+
 @media (max-width: 1200px) {
   .elora-home-copy {
-    padding: 35px 25px 28px 35px;
+    padding: 38px 27px 34px 35px;
   }
 
   .elora-home-copy h1 {
-    font-size: 48px;
+    font-size: clamp(41px, 4.2vw, 54px);
   }
 
   .elora-service-switch button {
@@ -435,12 +830,17 @@
   }
 
   .elora-home-visual {
-    min-height: 460px;
+    min-height: 500px;
   }
 
   .elora-triage-banner {
-    width: calc(100% - 40px);
-    grid-template-columns: 60px 1fr 190px;
+    width: calc(100% - 44px);
+
+    grid-template-columns:
+      60px
+      minmax(0, 1fr)
+      190px;
+
     gap: 18px;
     padding: 20px 25px;
   }
@@ -460,13 +860,8 @@
     border-left: 0;
   }
 
-  .elora-home-steps,
-  .elora-home-footer {
-    width: calc(100% - 70px);
-  }
-
   .elora-home-steps ol {
-    gap: 20px;
+    gap: 22px;
   }
 
   .elora-home-steps li {
@@ -474,14 +869,14 @@
   }
 
   .elora-step-number {
-    width: 28px;
-    height: 28px;
+    width: 29px;
+    height: 29px;
     font-size: 13px;
   }
 
   .elora-step-icon {
-    width: 45px;
-    height: 45px;
+    width: 48px;
+    height: 48px;
   }
 
   .elora-step-copy h3 {
@@ -489,22 +884,26 @@
   }
 
   .elora-step-copy p {
-    font-size: 12px;
+    font-size: 13px;
   }
 }
 
+/* =========================================================
+   RESPONSIVIDADE — CELULARES
+========================================================= */
+
 @media (max-width: 850px) {
   .elora-home-hero {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .elora-home-copy {
-    padding: 36px 24px 30px;
+    padding: 42px 24px 32px;
   }
 
   .elora-home-copy h1 {
-    max-width: 650px;
-    font-size: clamp(43px, 7vw, 58px);
+    max-width: 660px;
+    font-size: clamp(42px, 7vw, 58px);
   }
 
   .elora-home-description {
@@ -512,16 +911,32 @@
   }
 
   .elora-search-card {
-    max-width: none;
+    max-width: 620px;
   }
 
   .elora-home-visual {
     min-height: 0;
-    height: 390px;
+    height: 360px;
+  }
+
+  .elora-home-photo {
+    object-position: 56% 47%;
+  }
+
+  .elora-home-visual::before {
+    clip-path: ellipse(
+      96% 100% at 70% 52%
+    );
+  }
+
+  .elora-home-photo {
+    clip-path: ellipse(
+      95% 98% at 72% 52%
+    );
   }
 
   .elora-triage-banner {
-    margin-top: 0;
+    margin-top: 20px;
   }
 
   .elora-triage-copy p {
@@ -529,12 +944,12 @@
   }
 
   .elora-triage-button {
-    min-height: 47px;
+    min-height: 48px;
     font-size: 13px;
   }
 
   .elora-home-steps ol {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 28px;
   }
 
@@ -543,7 +958,7 @@
   }
 
   .elora-step-copy h3 {
-    font-size: 24px;
+    font-size: 23px;
   }
 
   .elora-step-copy p {
@@ -557,11 +972,11 @@
 
 @media (max-width: 560px) {
   .elora-home-copy {
-    padding: 30px 18px 26px;
+    padding: 34px 18px 27px;
   }
 
   .elora-home-copy h1 {
-    font-size: 43px;
+    font-size: clamp(38px, 10vw, 46px);
     letter-spacing: -1.5px;
   }
 
@@ -576,6 +991,7 @@
 
   .elora-search-card {
     padding: 0 13px 14px;
+    border-radius: 19px;
   }
 
   .elora-service-switch {
@@ -583,6 +999,7 @@
   }
 
   .elora-service-switch button {
+    gap: 6px;
     font-size: 12px;
   }
 
@@ -596,22 +1013,27 @@
   }
 
   .elora-home-visual {
-    height: 310px;
+    height: 285px;
   }
 
   .elora-hero-ribbon-blue {
-    border-width: 22px;
+    border-width: 18px;
   }
 
   .elora-hero-ribbon-lavender {
-    border-width: 19px;
+    border-width: 20px;
   }
 
   .elora-triage-banner {
     width: calc(100% - 28px);
-    grid-template-columns: 48px 1fr;
+
+    grid-template-columns:
+      48px
+      minmax(0, 1fr);
+
     gap: 12px;
-    padding: 22px 17px;
+
+    padding: 20px 16px;
     border-radius: 20px;
   }
 
@@ -621,16 +1043,16 @@
   }
 
   .elora-triage-copy h2 {
-    font-size: 28px;
+    font-size: 27px;
   }
 
   .elora-triage-button,
   .elora-triage-note {
-    grid-column: 1 / 3;
+    grid-column: 1 / -1;
   }
 
   .elora-triage-button {
-    margin-top: 5px;
+    margin-top: 4px;
   }
 
   .elora-triage-note {
@@ -641,14 +1063,15 @@
     font-size: 11px;
   }
 
-  .elora-home-steps,
-  .elora-home-footer {
-    width: calc(100% - 36px);
+  .elora-home-steps {
+    padding: 28px 18px;
   }
 
   .elora-home-footer {
     flex-direction: column;
-    gap: 5px;
+    gap: 6px;
+
+    padding: 20px 18px;
   }
 
   .elora-notice {
@@ -656,59 +1079,32 @@
   }
 }
 
-.elora-hero-ribbon {
-  display: none;
-}
+/* =========================================================
+   DESKTOPS COM POUCA ALTURA
+========================================================= */
 
-/* Faixa dos três passos */
-.elora-home-steps {
-  width: 100%;
-  margin: 22px 0 0;
-  padding: 32px max(24px, calc((100vw - 1376px) / 2));
+@media (min-width: 851px) and (max-height: 760px) {
+  .elora-home-hero {
+    min-height: 510px;
+  }
 
-  background: linear-gradient(
-    110deg,
-    #edf6ff 0%,
-    #e6f0ff 55%,
-    #eeeafa 100%
-  );
+  .elora-home-copy {
+    padding-top: 32px;
+    padding-bottom: 30px;
+  }
 
-  border-top: 1px solid #d5e5f5;
-  border-bottom: 1px solid #d5e5f5;
-}
-
-.elora-step-number {
-  background: #cfe6ff;
-  color: #185e9e;
-  font-weight: 700;
-}
-
-.elora-step-icon {
-  background: #d8eaff;
-  color: #185e9e;
-  border: 1px solid #b9d7f5;
-}
-
-.elora-step-copy h3 {
-  color: #132e55;
-}
-
-.elora-step-copy p {
-  color: #405675;
-}
-
-.elora-step-arrow {
-  color: #6994bd;
-}
-
-@media (max-width: 850px) {
-  .elora-home-steps {
-    padding: 28px 24px;
+  .elora-home-visual {
+    min-height: 510px;
   }
 }
 
-@media (max-width: 560px) {
-  .elora-home-steps {
-    padding: 26px 18px;
+/* =========================================================
+   ACESSIBILIDADE — MOVIMENTO REDUZIDO
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  #conteudo *,
+  .elora-header * {
+    transition: none !important;
   }
 }

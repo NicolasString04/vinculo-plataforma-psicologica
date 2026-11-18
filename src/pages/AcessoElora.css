@@ -1,7 +1,10 @@
 
-/* =========================================
-   ELORA — ACESSO / LOGIN
-========================================= */
+/* ========================================================
+   ELORA | LOGIN DE PACIENTES E PSICÓLOGOS
+   Fullscreen: imagem 54% / formulário 46%
+======================================================== */
+
+/* BASE E IDENTIDADES */
 
 .acesso-elora {
   --acesso-principal: #0865c3;
@@ -11,32 +14,33 @@
   --acesso-suave: #e8f3ff;
   --acesso-frase: #91e4ff;
 
+  --acesso-etiqueta-fundo: rgba(95, 163, 236, 0.66);
+  --acesso-imagem: url("/images/login-paciente.png");
+  --acesso-sombra-imagem: rgba(9, 21, 60, 0.45);
+  --acesso-sombra-final: rgba(9, 21, 60, 0.02);
+  --acesso-botao-inicio: var(--acesso-principal);
+
   position: relative;
   isolation: isolate;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
   width: 100vw;
-  min-height: 100svh;
-  margin-left: calc(50% - 50vw);
+  min-height: 100vh;
+  min-height: 100dvh;
 
-  padding: clamp(18px, 2.5vw, 42px);
-
-  overflow: hidden;
-  box-sizing: border-box;
+  margin: 0 0 0 calc(50% - 50vw);
+  padding: 0;
 
   color: var(--acesso-texto);
-  font-family: var(--elora-body-font, system-ui, sans-serif);
+  background: #fff;
 
-  background:
-    radial-gradient(ellipse at 12% 10%, #c1bcff 0%, transparent 42%),
-    radial-gradient(ellipse at 85% 95%, #a4caff 0%, transparent 44%),
-    linear-gradient(130deg, #e5dfff, #f5eaff 56%, #b7d4ff);
+  font-family: var(
+    --elora-body-font,
+    system-ui,
+    sans-serif
+  );
 }
 
-/* VERSÃO PSICÓLOGO */
+/* IDENTIDADE DO PSICÓLOGO */
 
 .acesso-profissional {
   --acesso-principal: #73099d;
@@ -45,13 +49,14 @@
   --acesso-suave: #f5eafa;
   --acesso-frase: #e5a4f6;
 
-  background:
-    radial-gradient(ellipse at 15% 10%, #bb79d7 0%, transparent 43%),
-    radial-gradient(ellipse at 90% 94%, #d4a0e8 0%, transparent 46%),
-    linear-gradient(130deg, #d7a4ec, #f5e8fb 56%, #d1a2e4);
+  --acesso-etiqueta-fundo: rgba(143, 75, 167, 0.72);
+  --acesso-imagem: url("/images/login-psicologo.png");
+  --acesso-sombra-imagem: rgba(42, 8, 57, 0.52);
+  --acesso-sombra-final: rgba(42, 8, 57, 0.04);
+  --acesso-botao-inicio: #8735aa;
 }
 
-/* RESET */
+/* RESET LOCAL */
 
 .acesso-elora,
 .acesso-elora *,
@@ -60,84 +65,68 @@
   box-sizing: border-box;
 }
 
-/* =========================================
-   ESTRUTURA PRINCIPAL
-========================================= */
+/* ========================================================
+   ESTRUTURA
+======================================================== */
 
 .acesso-layout {
   display: grid;
 
   grid-template-columns:
-    minmax(0, 1.1fr)
-    minmax(0, 0.9fr);
+    minmax(0, 54fr)
+    minmax(0, 46fr);
 
-  width: min(100%, 1580px);
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
 
-  min-height: min(790px, calc(100svh - 64px));
+  margin: 0;
+  padding: 0;
 
-  border-radius: 34px;
-  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 
-  box-shadow:
-    0 24px 85px rgba(25, 19, 76, 0.19);
-
-  background: #fdfbff;
+  background: #fff;
 }
 
-/* =========================================
+/* ========================================================
    BANNER ESQUERDO
-========================================= */
+======================================================== */
 
 .acesso-visual {
-  position: relative;
-
   display: flex;
   align-items: flex-start;
 
   min-width: 0;
-  min-height: 680px;
+  min-height: 100vh;
+  min-height: 100dvh;
 
-  padding: clamp(38px, 5vw, 78px);
-
-  overflow: hidden;
+  padding: clamp(32px, 4vw, 72px);
 
   color: #fff;
 
   background-image:
     linear-gradient(
       90deg,
-      rgba(9, 21, 60, 0.50),
-      rgba(9, 21, 60, 0.03) 80%
+      var(--acesso-sombra-imagem),
+      var(--acesso-sombra-final) 85%
     ),
-    url("/images/login-paciente.png");
+    var(--acesso-imagem);
 
-  background-position: center center;
+  background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
 }
-
-/* BANNER PSICÓLOGO */
-
-.acesso-profissional .acesso-visual {
-  background-image:
-    linear-gradient(
-      90deg,
-      rgba(42, 8, 57, 0.50),
-      rgba(42, 8, 57, 0.04) 80%
-    ),
-    url("/images/login-psicologo.png");
-}
-
-/* CONTEÚDO DO BANNER */
 
 .acesso-visual-conteudo {
   position: relative;
   z-index: 1;
 
   width: 100%;
-  max-width: 590px;
+  max-width: 650px;
 
-  padding-top: clamp(20px, 5vh, 58px);
+  padding-top: clamp(75px, 12vh, 145px);
 }
 
 /* ETIQUETA */
@@ -145,14 +134,13 @@
 .acesso-etiqueta {
   display: inline-flex;
   align-items: center;
-  gap: 11px;
 
+  gap: 11px;
   padding: 10px 20px;
 
   border-radius: 999px;
 
-  background: rgba(95, 163, 236, 0.66);
-
+  background: var(--acesso-etiqueta-fundo);
   color: #fff;
 
   font-size: clamp(0.82rem, 1.35vw, 1.15rem);
@@ -162,16 +150,11 @@
   backdrop-filter: blur(9px);
 }
 
-.acesso-profissional .acesso-etiqueta {
-  background: rgba(143, 75, 167, 0.69);
-}
-
 /* FRASE PRINCIPAL */
 
 .acesso-frase {
-  max-width: 580px;
-
-  margin: 32px 0 24px;
+  max-width: 650px;
+  margin: 30px 0 24px;
 
   color: #fff;
 
@@ -181,15 +164,13 @@
     serif
   );
 
-  font-size: clamp(2rem, 3.5vw, 3.5rem);
-
+  font-size: clamp(2.3rem, 3.5vw, 4rem);
   font-weight: 700;
-  line-height: 1.13;
+  line-height: 1.12;
   letter-spacing: -0.035em;
 }
 
 .acesso-frase span {
-  display: inline;
   color: var(--acesso-frase);
 }
 
@@ -204,13 +185,12 @@
   margin-top: 30px;
 
   border-radius: 20px;
-
   background: var(--acesso-frase);
 }
 
-/* =========================================
+/* ========================================================
    PAINEL DIREITO
-========================================= */
+======================================================== */
 
 .acesso-painel {
   display: flex;
@@ -220,19 +200,15 @@
   justify-content: center;
 
   min-width: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
 
-  padding: clamp(32px, 4vw, 68px);
+  padding: 45px clamp(28px, 5vw, 100px);
 
-  background:
-    linear-gradient(
-      145deg,
-      #ffffff 0%,
-      #fbf9ff 65%,
-      var(--acesso-suave) 100%
-    );
+  background: #fff;
 }
 
-/* LOGO ELORA */
+/* LOGO */
 
 .acesso-marca {
   display: inline-flex;
@@ -240,11 +216,9 @@
   justify-content: center;
 
   gap: 12px;
-
-  margin-bottom: 34px;
+  margin-bottom: 35px;
 
   color: var(--acesso-texto);
-
   text-decoration: none;
 }
 
@@ -253,9 +227,6 @@
 
   width: 58px;
   height: 58px;
-
-  max-width: 58px;
-  max-height: 58px;
 
   object-fit: contain;
   flex-shrink: 0;
@@ -269,18 +240,16 @@
   );
 
   font-size: clamp(2.5rem, 3.5vw, 3.5rem);
-
   font-weight: 700;
   line-height: 1;
-
   letter-spacing: -0.04em;
 }
 
-/* CONTEÚDO DO PAINEL */
+/* CONTEÚDO */
 
 .acesso-painel-conteudo {
   width: 100%;
-  max-width: 560px;
+  max-width: 620px;
   min-width: 0;
 }
 
@@ -303,7 +272,6 @@
   );
 
   font-size: clamp(2rem, 3vw, 3.1rem);
-
   font-weight: 700;
   line-height: 1.12;
   letter-spacing: -0.035em;
@@ -318,27 +286,23 @@
   line-height: 1.5;
 }
 
-/* =========================================
+/* ========================================================
    FORMULÁRIO
-========================================= */
+======================================================== */
 
 .acesso-form {
   display: flex;
   flex-direction: column;
 
   gap: 19px;
-
   width: 100%;
 }
-
-/* CAMPOS */
 
 .acesso-campo {
   display: flex;
   flex-direction: column;
 
   gap: 9px;
-
   width: 100%;
 }
 
@@ -349,7 +313,7 @@
   font-weight: 700;
 }
 
-/* INPUT */
+/* INPUTS */
 
 .acesso-input-wrap {
   display: flex;
@@ -359,29 +323,27 @@
 
   width: 100%;
   height: 57px;
-
   padding: 0 17px;
 
   border: 1.5px solid var(--acesso-borda);
   border-radius: 14px;
 
-  background: rgba(255, 255, 255, 0.85);
-
+  background: #fff;
   color: var(--acesso-escuro);
 
   transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
 .acesso-input-wrap:focus-within {
   border-color: var(--acesso-principal);
+  box-shadow: 0 0 0 4px rgba(8, 101, 195, 0.09);
+}
 
-  background: #fff;
-
-  box-shadow:
-    0 0 0 4px rgba(8, 101, 195, 0.09);
+.acesso-profissional
+.acesso-input-wrap:focus-within {
+  box-shadow: 0 0 0 4px rgba(115, 9, 157, 0.09);
 }
 
 .acesso-input-wrap input {
@@ -390,17 +352,15 @@
   width: 100%;
   min-width: 0;
   height: 100%;
-
   padding: 0;
 
-  border: none;
-  outline: none;
+  border: 0;
+  outline: 0;
 
   background: transparent;
-
   color: var(--acesso-texto);
 
-  font-family: inherit;
+  font: inherit;
   font-size: 1rem;
 }
 
@@ -408,36 +368,26 @@
   color: #9ba5bf;
 }
 
-.acesso-input-wrap input:focus {
-  outline: none;
-}
-
-/* BOTÃO MOSTRAR SENHA */
+/* MOSTRAR / OCULTAR SENHA */
 
 .acesso-mostrar-senha {
   display: flex;
   align-items: center;
   justify-content: center;
 
-  width: 36px;
-  height: 36px;
-
   flex-shrink: 0;
 
+  width: 36px;
+  height: 36px;
   padding: 0;
 
-  border: none;
+  border: 0;
   border-radius: 8px;
 
   background: transparent;
-
   color: var(--acesso-escuro);
 
   cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    color 0.2s ease;
 }
 
 .acesso-mostrar-senha:hover {
@@ -445,29 +395,27 @@
   color: var(--acesso-principal);
 }
 
-/* =========================================
+/* ========================================================
    RECUPERAÇÃO DE SENHA
-========================================= */
+======================================================== */
 
 .acesso-recuperacao {
   display: flex;
   justify-content: flex-end;
 
   width: 100%;
-
   margin-top: -9px;
 }
 
 .acesso-recuperacao button {
   padding: 3px 0;
 
-  border: none;
-
+  border: 0;
   background: transparent;
 
   color: var(--acesso-principal);
 
-  font-family: inherit;
+  font: inherit;
   font-size: 0.96rem;
   font-weight: 700;
 
@@ -486,15 +434,13 @@
   cursor: wait;
 }
 
-/* =========================================
+/* ========================================================
    MENSAGENS
-========================================= */
+======================================================== */
 
 .acesso-mensagem {
   width: 100%;
-
   margin: 0;
-
   padding: 12px 15px;
 
   border-radius: 10px;
@@ -505,23 +451,19 @@
 
 .acesso-erro {
   border: 1px solid #f1b7bd;
-
   background: #fff0f1;
-
   color: #a32937;
 }
 
 .acesso-aviso {
   border: 1px solid #b7ddc6;
-
   background: #effaf2;
-
   color: #24683e;
 }
 
-/* =========================================
+/* ========================================================
    BOTÃO ENTRAR
-========================================= */
+======================================================== */
 
 .acesso-submit {
   display: flex;
@@ -536,38 +478,37 @@
   margin-top: 3px;
   padding: 14px 22px;
 
-  border: none;
+  border: 0;
   border-radius: 14px;
 
-  background:
-    linear-gradient(
-      105deg,
-      var(--acesso-principal),
-      var(--acesso-escuro)
-    );
+  background: linear-gradient(
+    105deg,
+    var(--acesso-botao-inicio),
+    var(--acesso-escuro)
+  );
 
   color: #fff;
 
-  font-family: inherit;
+  font: inherit;
   font-size: 1.08rem;
   font-weight: 750;
 
-  cursor: pointer;
-
-  box-shadow:
-    0 8px 20px rgba(8, 70, 150, 0.13);
+  box-shadow: 0 8px 20px rgba(8, 70, 150, 0.13);
 
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    opacity 0.2s ease;
+    transform 0.2s,
+    box-shadow 0.2s;
+
+  cursor: pointer;
+}
+
+.acesso-profissional .acesso-submit {
+  box-shadow: 0 8px 20px rgba(115, 9, 157, 0.15);
 }
 
 .acesso-submit:hover:not(:disabled) {
   transform: translateY(-2px);
-
-  box-shadow:
-    0 12px 26px rgba(8, 70, 150, 0.22);
+  box-shadow: 0 12px 26px rgba(8, 70, 150, 0.22);
 }
 
 .acesso-submit:active:not(:disabled) {
@@ -579,33 +520,26 @@
   cursor: wait;
 }
 
-.acesso-profissional .acesso-submit {
-  box-shadow:
-    0 8px 20px rgba(115, 9, 157, 0.15);
-}
-
-/* =========================================
+/* ========================================================
    SEPARADOR
-========================================= */
+======================================================== */
 
 .acesso-separador {
   width: 100%;
   height: 1px;
-
   margin: 32px 0;
 
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      var(--acesso-borda),
-      transparent
-    );
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--acesso-borda),
+    transparent
+  );
 }
 
-/* =========================================
+/* ========================================================
    CRIAR CONTA
-========================================= */
+======================================================== */
 
 .acesso-criar-conta {
   display: flex;
@@ -616,38 +550,35 @@
 
   width: 100%;
   min-height: 55px;
-
   padding: 12px 16px;
 
   border: 1.5px solid var(--acesso-principal);
   border-radius: 13px;
 
   background: transparent;
-
   color: var(--acesso-escuro);
 
   font-size: 1rem;
   font-weight: 750;
 
-  text-decoration: none;
   text-align: center;
+  text-decoration: none;
 
   transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease;
+    background 0.2s,
+    color 0.2s,
+    transform 0.2s;
 }
 
 .acesso-criar-conta:hover {
   background: var(--acesso-principal);
   color: #fff;
-
   transform: translateY(-1px);
 }
 
-/* =========================================
-   TROCAR PERFIL
-========================================= */
+/* ========================================================
+   TROCAR ÁREA
+======================================================== */
 
 .acesso-trocar-perfil {
   display: flex;
@@ -657,7 +588,6 @@
   gap: 10px;
 
   width: 100%;
-
   margin-top: 25px;
 
   color: var(--acesso-escuro);
@@ -667,80 +597,105 @@
 
   text-decoration: underline;
   text-underline-offset: 4px;
-
-  transition: color 0.2s ease;
 }
 
 .acesso-trocar-perfil:hover {
   color: var(--acesso-principal);
 }
 
-/* =========================================
-   ACESSIBILIDADE
-========================================= */
+/* ========================================================
+   VOLTAR AO INÍCIO
+======================================================== */
 
-.acesso-elora button:focus-visible,
-.acesso-elora a:focus-visible,
-.acesso-elora input:focus-visible {
+.acesso-voltar {
+  position: absolute;
+  top: 22px;
+  left: 24px;
+  z-index: 20;
+
+  display: inline-flex;
+  align-items: center;
+
+  gap: 9px;
+  padding: 11px 18px;
+
+  border: 1px solid var(--acesso-borda);
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--acesso-escuro);
+
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+
+  backdrop-filter: blur(12px);
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12);
+
+  transition:
+    transform 0.2s,
+    background 0.2s;
+}
+
+.acesso-voltar span {
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.acesso-voltar:hover {
+  transform: translateX(-3px);
+  background: #fff;
+  color: var(--acesso-principal);
+}
+
+/* ACESSIBILIDADE */
+
+.acesso-elora :is(
+  button,
+  a,
+  input
+):focus-visible {
   outline: 3px solid var(--acesso-principal);
   outline-offset: 3px;
 }
 
-/* =========================================
-   RESPONSIVIDADE — TABLETS
-========================================= */
+/* ========================================================
+   RESPONSIVIDADE — NOTEBOOKS E TABLETS
+======================================================== */
 
-@media (max-width: 1050px) {
+@media (min-width: 761px) and (max-width: 1100px) {
   .acesso-layout {
     grid-template-columns:
       minmax(0, 1fr)
       minmax(0, 1fr);
-
-    min-height: 700px;
   }
 
-  .acesso-visual {
-    padding: 35px;
-  }
-
+  .acesso-visual,
   .acesso-painel {
     padding: 35px;
   }
 
-  .acesso-frase {
-    font-size: clamp(2rem, 4vw, 2.8rem);
+  .acesso-visual-conteudo {
+    padding-top: 105px;
   }
 
-  .acesso-marca {
-    margin-bottom: 25px;
+  .acesso-frase {
+    font-size: clamp(2rem, 3.6vw, 3rem);
   }
 }
 
-/* =========================================
+/* ========================================================
    RESPONSIVIDADE — CELULARES
-========================================= */
+======================================================== */
 
 @media (max-width: 760px) {
-  .acesso-elora {
-    align-items: flex-start;
-    padding: 14px;
-  }
-
   .acesso-layout {
-    grid-template-columns: 1fr;
-
-    width: 100%;
-    max-width: 540px;
-
-    min-height: auto;
-
-    border-radius: 23px;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .acesso-visual {
-    min-height: 270px;
-
-    padding: 28px;
+    min-height: 285px;
+    padding: 80px 24px 28px;
 
     background-position: center 45%;
   }
@@ -756,20 +711,20 @@
 
   .acesso-frase {
     max-width: 380px;
+    margin: 19px 0 12px;
 
-    margin: 22px 0 14px;
-
-    font-size: clamp(1.8rem, 7vw, 2.5rem);
+    font-size: clamp(1.8rem, 6vw, 2.65rem);
   }
 
   .acesso-traco {
     width: 55px;
     height: 4px;
-    margin-top: 18px;
+    margin-top: 15px;
   }
 
   .acesso-painel {
-    padding: 30px 24px 36px;
+    min-height: calc(100dvh - 285px);
+    padding: 36px 24px 45px;
   }
 
   .acesso-marca {
@@ -800,20 +755,28 @@
   .acesso-separador {
     margin: 25px 0;
   }
+
+  .acesso-voltar {
+    top: 14px;
+    left: 14px;
+
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
 }
 
-/* =========================================
-   TELAS MUITO PEQUENAS
-========================================= */
+/* ========================================================
+   CELULARES PEQUENOS
+======================================================== */
 
 @media (max-width: 380px) {
   .acesso-visual {
-    min-height: 235px;
-    padding: 22px;
+    min-height: 270px;
+    padding: 75px 18px 24px;
   }
 
   .acesso-painel {
-    padding: 25px 17px 30px;
+    padding: 30px 18px 40px;
   }
 
   .acesso-frase {
@@ -829,22 +792,18 @@
   }
 }
 
-/* =========================================
-   ALTURA REDUZIDA
-========================================= */
+/* ========================================================
+   DESKTOPS COM POUCA ALTURA
+======================================================== */
 
 @media (min-width: 761px) and (max-height: 760px) {
-  .acesso-layout {
-    min-height: calc(100svh - 40px);
-  }
-
-  .acesso-visual {
-    min-height: 600px;
-  }
-
   .acesso-painel {
     padding-top: 25px;
     padding-bottom: 25px;
+  }
+
+  .acesso-visual-conteudo {
+    padding-top: 80px;
   }
 
   .acesso-marca {
@@ -860,58 +819,14 @@
   }
 }
 
-/* BOTÃO VOLTAR AO INÍCIO */
+/* ========================================================
+   MOVIMENTO REDUZIDO
+======================================================== */
 
-.acesso-voltar {
-  position: absolute;
-  top: 22px;
-  left: 28px;
-  z-index: 10;
-
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-
-  padding: 11px 19px;
-
-  border: 1px solid var(--acesso-borda);
-  border-radius: 12px;
-
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(12px);
-
-  color: var(--acesso-escuro);
-
-  font-size: 0.95rem;
-  font-weight: 700;
-  text-decoration: none;
-
-  box-shadow: 0 4px 15px rgba(20, 30, 80, 0.07);
-
-  transition: all 0.2s ease;
-}
-
-.acesso-voltar span {
-  font-size: 1.35rem;
-  line-height: 1;
-}
-
-.acesso-voltar:hover {
-  transform: translateX(-3px);
-  background: #fff;
-  border-color: var(--acesso-principal);
-  color: var(--acesso-principal);
-}
-
-@media (max-width: 760px) {
-  .acesso-elora {
-    padding-top: 75px;
-  }
-
-  .acesso-voltar {
-    top: 14px;
-    left: 14px;
-    padding: 5px 10px;
-    font-size: 0.85rem;
+@media (prefers-reduced-motion: reduce) {
+  .acesso-elora *,
+  .acesso-elora *::before,
+  .acesso-elora *::after {
+    transition-duration: 0.01ms !important;
   }
 }

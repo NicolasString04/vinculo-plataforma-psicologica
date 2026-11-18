@@ -1,8 +1,8 @@
+
 import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import "./Home.css";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 function Icon({ name, size = 24, className = "" }) {
   const paths = {
@@ -12,32 +12,38 @@ function Icon({ name, size = 24, className = "" }) {
         <path d="M8 9h8M8 13h5" />
       </>
     ),
+
     calendar: (
       <>
         <rect x="3" y="5" width="18" height="16" rx="3" />
         <path d="M7 3v4M17 3v4M3 11h18M7 15h2M13 15h2" />
       </>
     ),
+
     search: (
       <>
         <circle cx="10.5" cy="10.5" r="7.5" />
         <path d="m16 16 5 5" />
       </>
     ),
+
     arrow: <path d="M4 12h16m-6-6 6 6-6 6" />,
     chevron: <path d="m8 4 8 8-8 8" />,
+
     document: (
       <>
         <rect x="5" y="3" width="14" height="18" rx="2" />
         <path d="M9 8h6M9 12h6M9 16h4" />
       </>
     ),
+
     person: (
       <>
         <circle cx="12" cy="7" r="4" />
         <path d="M4 21v-2a8 8 0 0 1 16 0v2" />
       </>
     ),
+
     video: (
       <>
         <rect x="3" y="5" width="13" height="14" rx="3" />
@@ -64,22 +70,35 @@ function Icon({ name, size = 24, className = "" }) {
   );
 }
 
+// Avisos existentes preservados.
 const notices = {
   login: {
     title: "Seu espaço no Elora",
-    text: "A página de login será a próxima etapa. Primeiro estamos construindo a página inicial.",
+    text:
+      "A página de login será a próxima etapa. " +
+      "Primeiro estamos construindo a página inicial.",
   },
+
   register: {
     title: "Vamos começar?",
-    text: "Em seguida, criaremos o cadastro e a escolha entre fazer a triagem ou pular por enquanto.",
+    text:
+      "Em seguida, criaremos o cadastro e a escolha " +
+      "entre fazer a triagem ou pular por enquanto.",
   },
+
   professional: {
     title: "Faça parte do Elora",
-    text: "O cadastro profissional terá apresentação, especialidades, CRP e disponibilidade para atendimento.",
+    text:
+      "O cadastro profissional terá apresentação, " +
+      "especialidades, CRP e disponibilidade para atendimento.",
   },
+
   triage: {
     title: "Vamos no seu ritmo.",
-    text: "A triagem será opcional e organizada em Sentimentos, Rotina, Necessidades e Revisão. O conteúdo das perguntas ainda será definido.",
+    text:
+      "A triagem será opcional e organizada em " +
+      "Sentimentos, Rotina, Necessidades e Revisão. " +
+      "O conteúdo das perguntas ainda será definido.",
   },
 };
 
@@ -94,13 +113,17 @@ const steps = [
     number: "2",
     icon: "person",
     title: "Encontre um profissional",
-    text: "Filtre por especialidade e encontre um psicólogo que combine com você.",
+    text:
+      "Filtre por especialidade e encontre um " +
+      "psicólogo que combine com você.",
   },
   {
     number: "3",
     icon: "video",
     title: "Converse online",
-    text: "Tenha sua sessão por videochamada, no seu espaço e no seu tempo.",
+    text:
+      "Tenha sua sessão por videochamada, " +
+      "no seu espaço e no seu tempo.",
   },
 ];
 
@@ -115,7 +138,8 @@ function localDateString() {
 }
 
 export default function Home() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+
   const [mode, setMode] = useState("now");
   const [specialty, setSpecialty] = useState("");
   const [date, setDate] = useState("");
@@ -160,17 +184,19 @@ export default function Home() {
     if (clickedOutside) closeNotice();
   }
 
+  // Destino atual preservado.
+  // A navegação será revisada posteriormente.
   function handleSearch(event) {
-  event.preventDefault();
+    event.preventDefault();
 
-  navigate("/cliente", {
-    state: {
-      modalidade: mode,
-      especialidade: specialty,
-      data: date,
-    },
-  });
-}
+    navigate("/cliente", {
+      state: {
+        modalidade: mode,
+        especialidade: specialty,
+        data: date,
+      },
+    });
+  }
 
   return (
     <>
@@ -179,24 +205,28 @@ export default function Home() {
       </a>
 
       <Header
-  onAccountClick={(type) => {
-    if (type === "professional") {
-     navigate("/login/psicologo");
-      return;
-    }
+        onAccountClick={(type) => {
+          if (type === "professional") {
+            navigate("/login/psicologo");
+            return;
+          }
 
-    showNotice(notices[type]);
-  }}
-/>
+          showNotice(notices[type]);
+        }}
+      />
 
       <main id="conteudo">
+        {/* HERO PRINCIPAL */}
+
         <section
           className="elora-home-hero"
           id="inicio"
           aria-labelledby="home-title"
         >
           <div className="elora-home-copy">
-            <p className="elora-eyebrow">SEU ESPAÇO DE ESCUTA</p>
+            <p className="elora-eyebrow">
+              SEU ESPAÇO DE ESCUTA
+            </p>
 
             <h1 id="home-title">
               Uma conversa pode ser seu primeiro passo.
@@ -207,6 +237,8 @@ export default function Home() {
               <br className="elora-desktop-break" />
               {" "}ou agendar uma sessão no seu tempo.
             </p>
+
+            {/* BUSCA */}
 
             <form
               className="elora-search-card"
@@ -230,7 +262,9 @@ export default function Home() {
 
                 <button
                   type="button"
-                  className={mode === "scheduled" ? "is-active" : ""}
+                  className={
+                    mode === "scheduled" ? "is-active" : ""
+                  }
                   aria-pressed={mode === "scheduled"}
                   onClick={() => setMode("scheduled")}
                 >
@@ -252,11 +286,22 @@ export default function Home() {
                 <select
                   id="specialty"
                   value={specialty}
-                  onChange={(event) => setSpecialty(event.target.value)}
+                  onChange={(event) =>
+                    setSpecialty(event.target.value)
+                  }
                 >
-                  <option value="">Selecione uma especialidade</option>
-                  <option value="Ansiedade">Ansiedade</option>
-                  <option value="Relacionamentos">Relacionamentos</option>
+                  <option value="">
+                    Selecione uma especialidade
+                  </option>
+
+                  <option value="Ansiedade">
+                    Ansiedade
+                  </option>
+
+                  <option value="Relacionamentos">
+                    Relacionamentos
+                  </option>
+
                   <option value="Autoconhecimento">
                     Autoconhecimento
                   </option>
@@ -274,18 +319,25 @@ export default function Home() {
                     type="date"
                     min={localDateString()}
                     value={date}
-                    onChange={(event) => setDate(event.target.value)}
+                    onChange={(event) =>
+                      setDate(event.target.value)
+                    }
                     required
                   />
                 </div>
               )}
 
-              <button type="submit" className="elora-search-button">
+              <button
+                type="submit"
+                className="elora-search-button"
+              >
                 Encontrar psicólogo
                 <Icon name="arrow" size={23} />
               </button>
             </form>
           </div>
+
+          {/* FOTO ORIGINAL DA ELORA */}
 
           <div className="elora-home-visual">
             <img
@@ -307,6 +359,8 @@ export default function Home() {
           </div>
         </section>
 
+        {/* TRIAGEM */}
+
         <section
           className="elora-triage-banner"
           aria-labelledby="triage-title"
@@ -318,16 +372,21 @@ export default function Home() {
           />
 
           <div className="elora-triage-copy">
-            <h2 id="triage-title">Vamos no seu ritmo.</h2>
+            <h2 id="triage-title">
+              Vamos no seu ritmo.
+            </h2>
 
             <p>
               A triagem inicial ajuda a organizar suas necessidades.
             </p>
           </div>
 
-          <Link to="/triagem" className="elora-triage-button">
-  Começar triagem
-</Link>
+          <Link
+            to="/triagem"
+            className="elora-triage-button"
+          >
+            Começar triagem
+          </Link>
 
           <div className="elora-triage-note">
             <p>Opcional. Você pode fazer depois.</p>
@@ -336,6 +395,8 @@ export default function Home() {
             </p>
           </div>
         </section>
+
+        {/* COMO FUNCIONA */}
 
         <section
           className="elora-home-steps"
@@ -351,7 +412,10 @@ export default function Home() {
                   </span>
 
                   <span className="elora-step-icon">
-                    <Icon name={step.icon} size={29} />
+                    <Icon
+                      name={step.icon}
+                      size={29}
+                    />
                   </span>
                 </div>
 
@@ -373,11 +437,15 @@ export default function Home() {
         </section>
       </main>
 
+      {/* RODAPÉ */}
+
       <footer className="elora-home-footer">
         <span>Elora · Psicologia online</span>
         <span>Nicolas Stringari da Silva</span>
         <span>Protótipo acadêmico em desenvolvimento.</span>
       </footer>
+
+      {/* AVISOS EXISTENTES */}
 
       <dialog
         ref={dialogRef}
@@ -397,9 +465,15 @@ export default function Home() {
 
         {notice && (
           <>
-            <img src="/images/logo-elora.png" alt="" />
+            <img
+              src="/images/logo-elora.png"
+              alt=""
+            />
 
-            <h2 id="notice-title">{notice.title}</h2>
+            <h2 id="notice-title">
+              {notice.title}
+            </h2>
+
             <p>{notice.text}</p>
 
             <button
