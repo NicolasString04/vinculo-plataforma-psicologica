@@ -1,3 +1,4 @@
+
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -13,16 +14,21 @@ import {
 
 import { auth, db } from "../firebase";
 
-// ======================================================
+// =====================================================
 // FUNÇÕES AUXILIARES
-// ======================================================
+// =====================================================
 
 const numeros = (valor) =>
   String(valor || "").replace(/\D/g, "");
 
+const texto = (valor) =>
+  String(valor || "").trim();
+
 function normalizarNascimento(valor) {
   if (valor.includes("/")) {
-    const [dia, mes, ano] = valor.split("/");
+    const [dia, mes, ano] =
+      valor.split("/");
+
     return `${ano}-${mes}-${dia}`;
   }
 
@@ -37,45 +43,55 @@ function normalizarNomeBusca(valor = "") {
     .trim();
 }
 
-// ======================================================
+// =====================================================
 // CADASTRO NO FIREBASE
-// ======================================================
+// =====================================================
 
 export async function cadastrarNoFirebase(
   form,
-  tipo,
-  informarEndereco = false
+  tipo
 ) {
-  const email = form.email.trim().toLowerCase();
+  const email = texto(
+    form.email
+  ).toLowerCase();
 
   let usuario;
 
   try {
+    // ================================================
     // 1. CRIAR OU RECUPERAR CONTA NO AUTHENTICATION
+    // ================================================
 
     try {
-      const resultado = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        form.senha
-      );
+      const resultado =
+        await createUserWithEmailAndPassword(
+          auth,
+          email,
+          form.senha
+        );
 
       usuario = resultado.user;
     } catch (erro) {
-      if (erro.code !== "auth/email-already-in-use") {
+      if (
+        erro.code !==
+        "auth/email-already-in-use"
+      ) {
         throw erro;
       }
 
-      const resultado = await signInWithEmailAndPassword(
-        auth,
-        email,
-        form.senha
-      );
+      const resultado =
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          form.senha
+        );
 
       usuario = resultado.user;
     }
 
-    // 2. VERIFICAR DOCUMENTO EM USUARIOS
+    // ================================================
+    // 2. VERIFICAR PERFIL EXISTENTE
+    // ================================================
 
     const referencia = doc(
       db,
@@ -83,86 +99,173 @@ export async function cadastrarNoFirebase(
       usuario.uid
     );
 
-    const existente = await getDocFromServer(referencia);
+    const existente =
+      await getDocFromServer(referencia);
 
     if (existente.exists()) {
       throw new Error(
-        "Este e-mail já tem um perfil no Elora. Use a tela de login."
+        "Este e-mail já tem um perfil na Elora. Use a tela de login."
       );
     }
 
-    // 3. PREPARAR CADASTRO PRINCIPAL
+    // ================================================
+    // 3. PREPARAR PERFIL PRINCIPAL
+    // ================================================
 
     const perfil = {
-      nome: form.nome.trim(),
+      nome: texto(form.nome),
+
       cpf: numeros(form.cpf),
-      nascimento: normalizarNascimento(form.nascimento),
+
+      nascimento: normalizarNascimento(
+        texto(form.nascimento)
+      ),
+
       email: usuario.email,
-      telefone: numeros(form.telefone),
+
+      telefone: numeros(
+        form.telefone
+      ),
+
       tipo,
+
       criadoEm: serverTimestamp(),
     };
 
-    // 4. CAMPOS ESPECÍFICOS DO PSICÓLOGO
+    // ================================================
+    // 4. NOME SOCIAL E GÊNERO
+    // ================================================
+
+    if (texto(form.nomeSocial)) {
+      perfil.nomeSocial =
+        texto(form.nomeSocial);
+
+      perfil.nomePublico =
+        texto(form.nomeSocial);
+    }
+
+    if (texto(form.genero)) {
+      perfil.genero = texto(form.genero);
+    }
+
+    // ================================================
+    // 5. CAMPOS DO PACIENTE
+    // ================================================
+
+    if (tipo === "paciente") {
+      if (texto(form.cidade)) {
+        perfil.cidade =
+          texto(form.cidade);
+      }
+
+      if (texto(form.uf)) {
+        perfil.uf = texto(
+          form.uf
+        ).toUpperCase();
+      }
+    }
+
+    // ================================================
+    // 6. CAMPOS DO PSICÓLOGO
+    // ================================================
 
     if (tipo === "psicologo") {
-      perfil.crp = form.crp.trim();
+      perfil.crp = texto(
+        form.crp
+      );
+
+      // O CRP não é validado
+      // automaticamente neste cadastro.
       perfil.status = "pendente";
 
-      perfil.endereco = informarEndereco
+      if (texto(form.areaAtuacao)) {
+        perfil.areaAtuacao =
+          texto(form.areaAtuacao);
+      }
+
+      const endereco = form.endereco;
+
+      perfil.endereco = endereco
         ? {
-            cep: numeros(form.cep),
-            rua: form.rua.trim(),
-            numero: form.numero.trim(),
-            complemento: form.complemento.trim(),
-            bairro: form.bairro.trim(),
-            cidade: form.cidade.trim(),
-            uf: form.uf.trim().toUpperCase(),
+            cep: numeros(
+              endereco.cep
+            ),
+
+            rua: texto(
+              endereco.rua
+            ),
+
+            numero: texto(
+              endereco.numero
+            ),
+
+            complemento: texto(
+              endereco.complemento
+            ),
+
+            bairro: texto(
+              endereco.bairro
+            ),
+
+            cidade: texto(
+              endereco.cidade
+            ),
+
+            uf: texto(
+              endereco.uf
+            ).toUpperCase(),
           }
         : null;
     }
 
-    // 5. SALVAR DOCUMENTO ORIGINAL
+    // ================================================
+    // 7. SALVAR DOCUMENTO NO FIRESTORE
+    // ================================================
 
-    await setDoc(referencia, perfil);
+    await setDoc(
+      referencia,
+      perfil
+    );
 
-    // ==================================================
-    // NOVO: ÍNDICE DE PACIENTES
-    // ==================================================
+    // ================================================
+    // 8. ÍNDICE DE BUSCA DOS PACIENTES
+    // ================================================
 
     if (tipo === "paciente") {
-      const nome = perfil.nome;
-
       const pacienteBusca = {
         uid: usuario.uid,
-        nome,
-        nomeBusca: normalizarNomeBusca(nome),
+
+        nome: perfil.nome,
+
+        nomeBusca:
+          normalizarNomeBusca(
+            perfil.nome
+          ),
       };
 
       try {
         await setDoc(
-          doc(db, "pacientesBusca", usuario.uid),
+          doc(
+            db,
+            "pacientesBusca",
+            usuario.uid
+          ),
           pacienteBusca
         );
-
-        console.log(
-          "Paciente adicionado à busca da Elora."
-        );
       } catch (erroIndice) {
-        // Não desfaz o cadastro original.
-        // A indexação poderá ser refeita
-        // pelo processo de migração.
-
         console.error(
           "Erro ao indexar paciente:",
           erroIndice
         );
+
+        // O cadastro principal
+        // não é desfeito se o
+        // índice secundário falhar.
       }
     }
-
   } finally {
-    // Mantém o comportamento atual do cadastro:
-    // encerrar a sessão após salvar.
+    // Mantém o fluxo atual:
+    // a sessão é encerrada após cadastro.
 
     if (usuario) {
       await signOut(auth);
@@ -170,23 +273,118 @@ export async function cadastrarNoFirebase(
   }
 }
 
-// ======================================================
+// =====================================================
+// LOGIN NO FIREBASE
+// =====================================================
+
+export async function entrarNoFirebase(
+  email,
+  senha,
+  tipoEsperado
+) {
+  const resultado =
+    await signInWithEmailAndPassword(
+      auth,
+      texto(email).toLowerCase(),
+      senha
+    );
+
+  const usuario = resultado.user;
+
+  try {
+    const referencia = doc(
+      db,
+      "usuarios",
+      usuario.uid
+    );
+
+    const documento =
+      await getDocFromServer(
+        referencia
+      );
+
+    if (!documento.exists()) {
+      throw new Error(
+        "Seu perfil ainda não está disponível."
+      );
+    }
+
+    const perfil = documento.data();
+
+    if (
+      tipoEsperado &&
+      perfil.tipo !== tipoEsperado
+    ) {
+      throw new Error(
+        "Este login não corresponde ao seu tipo de conta."
+      );
+    }
+
+    return {
+      usuario,
+      perfil,
+    };
+  } catch (erro) {
+    await signOut(auth);
+
+    throw erro;
+  }
+}
+
+// =====================================================
+// MENSAGENS DE ERRO DO LOGIN
+// =====================================================
+
+export function mensagemErroLogin(erro) {
+  switch (erro.code) {
+    case "auth/invalid-credential":
+    case "auth/wrong-password":
+    case "auth/user-not-found":
+      return "E-mail ou senha incorretos.";
+
+    case "auth/network-request-failed":
+      return (
+        "Sem conexão. Verifique sua internet " +
+        "e tente novamente."
+      );
+
+    case "permission-denied":
+      return (
+        "O Firestore não permitiu " +
+        "consultar seu perfil."
+      );
+
+    default:
+      return erro.code
+        ? "Não foi possível entrar na conta."
+        : erro.message;
+  }
+}
+
+// =====================================================
 // MENSAGENS DE ERRO DO CADASTRO
-// ======================================================
+// =====================================================
 
 export function mensagemErroCadastro(erro) {
   switch (erro.code) {
     case "permission-denied":
       return (
-        "O Firestore recusou o perfil. " +
-        "Confira se publicou as regras necessárias."
+        "O Firestore recusou o cadastro. " +
+        "Revise as regras de acesso e os " +
+        "campos permitidos."
       );
 
     case "auth/invalid-credential":
     case "auth/wrong-password":
       return (
-        "Não foi possível continuar com esse e-mail e senha. " +
-        "Confira os dados."
+        "Não foi possível continuar com " +
+        "esse e-mail e senha. Confira os dados."
+      );
+
+    case "auth/email-already-in-use":
+      return (
+        "Já existe uma conta com este e-mail. " +
+        "Utilize a página de login."
       );
 
     case "auth/weak-password":
@@ -194,14 +392,15 @@ export function mensagemErroCadastro(erro) {
 
     case "auth/operation-not-allowed":
       return (
-        "Habilite E-mail/senha no Firebase Authentication."
+        "Habilite E-mail/senha no " +
+        "Firebase Authentication."
       );
 
     case "auth/network-request-failed":
     case "unavailable":
       return (
-        "Falha de conexão. " +
-        "Tente novamente com o mesmo e-mail e senha."
+        "Falha de conexão. Tente novamente " +
+        "com o mesmo e-mail e senha."
       );
 
     default:

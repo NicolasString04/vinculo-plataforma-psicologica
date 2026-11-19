@@ -1,146 +1,163 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import RequisitosSenha, { requisitosSenha } from "./RequisitosSenha";
+
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
+import RequisitosSenha, {
+  requisitosSenha,
+} from "./RequisitosSenha";
+
 import "./CadastroElora.css";
 
-const nome = {
-  name: "nome",
-  label: "Nome completo",
-  autoComplete: "name",
-  placeholder: "Digite seu nome completo",
-  maxLength: 120,
-  largo: true,
-};
+// =====================================================
+// ELORA — FORMULÁRIO DE CADASTRO
+//
+// Compartilhado entre:
+// /cadastro
+// /cadastro/psicologo
+//
+// Paciente: azul
+// Psicólogo: roxo
+// =====================================================
 
-const cpf = {
-  name: "cpf",
-  label: "CPF",
-  inputMode: "numeric",
-  placeholder: "000.000.000-00",
-  maxLength: 14,
-};
-
-const nascimento = {
-  name: "nascimento",
-  label: "Data de nascimento",
-  type: "date",
-  autoComplete: "bday",
-};
-
-const email = {
-  name: "email",
-  label: "E-mail",
-  type: "email",
-  autoComplete: "email",
-  placeholder: "seu@email.com",
-};
-
-const telefone = {
-  name: "telefone",
-  label: "Telefone",
-  type: "tel",
-  autoComplete: "tel",
-  placeholder: "(11) 99999-9999",
-  maxLength: 18,
-};
-
-const senhas = [
-  {
-    name: "senha",
-    label: "Senha",
-    type: "password",
-    autoComplete: "new-password",
-    placeholder: "Digite sua senha",
-    minLength: 8,
-  },
-  {
-    name: "confirmarSenha",
-    label: "Confirmar senha",
-    type: "password",
-    autoComplete: "new-password",
-    placeholder: "Confirme sua senha",
-    minLength: 8,
-  },
-];
-
-const camposPaciente = [
-  nome,
-  cpf,
-  nascimento,
-  email,
-  telefone,
-  ...senhas,
-];
-
-const camposPsicologo = [
-  {
-    name: "crp",
-    label: "CRP",
-    placeholder: "00/00000",
-    maxLength: 10,
-  },
-  cpf,
-  nome,
-  nascimento,
-  telefone,
-  { ...email, largo: true },
-  ...senhas,
-];
-
-const camposEndereco = [
-  {
-    name: "cep",
-    label: "CEP",
-    placeholder: "00000-000",
-    inputMode: "numeric",
-    autoComplete: "postal-code",
-    maxLength: 9,
-  },
-  {
-    name: "rua",
-    label: "Rua",
-    autoComplete: "address-line1",
-    maxLength: 150,
-  },
-  {
-    name: "numero",
-    label: "Número",
-    placeholder: "Ex.: 123 ou S/N",
-    maxLength: 20,
-  },
-  {
-    name: "complemento",
-    label: "Complemento (opcional)",
-    autoComplete: "address-line2",
-    maxLength: 120,
-    opcional: true,
-  },
-  {
-    name: "bairro",
-    label: "Bairro",
-    maxLength: 100,
-  },
-  {
-    name: "cidade",
-    label: "Cidade",
-    autoComplete: "address-level2",
-    maxLength: 100,
-  },
-];
-
-const estados = [
+const ESTADOS = [
   "AC", "AL", "AP", "AM", "BA", "CE", "DF",
-  "ES", "GO", "MA", "MT", "MS", "MG", "PA",
-  "PB", "PR", "PE", "PI", "RJ", "RN", "RS",
-  "RO", "RR", "SC", "SP", "SE", "TO",
+  "ES", "GO", "MA", "MT", "MS", "PA", "PB",
+  "PR", "PE", "PI", "RJ", "RN", "RS", "RO",
+  "RR", "SC", "SP", "SE", "TO",
 ];
 
-const numeros = (valor) => valor.replace(/\D/g, "");
+const GENEROS = [
+  {
+    valor: "mulher",
+    nome: "Mulher",
+    simbolo: "♀",
+  },
+  {
+    valor: "homem",
+    nome: "Homem",
+    simbolo: "♂",
+  },
+  {
+    valor: "nao_binario",
+    nome: "Não binário",
+    simbolo: "⚥",
+  },
+  {
+    valor: "prefiro_nao_informar",
+    nome: "Prefiro não informar",
+    simbolo: "○",
+  },
+  {
+    valor: "outro",
+    nome: "Outro",
+    simbolo: "···",
+  },
+];
+
+const AREAS = [
+  "Psicologia Clínica",
+  "Psicologia Escolar / Educacional",
+  "Psicologia Organizacional e do Trabalho",
+  "Psicologia Hospitalar",
+  "Psicologia Social",
+  "Neuropsicologia",
+  "Outra",
+];
+
+const DADOS_INICIAIS = {
+  nome: "",
+  informarNomeSocial: false,
+  nomeSocial: "",
+
+  genero: "",
+  generoOutro: "",
+
+  nascimento: "",
+  cpf: "",
+  email: "",
+  telefone: "",
+
+  cidade: "",
+  uf: "",
+
+  crp: "",
+  areaAtuacao: "",
+
+  informarEndereco: false,
+  cep: "",
+  rua: "",
+  numero: "",
+  complemento: "",
+  bairro: "",
+  cidadeEndereco: "",
+  ufEndereco: "",
+
+  senha: "",
+  confirmarSenha: "",
+};
+
+// =====================================================
+// FUNÇÕES AUXILIARES
+// =====================================================
+
+function apenasNumeros(valor) {
+  return String(valor || "").replace(/\D/g, "");
+}
+
+function formatarCPF(valor) {
+  return apenasNumeros(valor)
+    .slice(0, 11)
+    .replace(/^(\d{3})(\d)/, "$1.$2")
+    .replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3")
+    .replace(/\.(\d{3})(\d)/, ".$1-$2");
+}
+
+function formatarTelefone(valor) {
+  const n = apenasNumeros(valor).slice(0, 11);
+
+  if (n.length <= 2) {
+    return n;
+  }
+
+  if (n.length <= 6) {
+    return `(${n.slice(0, 2)}) ${n.slice(2)}`;
+  }
+
+  if (n.length <= 10) {
+    return `(${n.slice(0, 2)}) ${n.slice(
+      2,
+      6
+    )}-${n.slice(6)}`;
+  }
+
+  return `(${n.slice(0, 2)}) ${n.slice(
+    2,
+    7
+  )}-${n.slice(7)}`;
+}
+
+function formatarCEP(valor) {
+  return apenasNumeros(valor)
+    .slice(0, 8)
+    .replace(/^(\d{5})(\d)/, "$1-$2");
+}
+
+function formatarCRP(valor) {
+  const n = apenasNumeros(valor).slice(0, 9);
+
+  if (n.length <= 2) {
+    return n;
+  }
+
+  return `${n.slice(0, 2)}/${n.slice(2)}`;
+}
 
 function cpfValido(valor) {
+  const n = apenasNumeros(valor);
+
   if (
-    valor.length !== 11 ||
-    /^(\d)\1{10}$/.test(valor)
+    n.length !== 11 ||
+    /^(\d)\1{10}$/.test(n)
   ) {
     return false;
   }
@@ -148,9 +165,13 @@ function cpfValido(valor) {
   return [9, 10].every((posicao) => {
     let soma = 0;
 
-    for (let i = 0; i < posicao; i += 1) {
+    for (
+      let i = 0;
+      i < posicao;
+      i += 1
+    ) {
       soma +=
-        Number(valor[i]) *
+        Number(n[i]) *
         (posicao + 1 - i);
     }
 
@@ -158,294 +179,628 @@ function cpfValido(valor) {
 
     return (
       (resto === 10 ? 0 : resto) ===
-      Number(valor[posicao])
+      Number(n[posicao])
     );
   });
 }
 
 function dataDeHoje() {
-  const agora = new Date();
+  const hoje = new Date();
 
   return [
-    agora.getFullYear(),
-    String(agora.getMonth() + 1).padStart(2, "0"),
-    String(agora.getDate()).padStart(2, "0"),
+    hoje.getFullYear(),
+    String(hoje.getMonth() + 1).padStart(2, "0"),
+    String(hoje.getDate()).padStart(2, "0"),
   ].join("-");
 }
 
-function Campo({
-  label,
-  name,
-  type = "text",
-  largo = false,
-  opcional = false,
-  endereco = false,
-  ...atributos
-}) {
-  const [visivel, setVisivel] = useState(false);
-  const [valorSenha, setValorSenha] = useState("");
+function nascimentoValido(valor) {
+  if (
+    !/^\d{4}-\d{2}-\d{2}$/.test(valor)
+  ) {
+    return false;
+  }
 
-  const ehSenha = type === "password";
-  const mostraRequisitos = name === "senha";
-  const id = `cadastro-${name}`;
+  const [ano, mes, dia] = valor
+    .split("-")
+    .map(Number);
 
-  const classe = [
-    "cadastro-elora-field",
-    largo && "campo-full",
-    endereco && `endereco-${name}`,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const data = new Date(
+    ano,
+    mes - 1,
+    dia
+  );
 
   return (
-    <div className={classe}>
-      <label htmlFor={id}>
-        {label}
+    ano >= 1900 &&
+    data.getFullYear() === ano &&
+    data.getMonth() === mes - 1 &&
+    data.getDate() === dia &&
+    valor <= dataDeHoje()
+  );
+}
+
+// =====================================================
+// CAMPO REUTILIZÁVEL
+// =====================================================
+
+function Campo({
+  nome,
+  rotulo,
+  valor,
+  atualizar,
+  tipo = "text",
+  placeholder = "",
+  obrigatorio = false,
+  largo = false,
+  ajuda = "",
+  ...restante
+}) {
+  return (
+    <div
+      className={`ce-campo ${
+        largo ? "ce-largo" : ""
+      }`}
+    >
+      <label htmlFor={`ce-${nome}`}>
+        {rotulo}
+
+        {obrigatorio && (
+          <span className="ce-asterisco">
+            {" "}*
+          </span>
+        )}
       </label>
 
-      <div
-        className={
-          ehSenha
-            ? "cadastro-elora-password"
-            : undefined
+      <input
+        {...restante}
+        id={`ce-${nome}`}
+        name={nome}
+        type={tipo}
+        value={valor}
+        onChange={(event) =>
+          atualizar(
+            nome,
+            event.target.value
+          )
         }
-      >
-        <input
-          {...atributos}
-          id={id}
-          name={name}
-          type={
-            ehSenha && visivel
-              ? "text"
-              : type
-          }
-          required={!opcional}
-          aria-describedby={
-            mostraRequisitos
-              ? "cadastro-requisitos-senha"
-              : undefined
-          }
-          onChange={
-            mostraRequisitos
-              ? (event) =>
-                  setValorSenha(event.target.value)
-              : undefined
-          }
-        />
+        placeholder={placeholder}
+        required={obrigatorio}
+      />
 
-        {ehSenha && (
-          <button
-            type="button"
-            aria-controls={id}
-            aria-label={`${
-              visivel ? "Ocultar" : "Mostrar"
-            } ${label.toLowerCase()}`}
-            onClick={() =>
-              setVisivel((atual) => !atual)
-            }
-          >
-            {visivel ? "Ocultar" : "Mostrar"}
-          </button>
-        )}
-      </div>
-
-      {mostraRequisitos && (
-        <RequisitosSenha senha={valorSenha} />
+      {ajuda && (
+        <small>{ajuda}</small>
       )}
     </div>
   );
 }
 
+// =====================================================
+// CAMPO DE REVISÃO
+// =====================================================
+
+function ResumoCampo({ titulo, texto }) {
+  return (
+    <div className="ce-revisao-item">
+      <span>{titulo}</span>
+
+      <strong>
+        {texto || "Não informado"}
+      </strong>
+    </div>
+  );
+}
+
+// =====================================================
+// FORMULÁRIO PRINCIPAL
+// =====================================================
+
 export default function FormularioCadastroElora({
   profissional = false,
   onCadastrar,
-  mensagemSucesso,
   mensagemErro,
+  mensagemSucesso,
 }) {
-  const navigate = useNavigate();
+  const [etapa, setEtapa] = useState(0);
 
-  const [informarEndereco, setInformarEndereco] =
+  const [dados, setDados] = useState(
+    DADOS_INICIAIS
+  );
+
+  const [erro, setErro] = useState("");
+  const [enviando, setEnviando] =
     useState(false);
 
-  const [enviando, setEnviando] = useState(false);
-  const [sucesso, setSucesso] = useState(false);
-  const [erro, setErro] = useState("");
+  const [concluido, setConcluido] =
+    useState(false);
 
-  // Redirecionamento automático do paciente
-  useEffect(() => {
-    if (!sucesso || profissional) return;
+  const [mostrarSenha, setMostrarSenha] =
+    useState(false);
 
-    const temporizador = setTimeout(() => {
-      navigate("/cliente", {
-        replace: true,
-      });
-    }, 2200);
+  // ================================================
+  // IDENTIDADE VISUAL E IMAGEM
+  // ================================================
 
-    return () => clearTimeout(temporizador);
-  }, [sucesso, profissional, navigate]);
+  const imagemSofa = profissional
+    ? "/images/sofa-roxo.png"
+    : "/images/sofa-azul-transparente.png";
 
-  const campos = profissional
-    ? camposPsicologo
-    : camposPaciente;
+  const rotaLogin = profissional
+    ? "/login/psicologo"
+    : "/login";
 
-  const hoje = dataDeHoje();
+  const rotaOutroCadastro = profissional
+    ? "/cadastro"
+    : "/cadastro/psicologo";
 
-  async function handleSubmit(event) {
+  const etapas = profissional
+    ? [
+        "Dados profissionais",
+        "Registro (CRP)",
+        "Conta e segurança",
+        "Conclusão",
+      ]
+    : [
+        "Dados pessoais",
+        "Contato",
+        "Segurança",
+        "Conclusão",
+      ];
+
+  // ================================================
+  // ATUALIZAÇÃO DOS CAMPOS
+  // ================================================
+
+  function atualizar(campo, valor) {
+    let novoValor = valor;
+
+    if (campo === "cpf") {
+      novoValor = formatarCPF(valor);
+    }
+
+    if (campo === "telefone") {
+      novoValor = formatarTelefone(valor);
+    }
+
+    if (campo === "cep") {
+      novoValor = formatarCEP(valor);
+    }
+
+    if (campo === "crp") {
+      novoValor = formatarCRP(valor);
+    }
+
+    setDados((anterior) => ({
+      ...anterior,
+      [campo]: novoValor,
+    }));
+
+    setErro("");
+  }
+
+  // ================================================
+  // GERADOR DE CAMPOS
+  // ================================================
+
+  function campo(nome, rotulo, props = {}) {
+    return (
+      <Campo
+        key={nome}
+        nome={nome}
+        rotulo={rotulo}
+        valor={dados[nome]}
+        atualizar={atualizar}
+        {...props}
+      />
+    );
+  }
+
+  function seletorUF(
+    nome,
+    rotulo = "UF",
+    obrigatorio = false
+  ) {
+    return (
+      <div
+        className="ce-campo"
+        key={nome}
+      >
+        <label htmlFor={`ce-${nome}`}>
+          {rotulo}
+
+          {obrigatorio && (
+            <span className="ce-asterisco">
+              {" "}*
+            </span>
+          )}
+        </label>
+
+        <select
+          id={`ce-${nome}`}
+          name={nome}
+          value={dados[nome]}
+          onChange={(event) =>
+            atualizar(
+              nome,
+              event.target.value
+            )
+          }
+          required={obrigatorio}
+        >
+          <option value="">
+            Selecione
+          </option>
+
+          {ESTADOS.map((uf) => (
+            <option
+              key={uf}
+              value={uf}
+            >
+              {uf}
+            </option>
+          ))}
+        </select>
+      </div>
+    );
+  }
+
+  // ================================================
+  // VALIDAÇÃO DAS ETAPAS
+  // ================================================
+
+  function validarEtapa() {
+    // ETAPA 1
+
+    if (etapa === 0) {
+      if (dados.nome.trim().length < 3) {
+        return [
+          "nome",
+          "Informe seu nome completo.",
+        ];
+      }
+
+      if (
+        dados.informarNomeSocial &&
+        dados.nomeSocial.trim().length < 2
+      ) {
+        return [
+          "nomeSocial",
+          "Informe seu nome social ou desmarque a opção.",
+        ];
+      }
+
+      if (
+        dados.genero === "outro" &&
+        !dados.generoOutro.trim()
+      ) {
+        return [
+          "generoOutro",
+          "Informe sua identificação de gênero.",
+        ];
+      }
+
+      if (profissional) {
+        if (
+          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+            dados.email.trim()
+          )
+        ) {
+          return [
+            "email",
+            "Informe um e-mail válido.",
+          ];
+        }
+
+        if (
+          ![10, 11].includes(
+            apenasNumeros(
+              dados.telefone
+            ).length
+          )
+        ) {
+          return [
+            "telefone",
+            "Informe um telefone com DDD.",
+          ];
+        }
+
+        if (!dados.areaAtuacao) {
+          return [
+            "areaAtuacao",
+            "Selecione sua área de atuação.",
+          ];
+        }
+      } else {
+        if (
+          !nascimentoValido(
+            dados.nascimento
+          )
+        ) {
+          return [
+            "nascimento",
+            "Informe uma data de nascimento válida.",
+          ];
+        }
+
+        if (
+          dados.uf &&
+          !ESTADOS.includes(dados.uf)
+        ) {
+          return [
+            "uf",
+            "Selecione uma UF válida.",
+          ];
+        }
+
+        if (
+          Boolean(dados.cidade.trim()) !==
+          Boolean(dados.uf)
+        ) {
+          return [
+            "cidade",
+            "Preencha cidade e UF juntas ou deixe ambas em branco.",
+          ];
+        }
+      }
+    }
+
+    // ETAPA 2
+
+    if (etapa === 1) {
+      if (!cpfValido(dados.cpf)) {
+        return [
+          "cpf",
+          "Informe um CPF válido.",
+        ];
+      }
+
+      if (profissional) {
+        if (
+          !nascimentoValido(
+            dados.nascimento
+          )
+        ) {
+          return [
+            "nascimento",
+            "Informe uma data de nascimento válida.",
+          ];
+        }
+
+        if (
+          !/^\d{2}\/\d{4,7}$/.test(
+            dados.crp
+          )
+        ) {
+          return [
+            "crp",
+            "Informe o CRP no formato 00/00000.",
+          ];
+        }
+
+        if (dados.informarEndereco) {
+          if (
+            apenasNumeros(
+              dados.cep
+            ).length !== 8
+          ) {
+            return [
+              "cep",
+              "Informe um CEP válido.",
+            ];
+          }
+
+          const obrigatorios = [
+            "rua",
+            "numero",
+            "bairro",
+            "cidadeEndereco",
+            "ufEndereco",
+          ];
+
+          for (const nome of obrigatorios) {
+            if (
+              !String(
+                dados[nome]
+              ).trim()
+            ) {
+              return [
+                nome,
+                "Preencha o endereço completo.",
+              ];
+            }
+          }
+
+          if (
+            !ESTADOS.includes(
+              dados.ufEndereco
+            )
+          ) {
+            return [
+              "ufEndereco",
+              "Selecione uma UF válida.",
+            ];
+          }
+        }
+      } else {
+        if (
+          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+            dados.email.trim()
+          )
+        ) {
+          return [
+            "email",
+            "Informe um e-mail válido.",
+          ];
+        }
+
+        if (
+          ![10, 11].includes(
+            apenasNumeros(
+              dados.telefone
+            ).length
+          )
+        ) {
+          return [
+            "telefone",
+            "Informe um telefone com DDD.",
+          ];
+        }
+      }
+    }
+
+    // ETAPA 3
+
+    if (etapa === 2) {
+      const faltam = requisitosSenha.filter(
+        ({ atende }) =>
+          !atende(dados.senha)
+      );
+
+      if (faltam.length > 0) {
+        return [
+          "senha",
+          `Sua senha ainda precisa de: ${faltam
+            .map((item) =>
+              item.texto.toLowerCase()
+            )
+            .join("; ")}.`,
+        ];
+      }
+
+      if (
+        dados.senha !==
+        dados.confirmarSenha
+      ) {
+        return [
+          "confirmarSenha",
+          "As senhas não coincidem.",
+        ];
+      }
+    }
+
+    return null;
+  }
+
+  // ================================================
+  // CONTINUAR / CRIAR CONTA
+  // ================================================
+
+  async function continuar(event) {
     event.preventDefault();
 
-    if (enviando || sucesso) return;
-
-    const formulario = event.currentTarget;
-    const form = new FormData(formulario);
-
-    const ler = (campo) =>
-      String(form.get(campo) ?? "").trim();
-
-    function falhar(campo, mensagem) {
-      setErro(mensagem);
-
-      formulario.elements
-        .namedItem(campo)
-        ?.focus();
+    if (enviando || concluido) {
+      return;
     }
 
     setErro("");
 
-    const dados = {
-      nome: ler("nome"),
-      cpf: numeros(ler("cpf")),
-      nascimento: ler("nascimento"),
-      email: ler("email").toLowerCase(),
-      telefone: numeros(ler("telefone")),
-      senha: String(form.get("senha") ?? ""),
-    };
+    if (etapa < 3) {
+      const validacao = validarEtapa();
 
-    // Validação do nome
-    if (dados.nome.length < 3) {
-      return falhar(
-        "nome",
-        "Informe seu nome completo."
-      );
-    }
+      if (validacao) {
+        setErro(validacao[1]);
 
-    // Validação do CPF
-    if (!cpfValido(dados.cpf)) {
-      return falhar(
-        "cpf",
-        "Informe um CPF válido."
-      );
-    }
+        requestAnimationFrame(() => {
+          document
+            .getElementById(
+              `ce-${validacao[0]}`
+            )
+            ?.focus();
+        });
 
-    // Validação da data de nascimento
-    if (
-      !/^\d{4}-\d{2}-\d{2}$/.test(dados.nascimento) ||
-      dados.nascimento > hoje
-    ) {
-      return falhar(
-        "nascimento",
-        "Informe uma data de nascimento válida."
-      );
-    }
-
-    // Validação do telefone
-    if (![10, 11].includes(dados.telefone.length)) {
-      return falhar(
-        "telefone",
-        "Informe um telefone com DDD."
-      );
-    }
-
-    // Validação dos requisitos de senha
-    const faltam = requisitosSenha.filter(
-      ({ atende }) => !atende(dados.senha)
-    );
-
-    if (faltam.length > 0) {
-      return falhar(
-        "senha",
-        `Sua senha ainda precisa de: ${faltam
-          .map(({ texto }) => texto.toLowerCase())
-          .join("; ")}.`
-      );
-    }
-
-    // Confirmação da senha
-    if (
-      dados.senha !== form.get("confirmarSenha")
-    ) {
-      return falhar(
-        "confirmarSenha",
-        "As senhas não coincidem."
-      );
-    }
-
-    // Campos exclusivos do psicólogo
-    if (profissional) {
-      dados.crp = ler("crp");
-      dados.endereco = null;
-
-      if (!/^\d{2}\/\d{4,7}$/.test(dados.crp)) {
-        return falhar(
-          "crp",
-          "Informe o CRP no formato 00/00000."
-        );
+        return;
       }
 
-      if (informarEndereco) {
-        const cep = numeros(ler("cep"));
-
-        if (cep.length !== 8) {
-          return falhar(
-            "cep",
-            "Informe um CEP com 8 dígitos."
-          );
-        }
-
-        for (const campo of camposEndereco) {
-          if (
-            !campo.opcional &&
-            !ler(campo.name)
-          ) {
-            return falhar(
-              campo.name,
-              `Preencha o campo ${campo.label}.`
-            );
-          }
-        }
-
-        if (!estados.includes(ler("uf"))) {
-          return falhar(
-            "uf",
-            "Selecione o estado."
-          );
-        }
-
-        dados.endereco = {
-          cep,
-          rua: ler("rua"),
-          numero: ler("numero"),
-          complemento: ler("complemento"),
-          bairro: ler("bairro"),
-          cidade: ler("cidade"),
-          uf: ler("uf"),
-        };
-      }
+      setEtapa((atual) => atual + 1);
+      return;
     }
 
     setEnviando(true);
 
     try {
-      // Aguarda Firebase Auth e Firestore
-      await onCadastrar(dados);
+      const endereco =
+        profissional &&
+        dados.informarEndereco
+          ? {
+              cep: apenasNumeros(
+                dados.cep
+              ),
+              rua: dados.rua.trim(),
+              numero: dados.numero.trim(),
+              complemento:
+                dados.complemento.trim(),
+              bairro: dados.bairro.trim(),
+              cidade:
+                dados.cidadeEndereco.trim(),
+              uf: dados.ufEndereco,
+            }
+          : null;
 
-      // Mostra confirmação somente após sucesso
-      setSucesso(true);
+      const dadosCadastro = {
+        nome: dados.nome.trim(),
+
+        nomeSocial:
+          dados.informarNomeSocial
+            ? dados.nomeSocial.trim()
+            : "",
+
+        genero:
+          dados.genero === "outro"
+            ? dados.generoOutro.trim()
+            : dados.genero,
+
+        nascimento: dados.nascimento,
+
+        cpf: apenasNumeros(
+          dados.cpf
+        ),
+
+        email: dados.email
+          .trim()
+          .toLowerCase(),
+
+        telefone: apenasNumeros(
+          dados.telefone
+        ),
+
+        senha: dados.senha,
+
+        cidade: profissional
+          ? ""
+          : dados.cidade.trim(),
+
+        uf: profissional
+          ? ""
+          : dados.uf,
+
+        crp: profissional
+          ? dados.crp.trim()
+          : "",
+
+        areaAtuacao: profissional
+          ? dados.areaAtuacao
+          : "",
+
+        endereco,
+      };
+
+      await onCadastrar(dadosCadastro);
+
+      setConcluido(true);
     } catch (falha) {
-      setErro(mensagemErro(falha));
+      setErro(
+        mensagemErro
+          ? mensagemErro(falha)
+          : "Não foi possível criar sua conta."
+      );
     } finally {
       setEnviando(false);
     }
   }
+
+  // ==================================================
+  // INTERFACE
+  // ==================================================
 
   return (
     <main
@@ -455,15 +810,9 @@ export default function FormularioCadastroElora({
           : "cadastro-paciente"
       }`}
     >
-      <img
-        className="cadastro-elora-sofa"
-        src={
-          profissional
-            ? "/images/sofa-roxo.png"
-            : "/images/sofa-azul-transparente.png"
-        }
-        alt=""
-      />
+      {/* ============================================
+          CABEÇALHO
+      ============================================ */}
 
       <header className="cadastro-elora-topbar">
         <Link
@@ -475,255 +824,891 @@ export default function FormularioCadastroElora({
             src="/images/logo-elora.png"
             alt=""
           />
+
           <span>elora</span>
         </Link>
 
-        <span
-          className="cadastro-elora-divider"
-          aria-hidden="true"
-        />
-
-        <strong>
+        <span className="ce-topbar-label">
           {profissional
-            ? "Psicólogo(a)"
-            : "Paciente"}
-        </strong>
+            ? "Área do psicólogo"
+            : "Área do paciente"}
+        </span>
       </header>
 
-      <section
-        className="cadastro-elora-shell"
-        aria-labelledby="titulo-cadastro"
-      >
-        <div className="cadastro-elora-heading">
-          <span className="cadastro-elora-eyebrow">
-            {profissional
-              ? "Área do psicólogo"
-              : "Área do paciente"}
-          </span>
+      {/* ============================================
+          ESTRUTURA
+      ============================================ */}
 
-          <h1 id="titulo-cadastro">
-            {profissional
-              ? "Crie sua conta profissional"
-              : "Crie sua conta"}
-          </h1>
+      <div className="ce-layout">
 
-          {!profissional && (
+        {/* ==========================================
+            COLUNA ESQUERDA
+        ========================================== */}
+
+        <section
+          className="ce-workflow"
+          aria-labelledby="ce-titulo"
+        >
+          {/* VOLTAR + ETAPAS */}
+
+          <div className="ce-navigation">
+            <Link
+              to="/"
+              className="ce-voltar-inicio"
+            >
+              ← &nbsp; Voltar ao início
+            </Link>
+
+            <nav
+              className="ce-progress"
+              aria-label="Progresso do cadastro"
+            >
+              {etapas.map(
+                (titulo, indice) => (
+                  <div
+                    key={titulo}
+                    className={`ce-step ${
+                      indice === etapa
+                        ? "ce-step-current"
+                        : ""
+                    } ${
+                      indice < etapa
+                        ? "ce-step-done"
+                        : ""
+                    }`}
+                    aria-current={
+                      indice === etapa
+                        ? "step"
+                        : undefined
+                    }
+                  >
+                    <span className="ce-step-number">
+                      {indice < etapa
+                        ? "✓"
+                        : indice + 1}
+                    </span>
+
+                    <span className="ce-step-label">
+                      {titulo}
+                    </span>
+                  </div>
+                )
+              )}
+            </nav>
+          </div>
+
+          {/* TÍTULO DA ETAPA */}
+
+          <div className="ce-heading">
+            <h1 id="ce-titulo">
+              {profissional
+                ? "Criar conta profissional"
+                : "Criar conta de paciente"}
+            </h1>
+
             <p>
-              Encontre apoio no seu ritmo.
+              {etapa === 0
+                ? "Vamos começar com suas informações básicas."
+                : etapa === 1
+                  ? profissional
+                    ? "Informe seus dados e seu registro profissional."
+                    : "Como podemos entrar em contato com você?"
+                  : etapa === 2
+                    ? "Proteja sua conta com uma senha segura."
+                    : "Confira suas informações antes de finalizar."}
             </p>
-          )}
-        </div>
+          </div>
 
-        {sucesso ? (
-          profissional ? (
-            <p
-              className="cadastro-elora-mensagem"
-              role="status"
-            >
-              {mensagemSucesso}
-            </p>
-          ) : (
-            <section
-              className="cadastro-elora-confirmacao"
-              role="status"
-              aria-live="polite"
-            >
-              <div
-                className="cadastro-elora-confirmacao-icone"
-                aria-hidden="true"
-              >
-                ✓
-              </div>
+          {/* FORMULÁRIO */}
 
-              <span className="cadastro-elora-confirmacao-etiqueta">
-                BEM-VINDO(A) AO ELORA
-              </span>
-
-              <h2>
-                Conta criada com sucesso!
-              </h2>
-
-              <p>
-                Seu cadastro foi concluído.
-                Seu espaço está pronto para você
-                começar a explorar.
-              </p>
-
-              <span className="cadastro-elora-confirmacao-aguarde">
-                Redirecionando para sua área...
-              </span>
-
-              <div
-                className="cadastro-elora-confirmacao-progresso"
-                aria-hidden="true"
-              >
-                <span />
-              </div>
-            </section>
-          )
-        ) : (
           <form
-            className="cadastro-elora-form"
-            onSubmit={handleSubmit}
-            onChange={() => setErro("")}
+            className="ce-form"
+            onSubmit={continuar}
+            noValidate
             aria-busy={enviando}
           >
-            {campos.map((campo) => (
-              <Campo
-                key={campo.name}
-                {...campo}
-                max={
-                  campo.type === "date"
-                    ? hoje
-                    : undefined
-                }
-              />
-            ))}
+            {/* ======================================
+                CADASTRO CONCLUÍDO
+            ====================================== */}
 
-            {profissional && (
+            {concluido ? (
               <section
-                className="cadastro-elora-address campo-full"
-                aria-labelledby="titulo-endereco"
+                className="ce-success"
+                role="status"
               >
-                <div className="cadastro-elora-address-heading">
-                  <div>
-                    <h2 id="titulo-endereco">
-                      Deseja informar seu endereço?
-                    </h2>
+                <span
+                  className="ce-success-icon"
+                  aria-hidden="true"
+                >
+                  ✓
+                </span>
 
-                    <p>
-                      É opcional. Podemos usá-lo
-                      no futuro para enviar conquistas.
-                    </p>
-                  </div>
+                <h2>
+                  Conta criada com sucesso!
+                </h2>
 
-                  <div
-                    className="cadastro-elora-radio"
-                    role="group"
-                    aria-labelledby="titulo-endereco"
-                  >
-                    <label>
-                      <input
-                        type="radio"
-                        name="informarEndereco"
-                        value="sim"
-                        checked={informarEndereco}
-                        onChange={() =>
-                          setInformarEndereco(true)
-                        }
-                      />
-                      Sim
-                    </label>
+                <p>
+                  {mensagemSucesso ||
+                    "Seu cadastro foi concluído."}
+                </p>
 
-                    <label>
-                      <input
-                        type="radio"
-                        name="informarEndereco"
-                        value="nao"
-                        checked={!informarEndereco}
-                        onChange={() =>
-                          setInformarEndereco(false)
-                        }
-                      />
-                      Não
-                    </label>
-                  </div>
-                </div>
+                {profissional && (
+                  <p>
+                    Seu perfil profissional
+                    permanecerá pendente até
+                    a verificação do CRP.
+                  </p>
+                )}
 
-                {informarEndereco && (
-                  <div className="cadastro-elora-address-grid">
-                    {camposEndereco.map((campo) => (
-                      <Campo
-                        key={campo.name}
-                        {...campo}
-                        endereco
-                      />
-                    ))}
+                <p>
+                  Faça login para continuar.
+                </p>
 
-                    <div className="cadastro-elora-field endereco-uf">
-                      <label htmlFor="cadastro-uf">
-                        UF
+                <Link
+                  to={rotaLogin}
+                  className="ce-submit"
+                >
+                  Ir para o login →
+                </Link>
+              </section>
+            ) : (
+              <>
+
+                {/* ================================
+                    ETAPA 1 — DADOS INICIAIS
+                ================================ */}
+
+                {etapa === 0 && (
+                  <div className="ce-fields">
+
+                    {campo(
+                      "nome",
+                      "Nome completo",
+                      {
+                        largo: true,
+                        obrigatorio: true,
+                        placeholder:
+                          "Seu nome completo",
+                        autoComplete: "name",
+                        maxLength: 120,
+                      }
+                    )}
+
+                    {/* NOME SOCIAL */}
+
+                    <div className="ce-social-option ce-largo">
+                      <label className="ce-checkbox">
+                        <input
+                          type="checkbox"
+                          checked={
+                            dados.informarNomeSocial
+                          }
+                          onChange={(event) =>
+                            atualizar(
+                              "informarNomeSocial",
+                              event.target.checked
+                            )
+                          }
+                        />
+
+                        <span>
+                          Desejo informar nome social
+                        </span>
                       </label>
 
-                      <select
-                        id="cadastro-uf"
-                        name="uf"
-                        autoComplete="address-level1"
-                        defaultValue=""
-                        required
-                      >
-                        <option
-                          value=""
-                          disabled
-                        >
-                          UF
-                        </option>
-
-                        {estados.map((uf) => (
-                          <option
-                            key={uf}
-                            value={uf}
-                          >
-                            {uf}
-                          </option>
-                        ))}
-                      </select>
+                      <small>
+                        Usaremos o nome social
+                        nas comunicações,
+                        quando informado.
+                      </small>
                     </div>
+
+                    {dados.informarNomeSocial &&
+                      campo(
+                        "nomeSocial",
+                        "Nome social",
+                        {
+                          largo: true,
+                          obrigatorio: true,
+                          placeholder:
+                            "Como você gostaria de ser chamado(a)?",
+                          maxLength: 120,
+                        }
+                      )}
+
+                    {/* PACIENTE — NASCIMENTO */}
+
+                    {!profissional &&
+                      campo(
+                        "nascimento",
+                        "Data de nascimento",
+                        {
+                          largo: true,
+                          obrigatorio: true,
+                          tipo: "date",
+                          max: dataDeHoje(),
+                          autoComplete: "bday",
+                        }
+                      )}
+
+                    {/* PSICÓLOGO — E-MAIL */}
+
+                    {profissional &&
+                      campo(
+                        "email",
+                        "E-mail profissional",
+                        {
+                          largo: true,
+                          obrigatorio: true,
+                          tipo: "email",
+                          placeholder:
+                            "seu@email.com",
+                          autoComplete: "email",
+                        }
+                      )}
+
+                    {/* IDENTIFICAÇÃO DE GÊNERO */}
+
+                    <div className="ce-genero ce-largo">
+                      <span className="ce-label">
+                        Identificação de gênero
+                        {" "}
+                        <small>(opcional)</small>
+                      </span>
+
+                      <div
+                        className="ce-genero-opcoes"
+                        role="group"
+                        aria-label="Identificação de gênero"
+                      >
+                        {GENEROS.map((opcao) => (
+                          <button
+                            key={opcao.valor}
+                            type="button"
+                            aria-pressed={
+                              dados.genero ===
+                              opcao.valor
+                            }
+                            className={
+                              dados.genero ===
+                              opcao.valor
+                                ? "ce-genero-ativo"
+                                : ""
+                            }
+                            onClick={() =>
+                              atualizar(
+                                "genero",
+                                dados.genero ===
+                                  opcao.valor
+                                  ? ""
+                                  : opcao.valor
+                              )
+                            }
+                          >
+                            <span aria-hidden="true">
+                              {opcao.simbolo}
+                            </span>
+
+                            {opcao.nome}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {dados.genero === "outro" &&
+                      campo(
+                        "generoOutro",
+                        "Como você se identifica?",
+                        {
+                          largo: true,
+                          placeholder:
+                            "Sua identificação",
+                          maxLength: 80,
+                        }
+                      )}
+
+                    {/* PACIENTE — LOCALIZAÇÃO */}
+
+                    {!profissional && (
+                      <>
+                        {campo(
+                          "cidade",
+                          "Cidade (opcional)",
+                          {
+                            placeholder:
+                              "Ex.: Guaramirim",
+                            autoComplete:
+                              "address-level2",
+                            maxLength: 100,
+                          }
+                        )}
+
+                        {seletorUF(
+                          "uf",
+                          "UF (opcional)"
+                        )}
+                      </>
+                    )}
+
+                    {/* PSICÓLOGO — DADOS PROFISSIONAIS */}
+
+                    {profissional && (
+                      <>
+                        {campo(
+                          "telefone",
+                          "Telefone",
+                          {
+                            tipo: "tel",
+                            obrigatorio: true,
+                            placeholder:
+                              "(47) 99999-9999",
+                            autoComplete: "tel",
+                            maxLength: 16,
+                          }
+                        )}
+
+                        <div className="ce-campo">
+                          <label htmlFor="ce-areaAtuacao">
+                            Área de atuação principal
+
+                            <span className="ce-asterisco">
+                              {" "}*
+                            </span>
+                          </label>
+
+                          <select
+                            id="ce-areaAtuacao"
+                            name="areaAtuacao"
+                            value={
+                              dados.areaAtuacao
+                            }
+                            onChange={(event) =>
+                              atualizar(
+                                "areaAtuacao",
+                                event.target.value
+                              )
+                            }
+                            required
+                          >
+                            <option value="">
+                              Selecione sua área
+                            </option>
+
+                            {AREAS.map((area) => (
+                              <option
+                                key={area}
+                                value={area}
+                              >
+                                {area}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </>
+                    )}
+
                   </div>
                 )}
-              </section>
-            )}
 
-            {erro && (
-              <p
-                className="cadastro-elora-mensagem campo-full mensagem-erro"
-                role="alert"
-              >
-                {erro}
-              </p>
-            )}
+                {/* ================================
+                    ETAPA 2 — CONTATO OU CRP
+                ================================ */}
 
-            <button
-              className="cadastro-elora-submit campo-full"
-              type="submit"
-              disabled={enviando}
-            >
-              {enviando
-                ? "Salvando cadastro…"
-                : profissional
-                  ? "Criar conta profissional"
-                  : "Criar conta"}
-            </button>
+                {etapa === 1 && (
+                  <div className="ce-fields">
+
+                    {/* PACIENTE */}
+
+                    {!profissional && (
+                      <>
+                        {campo(
+                          "email",
+                          "E-mail",
+                          {
+                            largo: true,
+                            obrigatorio: true,
+                            tipo: "email",
+                            placeholder:
+                              "seu@email.com",
+                            autoComplete: "email",
+                          }
+                        )}
+
+                        {campo(
+                          "telefone",
+                          "Telefone",
+                          {
+                            obrigatorio: true,
+                            tipo: "tel",
+                            placeholder:
+                              "(47) 99999-9999",
+                            autoComplete: "tel",
+                            maxLength: 16,
+                          }
+                        )}
+
+                        {campo(
+                          "cpf",
+                          "CPF",
+                          {
+                            obrigatorio: true,
+                            placeholder:
+                              "000.000.000-00",
+                            inputMode: "numeric",
+                            maxLength: 14,
+                          }
+                        )}
+
+                        <p className="ce-helper ce-largo">
+                          Seus dados pessoais
+                          não serão exibidos
+                          publicamente.
+                        </p>
+                      </>
+                    )}
+
+                    {/* PSICÓLOGO */}
+
+                    {profissional && (
+                      <>
+                        {campo(
+                          "crp",
+                          "Registro profissional (CRP)",
+                          {
+                            largo: true,
+                            obrigatorio: true,
+                            placeholder:
+                              "00/00000",
+                            maxLength: 10,
+                            ajuda:
+                              "A validação do CRP será realizada antes da publicação do perfil.",
+                          }
+                        )}
+
+                        {campo(
+                          "cpf",
+                          "CPF",
+                          {
+                            obrigatorio: true,
+                            placeholder:
+                              "000.000.000-00",
+                            inputMode: "numeric",
+                            maxLength: 14,
+                          }
+                        )}
+
+                        {campo(
+                          "nascimento",
+                          "Data de nascimento",
+                          {
+                            obrigatorio: true,
+                            tipo: "date",
+                            max: dataDeHoje(),
+                            autoComplete: "bday",
+                          }
+                        )}
+
+                        {/* ENDEREÇO OPCIONAL */}
+
+                        <div className="ce-address-toggle ce-largo">
+                          <label className="ce-checkbox">
+                            <input
+                              type="checkbox"
+                              checked={
+                                dados.informarEndereco
+                              }
+                              onChange={(event) =>
+                                atualizar(
+                                  "informarEndereco",
+                                  event.target.checked
+                                )
+                              }
+                            />
+
+                            <span>
+                              Desejo informar meu endereço
+                              (opcional)
+                            </span>
+                          </label>
+
+                          <small>
+                            O endereço informado
+                            não deve ser exibido
+                            publicamente.
+                          </small>
+                        </div>
+
+                        {dados.informarEndereco && (
+                          <div className="ce-fields ce-address-fields ce-largo">
+
+                            {campo(
+                              "cep",
+                              "CEP",
+                              {
+                                obrigatorio: true,
+                                placeholder:
+                                  "00000-000",
+                                maxLength: 9,
+                                inputMode: "numeric",
+                                autoComplete:
+                                  "postal-code",
+                              }
+                            )}
+
+                            {campo(
+                              "rua",
+                              "Rua",
+                              {
+                                obrigatorio: true,
+                                placeholder:
+                                  "Rua ou avenida",
+                                maxLength: 150,
+                                autoComplete:
+                                  "address-line1",
+                              }
+                            )}
+
+                            {campo(
+                              "numero",
+                              "Número",
+                              {
+                                obrigatorio: true,
+                                placeholder:
+                                  "Número ou S/N",
+                                maxLength: 20,
+                              }
+                            )}
+
+                            {campo(
+                              "complemento",
+                              "Complemento (opcional)",
+                              {
+                                placeholder:
+                                  "Apartamento, bloco...",
+                                maxLength: 120,
+                                autoComplete:
+                                  "address-line2",
+                              }
+                            )}
+
+                            {campo(
+                              "bairro",
+                              "Bairro",
+                              {
+                                obrigatorio: true,
+                                placeholder:
+                                  "Seu bairro",
+                                maxLength: 100,
+                              }
+                            )}
+
+                            {campo(
+                              "cidadeEndereco",
+                              "Cidade",
+                              {
+                                obrigatorio: true,
+                                placeholder:
+                                  "Sua cidade",
+                                maxLength: 100,
+                                autoComplete:
+                                  "address-level2",
+                              }
+                            )}
+
+                            {seletorUF(
+                              "ufEndereco",
+                              "UF",
+                              true
+                            )}
+
+                          </div>
+                        )}
+                      </>
+                    )}
+
+                  </div>
+                )}
+
+                {/* ================================
+                    ETAPA 3 — SEGURANÇA
+                ================================ */}
+
+                {etapa === 2 && (
+                  <div className="ce-fields">
+
+                    <div className="ce-campo ce-largo">
+                      <label htmlFor="ce-senha">
+                        Senha
+
+                        <span className="ce-asterisco">
+                          {" "}*
+                        </span>
+                      </label>
+
+                      <div className="ce-password">
+                        <input
+                          id="ce-senha"
+                          name="senha"
+                          type={
+                            mostrarSenha
+                              ? "text"
+                              : "password"
+                          }
+                          value={dados.senha}
+                          onChange={(event) =>
+                            atualizar(
+                              "senha",
+                              event.target.value
+                            )
+                          }
+                          placeholder="Crie uma senha segura"
+                          autoComplete="new-password"
+                          required
+                        />
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setMostrarSenha(
+                              (atual) => !atual
+                            )
+                          }
+                        >
+                          {mostrarSenha
+                            ? "Ocultar"
+                            : "Mostrar"}
+                        </button>
+                      </div>
+
+                      <RequisitosSenha
+                        senha={dados.senha}
+                      />
+                    </div>
+
+                    {campo(
+                      "confirmarSenha",
+                      "Confirmar senha",
+                      {
+                        largo: true,
+                        obrigatorio: true,
+                        tipo: mostrarSenha
+                          ? "text"
+                          : "password",
+                        placeholder:
+                          "Repita sua senha",
+                        autoComplete:
+                          "new-password",
+                      }
+                    )}
+
+                    <p className="ce-helper ce-largo">
+                      Sua senha será utilizada
+                      no Firebase Authentication
+                      para proteger o acesso
+                      à sua conta.
+                    </p>
+
+                  </div>
+                )}
+
+                {/* ================================
+                    ETAPA 4 — REVISÃO
+                ================================ */}
+
+                {etapa === 3 && (
+                  <section className="ce-review">
+                    <p>
+                      Confira seus dados antes
+                      de concluir o cadastro.
+                    </p>
+
+                    <div className="ce-review-grid">
+
+                      <ResumoCampo
+                        titulo="Nome completo"
+                        texto={dados.nome}
+                      />
+
+                      {dados.informarNomeSocial && (
+                        <ResumoCampo
+                          titulo="Nome social"
+                          texto={
+                            dados.nomeSocial
+                          }
+                        />
+                      )}
+
+                      <ResumoCampo
+                        titulo="E-mail"
+                        texto={dados.email}
+                      />
+
+                      <ResumoCampo
+                        titulo="Telefone"
+                        texto={dados.telefone}
+                      />
+
+                      <ResumoCampo
+                        titulo="CPF"
+                        texto={
+                          dados.cpf
+                            ? `***.***.***-${apenasNumeros(
+                                dados.cpf
+                              ).slice(-2)}`
+                            : ""
+                        }
+                      />
+
+                      <ResumoCampo
+                        titulo="Identificação de gênero"
+                        texto={
+                          dados.genero === "outro"
+                            ? dados.generoOutro
+                            : GENEROS.find(
+                                (item) =>
+                                  item.valor ===
+                                  dados.genero
+                              )?.nome
+                        }
+                      />
+
+                      {profissional ? (
+                        <>
+                          <ResumoCampo
+                            titulo="CRP"
+                            texto={dados.crp}
+                          />
+
+                          <ResumoCampo
+                            titulo="Área de atuação"
+                            texto={
+                              dados.areaAtuacao
+                            }
+                          />
+                        </>
+                      ) : (
+                        <ResumoCampo
+                          titulo="Cidade / UF"
+                          texto={[
+                            dados.cidade,
+                            dados.uf,
+                          ]
+                            .filter(Boolean)
+                            .join(" / ")}
+                        />
+                      )}
+
+                    </div>
+
+                    {profissional && (
+                      <p className="ce-review-note">
+                        O cadastro não garante
+                        aprovação profissional.
+                        A verificação do CRP
+                        continua pendente.
+                      </p>
+                    )}
+                  </section>
+                )}
+
+                {/* ERROS */}
+
+                {erro && (
+                  <p
+                    className="ce-error"
+                    role="alert"
+                  >
+                    {erro}
+                  </p>
+                )}
+
+                {/* BOTÕES */}
+
+                <div className="ce-actions">
+
+                  {etapa > 0 && (
+                    <button
+                      type="button"
+                      className="ce-back"
+                      disabled={enviando}
+                      onClick={() => {
+                        setErro("");
+
+                        setEtapa(
+                          (atual) =>
+                            Math.max(
+                              0,
+                              atual - 1
+                            )
+                        );
+                      }}
+                    >
+                      ← Voltar
+                    </button>
+                  )}
+
+                  <button
+                    className="ce-submit"
+                    type="submit"
+                    disabled={enviando}
+                  >
+                    {enviando
+                      ? "Criando conta..."
+                      : etapa === 3
+                        ? "Criar conta →"
+                        : "Continuar →"}
+                  </button>
+
+                </div>
+              </>
+            )}
           </form>
-        )}
 
-        <p className="cadastro-elora-login">
-          Já tem conta?{" "}
-          <Link
-            to={
-              profissional
-                ? "/login/psicologo"
-                : "/login"
-            }
-          >
-            Entrar
-          </Link>
-        </p>
+          {/* LINKS INFERIORES */}
 
-        <p className="cadastro-elora-other">
-          <Link
-            to={
-              profissional
-                ? "/cadastro"
-                : "/cadastro/psicologo"
-            }
-          >
-            {profissional
-              ? "Sou paciente"
-              : "Sou psicólogo(a)"}
-          </Link>
-        </p>
-      </section>
+          <div className="ce-bottom-links">
+            Já tem conta?{" "}
+
+            <Link to={rotaLogin}>
+              Entrar
+            </Link>
+
+            <span aria-hidden="true">
+              {" "} · {" "}
+            </span>
+
+            <Link to={rotaOutroCadastro}>
+              {profissional
+                ? "Sou paciente"
+                : "Sou psicólogo(a)"}
+            </Link>
+          </div>
+        </section>
+
+        {/* ==========================================
+            COLUNA DIREITA — SOMENTE SOFÁ
+
+            Paciente:
+            /images/sofa-azul-transparente.png
+
+            Psicólogo:
+            /images/sofa-roxo.png
+        ========================================== */}
+
+        <aside
+          className="ce-aside"
+          aria-hidden="true"
+        >
+          <div className="ce-sofa-art">
+            <img
+              src={imagemSofa}
+              alt=""
+              loading="eager"
+            />
+          </div>
+        </aside>
+
+      </div>
     </main>
   );
 }

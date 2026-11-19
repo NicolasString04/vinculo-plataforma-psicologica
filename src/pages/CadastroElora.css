@@ -1,644 +1,1195 @@
+
+/* ==============================================
+   ELORA — CADASTRO DE PACIENTE E PSICÓLOGO
+   CSS completo — versão ajustada
+   Mantém formulário e altera somente o sofá
+============================================== */
+
 .cadastro-elora-page {
-  --cad-fundo: #fffdfa;
-  --cad-texto: #11234a;
-  --cad-secundario: #45546f;
-  --cad-borda: #aeb7c7;
-  --cad-cor: #1768b9;
-  --cad-escura: #114d91;
-  --cad-suave: #e3f2ff;
-  --cad-onda: #aed9fc;
-  --cad-largura: 1000px;
-  --cad-margem: clamp(22px, 6vw, 72px);
-  --cad-onda-forma: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 100' preserveAspectRatio='none'%3E%3Cpath d='M0 26C235 -30 430 95 720 74S1170 -27 1440 23V100H0Z'/%3E%3C/svg%3E");
+  --ce-primary: #0865bd;
+  --ce-primary-dark: #084788;
+  --ce-ink: #122b57;
+  --ce-text: #4f6180;
+  --ce-edge: #c6d5ed;
+  --ce-soft: #e7f3ff;
+  --ce-light: #f6fbff;
+  --ce-glow: rgba(31, 105, 190, 0.12);
+  --cad-cor: var(--ce-primary);
+  --cad-texto: var(--ce-ink);
+  --cad-secundario: var(--ce-text);
+  --cad-suave: var(--ce-soft);
 
   position: relative;
   isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100dvh;
+  min-height: 0;
+  margin: 0;
   overflow: hidden;
-  min-height: 100svh;
-  padding: 24px var(--cad-margem) 108px;
-  background: var(--cad-fundo);
-  color: var(--cad-texto);
-  font-family: var(--elora-body-font, system-ui, sans-serif);
+  color: var(--ce-ink);
+
+  background:
+    radial-gradient(
+      ellipse at 78% 56%,
+      rgba(177, 211, 250, 0.35),
+      transparent 53%
+    ),
+    linear-gradient(
+      135deg,
+      #fbfdff 0%,
+      #eef6ff 49%,
+      #dcecff 100%
+    );
+
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .cadastro-elora-page.cadastro-psicologo {
-  --cad-cor: #642b99;
-  --cad-escura: #4c2079;
-  --cad-suave: #f1e8fa;
-  --cad-onda: #d7bcf2;
+  --ce-primary: #8534b4;
+  --ce-primary-dark: #5d207d;
+  --ce-ink: #221349;
+  --ce-text: #65567c;
+  --ce-edge: #dec6ee;
+  --ce-soft: #f0e5fa;
+  --ce-light: #faf5ff;
+  --ce-glow: rgba(118, 43, 161, 0.13);
+
+  background:
+    radial-gradient(
+      ellipse at 81% 57%,
+      rgba(209, 179, 237, 0.42),
+      transparent 53%
+    ),
+    linear-gradient(
+      135deg,
+      #fefaff 0%,
+      #f4edfc 53%,
+      #e7d5f7 100%
+    );
 }
 
 .cadastro-elora-page,
 .cadastro-elora-page *,
-.cadastro-elora-page::before,
-.cadastro-elora-page::after {
+.cadastro-elora-page *::before,
+.cadastro-elora-page *::after {
   box-sizing: border-box;
 }
+
+.cadastro-elora-page a {
+  text-decoration: none;
+}
+
+.cadastro-elora-page button,
+.cadastro-elora-page input,
+.cadastro-elora-page select {
+  font: inherit;
+}
+
+.cadastro-elora-page button {
+  cursor: pointer;
+}
+
+.cadastro-elora-page :is(
+  a,
+  button,
+  input,
+  select
+):focus-visible {
+  outline: 2px solid var(--ce-primary);
+  outline-offset: 2px;
+}
+
+/* FUNDO DECORATIVO */
 
 .cadastro-elora-page::before,
 .cadastro-elora-page::after {
   content: "";
   position: absolute;
   z-index: -1;
-  inset: auto 0 0;
-  height: 85px;
-  background: var(--cad-suave);
-  mask: var(--cad-onda-forma) center / 100% 100% no-repeat;
   pointer-events: none;
+}
+
+.cadastro-elora-page::before {
+  width: 45vw;
+  height: 35vw;
+  left: -28vw;
+  bottom: -20vw;
+  border-radius: 50%;
+  background: var(--ce-soft);
+  opacity: 0.72;
 }
 
 .cadastro-elora-page::after {
-  height: 58px;
-  background: var(--cad-onda);
-  opacity: 0.75;
-  transform: scaleX(-1);
+  width: 48vw;
+  height: 16vw;
+  right: -18vw;
+  bottom: -11vw;
+  border-radius: 50%;
+  background: var(--ce-edge);
+  opacity: 0.24;
 }
 
-.cadastro-elora-page > .cadastro-elora-sofa {
-  position: absolute;
-  z-index: -1;
-  top: 0;
-  right: 0;
-  display: block;
-  width: min(44vw, 620px);
-  max-width: none;
-  height: auto;
-  pointer-events: none;
-  user-select: none;
-}
-
-.cadastro-elora-topbar,
-.cadastro-elora-shell {
-  width: 100%;
-  max-width: var(--cad-largura);
-  margin-inline: auto;
-}
+/* CABEÇALHO */
 
 .cadastro-elora-topbar {
+  position: relative;
+  z-index: 10;
   display: flex;
   align-items: center;
-  gap: 15px;
-  min-height: 48px;
-  margin-bottom: 44px;
+  justify-content: space-between;
+  flex: 0 0 62px;
+  width: 100%;
+  height: 62px;
+  min-height: 62px;
+  padding:
+    7px
+    max(30px, calc((100vw - 1660px) / 2));
+
+  background: linear-gradient(
+    110deg,
+    var(--ce-primary-dark),
+    var(--ce-primary)
+  );
+
+  color: #fff;
 }
 
 .cadastro-elora-brand {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: var(--cad-texto);
-  text-decoration: none;
-  font: 700 clamp(1.9rem, 4vw, 2.6rem)/1
-    var(--elora-heading-font, Georgia, serif);
-  letter-spacing: -0.04em;
+  color: #fff;
 }
 
 .cadastro-elora-brand img {
   display: block;
-  width: 44px;
-  height: 44px;
+  width: 35px;
+  height: 35px;
   object-fit: contain;
+  filter: brightness(0) invert(1);
 }
 
-.cadastro-elora-divider {
-  width: 1px;
-  height: 31px;
-  background: var(--cad-borda);
+.cadastro-elora-brand span {
+  color: #fff;
+  font: 400 39px/1 Georgia, "Times New Roman", serif;
+  letter-spacing: -2px;
 }
 
-.cadastro-elora-topbar > strong {
-  color: var(--cad-escura);
-  font-size: clamp(0.86rem, 2vw, 1rem);
-  font-weight: 650;
-}
-
-.cadastro-elora-heading {
-  min-height: 134px;
-  margin-bottom: 26px;
-}
-
-.cadastro-psicologo .cadastro-elora-heading {
-  min-height: 118px;
-  margin-bottom: 22px;
-}
-
-.cadastro-elora-eyebrow {
-  display: inline-block;
-  padding: 6px 13px;
-  border-radius: 999px;
-  background: var(--cad-suave);
-  color: var(--cad-escura);
-  font-size: 0.76rem;
-  font-weight: 750;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-}
-
-.cadastro-elora-heading h1 {
-  max-width: 74%;
-  margin: 14px 0 8px;
-  color: var(--cad-texto);
-  font: 700 clamp(2.6rem, 5vw, 4.35rem)/1.04
-    var(--elora-heading-font, Georgia, serif);
-  letter-spacing: -0.038em;
-  text-wrap: balance;
-}
-
-.cadastro-psicologo .cadastro-elora-heading h1 {
-  font-size: clamp(2.2rem, 4vw, 3.6rem);
-}
-
-.cadastro-elora-heading > p {
-  max-width: 65%;
-  margin: 0;
-  color: var(--cad-secundario);
-  font-size: clamp(1rem, 2vw, 1.25rem);
-}
-
-.cadastro-elora-form,
-.cadastro-elora-address-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px 22px;
-}
-
-.cadastro-psicologo .cadastro-elora-form {
-  row-gap: 13px;
-}
-
-.cadastro-elora-form > .campo-full {
-  grid-column: 1 / -1;
-}
-
-.cadastro-elora-field {
-  min-width: 0;
-}
-
-.cadastro-elora-field > label {
-  display: block;
-  margin-bottom: 6px;
-  color: var(--cad-texto);
-  font-size: 0.94rem;
+.ce-topbar-label {
+  color: #fff;
+  font-size: 12px;
   font-weight: 700;
+  opacity: 0.9;
 }
 
-.cadastro-elora-field input,
-.cadastro-elora-field select {
-  display: block;
-  width: 100%;
-  min-width: 0;
-  min-height: 45px;
-  padding: 9px 13px;
-  border: 1px solid var(--cad-borda);
-  border-radius: 9px;
-  background: #ffffffed;
-  color: var(--cad-texto);
-  font: inherit;
-}
+/* ESTRUTURA PRINCIPAL */
 
-.cadastro-elora-field input::placeholder {
-  color: #657088;
-}
-
-.cadastro-elora-page :focus-visible {
-  outline: 2px solid var(--cad-cor);
-  outline-offset: 3px;
-}
-
-.cadastro-elora-password {
+.cadastro-elora-page .ce-layout {
   position: relative;
+  display: block;
+  flex: 1 1 auto;
+  width: min(1800px, calc(100% - 36px));
+  min-height: 0;
+  height: auto;
+  margin: 0 auto;
+  padding: 10px 0 12px;
+
+  /* Permite que o sofá ultrapasse a área central. */
+  overflow: visible;
 }
 
-.cadastro-elora-password input {
-  padding-right: 86px;
+.cadastro-elora-page .ce-workflow {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  width: min(1360px, 80%);
+  height: 100%;
+  min-height: 0;
+  max-height: 100%;
+  margin: 0 auto;
+  padding: 0 5px 5px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ce-edge) transparent;
 }
 
-.cadastro-elora-password button {
-  position: absolute;
-  inset: 0 7px 0 auto;
-  padding-inline: 6px;
-  border: 0;
+.ce-workflow::-webkit-scrollbar {
+  width: 5px;
+}
+
+.ce-workflow::-webkit-scrollbar-thumb {
+  background: var(--ce-edge);
+  border-radius: 20px;
+}
+
+.ce-workflow::-webkit-scrollbar-track {
   background: transparent;
-  color: var(--cad-escura);
-  font: inherit;
-  font-size: 0.8rem;
-  cursor: pointer;
 }
 
-.cadastro-elora-address {
-  min-width: 0;
-  margin-top: 8px;
-  padding: 18px 20px;
-  border-radius: 15px;
-  background: var(--cad-suave);
-}
+/* NAVEGAÇÃO E PROGRESSO */
 
-.cadastro-elora-address-heading {
+.ce-navigation {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px 20px;
+  width: 100%;
+  min-height: 51px;
+  gap: 18px;
+  margin: 0 0 7px;
 }
 
-.cadastro-elora-address-heading h2 {
-  margin: 0 0 4px;
-  color: var(--cad-escura);
-  font: 700 clamp(1.2rem, 2.2vw, 1.7rem)/1.15
-    var(--elora-heading-font, Georgia, serif);
-}
-
-.cadastro-elora-address-heading p {
-  margin: 0;
-  color: var(--cad-secundario);
-  font-size: 0.88rem;
-}
-
-.cadastro-elora-radio {
-  display: flex;
-  gap: 16px;
-}
-
-.cadastro-elora-radio label {
+.ce-voltar-inicio {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  min-height: 32px;
-  cursor: pointer;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-height: 34px;
+  padding: 7px 14px;
+  border: 1px solid var(--ce-edge);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--ce-primary-dark);
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 4px 13px var(--ce-glow);
 }
 
-.cadastro-elora-radio input {
-  width: 18px;
-  height: 18px;
-  margin: 0;
-  accent-color: var(--cad-cor);
+.ce-voltar-inicio:hover {
+  background: #fff;
 }
 
-.cadastro-elora-address-grid {
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 12px 14px;
-  margin-top: 16px;
+.ce-progress {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex: 1 1 auto;
+  min-width: 0;
+  gap: 0;
+  padding: 0;
 }
 
-.endereco-cep,
-.endereco-numero {
-  grid-column: span 3;
-}
-
-.endereco-rua,
-.endereco-complemento {
-  grid-column: span 9;
-}
-
-.endereco-bairro,
-.endereco-cidade {
-  grid-column: span 5;
-}
-
-.endereco-uf {
-  grid-column: span 2;
-}
-
-.cadastro-elora-submit {
-  min-height: 53px;
-  margin-top: 13px;
-  padding: 10px 18px;
-  border: 0;
-  border-radius: 11px;
-  background: linear-gradient(110deg, var(--cad-cor), var(--cad-escura));
-  color: #fff;
-  font: inherit;
-  font-size: 1.1rem;
-  font-weight: 750;
-  cursor: pointer;
-}
-
-.cadastro-elora-submit:hover {
-  background: var(--cad-escura);
-}
-
-.cadastro-elora-login,
-.cadastro-elora-other {
-  margin: 16px 0 0;
+.ce-step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  min-width: 0;
+  gap: 5px;
   text-align: center;
 }
 
-.cadastro-elora-other {
-  margin-top: 8px;
-  font-size: 0.88rem;
-}
-
-.cadastro-elora-login a,
-.cadastro-elora-other a {
-  color: var(--cad-escura);
-  font-weight: 750;
-  text-underline-offset: 3px;
-}
-
-.cadastro-elora-mensagem {
-  margin: 0;
-  padding: 10px 14px;
-  border-radius: 9px;
-  background: #eaf6ee;
-  color: #17532e;
-}
-
-.cadastro-elora-mensagem.mensagem-erro {
-  background: #fff0f1;
-  color: #8b2434;
-}
-
-@media (max-width: 760px) {
-  .cadastro-elora-page > .cadastro-elora-sofa {
-    width: min(53vw, 360px);
-    opacity: 0.55;
-  }
-
-  .cadastro-elora-topbar {
-    margin-bottom: 36px;
-  }
-
-  .cadastro-elora-heading h1 {
-    max-width: 85%;
-  }
-
-  .cadastro-elora-address-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .cadastro-elora-address-grid > .cadastro-elora-field {
-    grid-column: auto;
-  }
-}
-
-@media (max-width: 520px) {
-  .cadastro-elora-page {
-    padding-bottom: 90px;
-  }
-
-  .cadastro-elora-page > .cadastro-elora-sofa {
-    width: 48vw;
-    opacity: 0.3;
-  }
-
-  .cadastro-elora-topbar {
-    gap: 10px;
-    margin-bottom: 30px;
-  }
-
-  .cadastro-elora-brand img {
-    width: 36px;
-    height: 36px;
-  }
-
-  .cadastro-elora-heading,
-  .cadastro-psicologo .cadastro-elora-heading {
-    min-height: 0;
-  }
-
-  .cadastro-elora-heading h1,
-  .cadastro-elora-heading > p {
-    max-width: 100%;
-  }
-
-  .cadastro-elora-form,
-  .cadastro-elora-address-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .cadastro-elora-address {
-    padding: 15px;
-  }
-}
-
-/* Ajustes no topo dos cadastros do Elora */
-.cadastro-elora-page > .cadastro-elora-topbar {
-  max-width: none;
-  margin-inline: 0;
-}
-
-.cadastro-elora-page .cadastro-elora-brand {
-  font-size: clamp(2.1rem, 4vw, 3.25rem);
-}
-
-.cadastro-elora-page .cadastro-elora-brand img {
-  width: clamp(40px, 4.2vw, 56px);
-  height: clamp(40px, 4.2vw, 56px);
-}
-
-.cadastro-elora-page .cadastro-elora-topbar > strong {
-  font-size: clamp(0.9rem, 1.6vw, 1.2rem);
-}
-
-/* Luz suave no canto do cadastro profissional */
-.cadastro-elora-page.cadastro-psicologo {
-  background:
-    radial-gradient(
-      ellipse 330px 210px at 91% 85px,
-      #fbe3d5 0%,
-      transparent 100%
-    ),
-    radial-gradient(
-      ellipse 390px 190px at 97% 235px,
-      #eee0fa 0%,
-      transparent 100%
-    ),
-    var(--cad-fundo, #fffdfa);
-}
-
-/* Sofá um pouco maior e com a ponta da onda mais suave */
-.cadastro-elora-page.cadastro-psicologo > .cadastro-elora-sofa {
-  width: min(48vw, 680px);
-  mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    #000 26%
-  );
-}
-
-/* Fios finos sobre a parte inferior da ilustração */
-.cadastro-psicologo > .cadastro-elora-topbar::after {
+.ce-step:not(:last-child)::after {
   content: "";
   position: absolute;
-  z-index: -1;
-  top: clamp(135px, 13vw, 210px);
-  right: 0;
-  width: min(34vw, 480px);
-  height: clamp(85px, 10vw, 145px);
-  pointer-events: none;
-  opacity: 0.65;
-
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 145' preserveAspectRatio='none'%3E%3Cpath d='M0 26C108 10 171 132 310 113C384 103 436 69 480 21' fill='none' stroke='%23ffffff' stroke-width='1.3'/%3E%3Cpath d='M0 39C104 18 179 125 309 101C382 87 433 70 480 35' fill='none' stroke='%23f4c9e6' stroke-width='1.2'/%3E%3Cpath d='M0 47C113 22 184 137 319 121C387 113 444 79 480 47' fill='none' stroke='%23c5b0ed' stroke-width='1.25'/%3E%3Cpath d='M0 61C111 32 187 141 326 130C396 124 447 92 480 59' fill='none' stroke='%23ffffff' stroke-width='1'/%3E%3C/svg%3E")
-    center / 100% 100% no-repeat;
-
-  mask-image: linear-gradient(to right, transparent, #000 25%);
+  top: 14px;
+  left: calc(50% + 17px);
+  right: calc(-50% + 17px);
+  height: 2px;
+  background: var(--ce-edge);
 }
 
-@media (max-width: 760px) {
-  .cadastro-elora-page.cadastro-psicologo > .cadastro-elora-sofa {
-    width: min(53vw, 380px);
-  }
-
-  .cadastro-psicologo > .cadastro-elora-topbar::after {
-    display: none;
-  }
+.ce-step-done:not(:last-child)::after {
+  background: var(--ce-primary);
 }
 
-@media (max-width: 520px) {
-  .cadastro-elora-page.cadastro-psicologo > .cadastro-elora-sofa {
-    width: 48vw;
-  }
-}
-
-/* Paciente — névoa azul suave no canto do sofá */
-.cadastro-elora-page.cadastro-paciente {
-  background:
-    radial-gradient(ellipse 330px 210px at 91% 85px, #e9e3fa, transparent),
-    radial-gradient(ellipse 390px 210px at 97% 235px, #d7edff, transparent),
-    var(--cad-fundo, #fffdfa);
-}
-
-/* Sofá um pouco maior, com a ponta da onda dissolvendo no fundo */
-.cadastro-elora-page.cadastro-paciente > .cadastro-elora-sofa {
-  width: min(48vw, 680px);
-  mask-image: linear-gradient(to right, transparent 0%, #000 26%);
-}
-
-/* Linhas finas em azul e branco acompanhando a curva */
-.cadastro-paciente > .cadastro-elora-topbar::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  top: clamp(135px, 13vw, 210px);
-  right: 0;
-  width: min(34vw, 480px);
-  height: clamp(85px, 10vw, 145px);
-  pointer-events: none;
-  opacity: 0.68;
-
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 145' preserveAspectRatio='none'%3E%3Cg fill='none'%3E%3Cpath d='M0 26C108 10 171 132 310 113C384 103 436 69 480 21' stroke='%23ffffff' stroke-width='1.3'/%3E%3Cpath d='M0 39C104 18 179 125 309 101C382 87 433 70 480 35' stroke='%23b1d9fa' stroke-width='1.2'/%3E%3Cpath d='M0 47C113 22 184 137 319 121C387 113 444 79 480 47' stroke='%23b8b9ef' stroke-width='1.25'/%3E%3Cpath d='M0 61C111 32 187 141 326 130C396 124 447 92 480 59' stroke='%23ffffff' stroke-width='1'/%3E%3C/g%3E%3C/svg%3E")
-    center / 100% 100% no-repeat;
-
-  mask-image: linear-gradient(to right, transparent, #000 25%);
-}
-
-@media (max-width: 760px) {
-  .cadastro-elora-page.cadastro-paciente > .cadastro-elora-sofa {
-    width: min(53vw, 380px);
-  }
-
-  .cadastro-paciente > .cadastro-elora-topbar::after {
-    display: none;
-  }
-}
-
-@media (max-width: 520px) {
-  .cadastro-elora-page.cadastro-paciente > .cadastro-elora-sofa {
-    width: 48vw;
-  }
-}
-
-/* Confirmação de cadastro do paciente */
-
-.cadastro-elora-confirmacao {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-  width: 100%;
-  max-width: 650px;
-  padding: 28px;
-  margin-top: 24px;
-
-  background: linear-gradient(
-    135deg,
-    #ffffff 0%,
-    #eef7ff 100%
-  );
-
-  border: 1px solid #c5e2fa;
-  border-radius: 22px;
-
-  box-shadow: 0 16px 40px rgba(23, 104, 185, 0.09);
-
-  animation: cadastroConfirmacaoEntrada 0.45s ease-out;
-}
-
-.cadastro-elora-confirmacao-icone {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 56px;
-  height: 56px;
-  flex-shrink: 0;
-
-  background: #e0f4e9;
-  color: #238653;
-
+.ce-step-number {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  font-size: 30px;
-  font-weight: 700;
+  background: var(--ce-edge);
+  color: var(--ce-ink);
+  font-size: 13px;
+  font-weight: 800;
 }
 
-.cadastro-elora-confirmacao-conteudo {
+.ce-step-current .ce-step-number,
+.ce-step-done .ce-step-number {
+  background: var(--ce-primary);
+  color: #fff;
+}
+
+.ce-step-label {
+  max-width: 130px;
+  color: var(--ce-text);
+  font-size: 10px;
+  line-height: 1.25;
+}
+
+.ce-step-current .ce-step-label {
+  color: var(--ce-ink);
+  font-weight: 800;
+}
+
+/* TÍTULOS */
+
+.ce-heading {
+  width: 100%;
+  margin: 0 0 12px;
+  padding: 0 8px;
+}
+
+.ce-heading h1 {
+  margin: 0 0 4px;
+  color: var(--ce-ink);
+  font:
+    700 clamp(29px, 2.65vw, 40px)/1.12
+    Georgia, "Times New Roman", serif;
+  letter-spacing: -0.8px;
+}
+
+.ce-heading p {
+  margin: 0;
+  color: var(--ce-text);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* FORMULÁRIO */
+
+.cadastro-elora-page .ce-form {
+  position: relative;
+  z-index: 4;
+  flex: 0 0 auto;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 19px 25px;
+  border: 1px solid var(--ce-edge);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow:
+    0 13px 34px var(--ce-glow),
+    0 3px 10px rgba(22, 22, 53, 0.03);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.ce-fields {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 11px 16px;
+}
+
+.ce-largo {
+  grid-column: 1 / -1;
+}
+
+.ce-campo {
   min-width: 0;
 }
 
-.cadastro-elora-confirmacao-etiqueta {
+.ce-campo > label,
+.ce-label {
   display: block;
-  margin-bottom: 8px;
+  margin: 0 0 5px;
+  color: var(--ce-ink);
+  font-size: 12px;
+  font-weight: 800;
+}
 
-  color: var(--cad-cor);
+.ce-label small {
+  color: var(--ce-text);
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.ce-asterisco {
+  color: #ca3658;
+}
+
+/* INPUTS */
+
+.ce-campo input,
+.ce-campo select,
+.ce-password input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 39px;
+  min-height: 39px;
+  padding: 7px 12px;
+  border: 1px solid var(--ce-edge);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--ce-ink);
+  font-size: 12px;
+}
+
+.ce-campo input::placeholder,
+.ce-password input::placeholder {
+  color: #8794ad;
+}
+
+.ce-campo input:focus,
+.ce-campo select:focus,
+.ce-password input:focus {
+  border-color: var(--ce-primary);
+}
+
+.ce-campo > small,
+.ce-social-option small,
+.ce-address-toggle small {
+  display: block;
+  margin-top: 4px;
+  color: var(--ce-text);
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+/* NOME SOCIAL */
+
+.ce-social-option {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+}
+
+.ce-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--ce-ink);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ce-checkbox input {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  accent-color: var(--ce-primary);
+}
+
+/* GÊNERO */
+
+.ce-genero {
+  min-width: 0;
+}
+
+.ce-genero-opcoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ce-genero-opcoes button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 5px 11px;
+  border: 1px solid var(--ce-edge);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.84);
+  color: var(--ce-ink);
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ce-genero-opcoes button > span {
+  color: var(--ce-primary);
+  font-size: 15px;
+  line-height: 1;
+}
+
+.ce-genero-opcoes button:hover {
+  border-color: var(--ce-primary);
+}
+
+.ce-genero-opcoes button.ce-genero-ativo {
+  border-color: var(--ce-primary);
+  background: var(--ce-soft);
+  color: var(--ce-primary-dark);
+  box-shadow:
+    inset 0 0 0 1px var(--ce-primary);
+}
+
+/* ENDEREÇO */
+
+.ce-address-toggle {
+  padding: 11px 13px;
+  border: 1px solid var(--ce-edge);
+  border-radius: 11px;
+  background: var(--ce-light);
+}
+
+.ce-address-fields {
+  padding: 13px;
+  border: 1px solid var(--ce-edge);
+  border-radius: 11px;
+  background: var(--ce-light);
+}
+
+.ce-helper {
+  margin: 3px 0 0;
+  color: var(--ce-text);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* SENHA */
+
+.ce-password {
+  position: relative;
+}
+
+.ce-password input {
+  padding-right: 75px;
+}
+
+.ce-password button {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  padding: 5px;
+  border: 0;
+  background: transparent;
+  color: var(--ce-primary-dark);
   font-size: 11px;
   font-weight: 800;
-  letter-spacing: 1.4px;
 }
 
-.cadastro-elora-confirmacao h2 {
-  margin: 0 0 12px;
-
-  color: var(--cad-texto);
-  font-size: clamp(24px, 3vw, 30px);
-  line-height: 1.2;
+.cadastro-elora-page .requisitos-senha {
+  margin-top: 8px;
+  padding: 11px 13px;
+  border: 1px solid var(--ce-edge);
+  border-radius: 11px;
+  background: var(--ce-soft);
 }
 
-.cadastro-elora-confirmacao p {
-  margin: 0 0 18px;
+/* REVISÃO */
 
-  color: var(--cad-secundario);
-  font-size: 15px;
-  line-height: 1.6;
+.ce-review > p {
+  margin: 0 0 13px;
+  color: var(--ce-text);
+  font-size: 12px;
+  line-height: 1.5;
 }
 
-.cadastro-elora-confirmacao-aguarde {
-  display: inline-block;
+.ce-review-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
 
-  color: var(--cad-cor);
+.ce-revisao-item {
+  min-width: 0;
+  padding: 11px;
+  border: 1px solid var(--ce-edge);
+  border-radius: 10px;
+  background: var(--ce-light);
+}
+
+.ce-revisao-item span {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--ce-text);
+  font-size: 10px;
+}
+
+.ce-revisao-item strong {
+  color: var(--ce-ink);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.ce-review .ce-review-note {
+  margin-top: 12px;
+  color: var(--ce-primary-dark);
+}
+
+/* ERROS */
+
+.ce-error {
+  margin: 11px 0 0;
+  padding: 10px 13px;
+  border: 1px solid #f1c3ca;
+  border-radius: 10px;
+  background: #fff0f3;
+  color: #a72c46;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* BOTÕES */
+
+.ce-actions {
+  display: flex;
+  gap: 11px;
+  margin-top: 13px;
+}
+
+.ce-submit,
+.ce-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 9px 17px;
+  border-radius: 10px;
   font-size: 13px;
-  font-weight: 650;
+  font-weight: 800;
+  text-align: center;
 }
 
-@keyframes cadastroConfirmacaoEntrada {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
+.ce-submit {
+  flex: 1;
+  border: 0;
+  background: linear-gradient(
+    110deg,
+    var(--ce-primary),
+    var(--ce-primary-dark)
+  );
+  color: #fff;
+  box-shadow:
+    0 5px 12px var(--ce-glow);
+}
+
+.ce-submit:hover {
+  filter: brightness(1.06);
+}
+
+.ce-back {
+  border: 1px solid var(--ce-edge);
+  background: #fff;
+  color: var(--ce-primary-dark);
+}
+
+.ce-actions button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* LINKS INFERIORES */
+
+.ce-bottom-links {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  margin: 9px 0 0;
+  color: var(--ce-text);
+  font-size: 11px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.ce-bottom-links a {
+  color: var(--ce-primary-dark);
+  font-weight: 800;
+}
+
+.ce-bottom-links a:hover {
+  text-decoration: underline;
+}
+
+/* CADASTRO CONCLUÍDO */
+
+.ce-success {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.ce-success-icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #e3f5eb;
+  color: #19814d;
+  font-size: 26px;
+}
+
+.ce-success h2 {
+  margin: 0;
+  font: 400 27px/1.2 Georgia, serif;
+}
+
+.ce-success p {
+  margin: 0;
+  color: var(--ce-text);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.ce-success .ce-submit {
+  align-self: stretch;
+  margin-top: 8px;
+}
+
+/* ==============================================
+   SOFÁ — AJUSTE PRINCIPAL
+
+   Mantém o formulário original.
+   A imagem fica mais para fora e atrás dele.
+
+   Paciente: sofa-azul-transparente.png
+   Psicólogo: sofa-roxo.png
+============================================== */
+
+.cadastro-elora-page .ce-aside {
+  position: absolute;
+  z-index: 1;
+
+  right: -170px;
+  bottom: -24px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+
+  width: min(50vw, 875px);
+  height: min(64dvh, 555px);
+  min-height: 0;
+
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.cadastro-elora-page .ce-sofa-art {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+
+  margin: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.cadastro-elora-page .ce-sofa-art img {
+  position: relative;
+  z-index: 2;
+  display: block;
+
+  width: 100%;
+  height: 100%;
+  max-width: none;
+
+  object-fit: contain;
+  object-position: right bottom;
+
+  transform: scale(1.07);
+  transform-origin: right bottom;
+
+  opacity: 1;
+  filter: none;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+/* EFEITOS DO SOFÁ */
+
+.cadastro-elora-page .ce-sofa-art::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  right: 4%;
+  bottom: 9%;
+  width: 77%;
+  height: 65%;
+  border-radius: 50%;
+
+  background: radial-gradient(
+    ellipse,
+    rgba(70, 149, 237, 0.18) 0%,
+    rgba(159, 205, 253, 0.09) 46%,
+    transparent 75%
+  );
+
+  filter: blur(26px);
+}
+
+.cadastro-psicologo .ce-sofa-art::before {
+  background: radial-gradient(
+    ellipse,
+    rgba(154, 83, 207, 0.20) 0%,
+    rgba(209, 174, 241, 0.10) 46%,
+    transparent 75%
+  );
+}
+
+.cadastro-elora-page .ce-sofa-art::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  right: 5%;
+  bottom: 0;
+  width: 85%;
+  height: 85px;
+  border-radius: 50%;
+  background: var(--ce-primary);
+  opacity: 0.07;
+  filter: blur(34px);
+}
+
+/* NOTEBOOKS / DESKTOPS MÉDIOS */
+
+@media (min-width: 981px) and (max-width: 1400px) {
+  .cadastro-elora-page .ce-layout {
+    width: calc(100% - 32px);
   }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .cadastro-elora-page .ce-workflow {
+    width: min(1220px, 85%);
+  }
+
+  .cadastro-elora-page .ce-aside {
+    right: -140px;
+    width: min(50vw, 680px);
+    height: min(59dvh, 470px);
+  }
+
+  .cadastro-elora-page .ce-form {
+    padding: 17px 20px;
+  }
+
+  .ce-navigation {
+    gap: 13px;
   }
 }
 
-@media (max-width: 520px) {
-  .cadastro-elora-confirmacao {
+/* MONITORES COM ALTURA REDUZIDA */
+
+@media (min-width: 981px) and (max-height: 790px) {
+  .cadastro-elora-topbar {
+    flex-basis: 56px;
+    height: 56px;
+    min-height: 56px;
+  }
+
+  .cadastro-elora-brand img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .cadastro-elora-brand span {
+    font-size: 36px;
+  }
+
+  .cadastro-elora-page .ce-layout {
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+
+  .ce-navigation {
+    min-height: 44px;
+    margin-bottom: 4px;
+  }
+
+  .ce-heading {
+    margin-bottom: 8px;
+  }
+
+  .ce-heading h1 {
+    font-size: clamp(28px, 2.4vw, 36px);
+  }
+
+  .ce-heading p {
+    font-size: 13px;
+  }
+
+  .cadastro-elora-page .ce-form {
+    padding: 15px 21px;
+  }
+
+  .ce-fields {
+    gap: 9px 14px;
+  }
+
+  .ce-campo input,
+  .ce-campo select,
+  .ce-password input {
+    height: 36px;
+    min-height: 36px;
+  }
+
+  .ce-genero-opcoes button {
+    min-height: 30px;
+  }
+
+  .ce-actions {
+    margin-top: 10px;
+  }
+
+  .ce-submit,
+  .ce-back {
+    min-height: 39px;
+  }
+
+  .ce-bottom-links {
+    margin-top: 6px;
+  }
+
+  .cadastro-elora-page .ce-aside {
+    bottom: -20px;
+    height: min(60dvh, 440px);
+  }
+}
+
+/* TELAS INTERMEDIÁRIAS */
+
+@media (min-width: 981px) and (max-width: 1150px) {
+  .cadastro-elora-page .ce-workflow {
+    width: 88%;
+  }
+
+  .cadastro-elora-page .ce-aside {
+    right: -130px;
+    width: 50vw;
+    height: min(55dvh, 410px);
+  }
+
+  .ce-genero-opcoes {
+    gap: 5px;
+  }
+
+  .ce-genero-opcoes button {
+    padding: 5px 9px;
+  }
+}
+
+/* TABLETS */
+
+@media (max-width: 980px) {
+  .cadastro-elora-page {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+
+  .cadastro-elora-topbar {
+    min-height: 62px;
+    height: 62px;
+  }
+
+  .cadastro-elora-page .ce-layout {
+    display: flex;
     flex-direction: column;
-    padding: 22px;
+    width: min(760px, calc(100% - 36px));
+    min-height: calc(100dvh - 62px);
+    height: auto;
+    gap: 0;
+    padding: 18px 0 0;
+    overflow: visible;
+  }
+
+  .cadastro-elora-page .ce-workflow {
+    position: relative;
+    z-index: 3;
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .ce-navigation {
+    flex-wrap: wrap;
+    min-height: 0;
+    gap: 14px;
+  }
+
+  .ce-progress {
+    flex-basis: 100%;
+  }
+
+  .ce-heading {
+    margin-top: 14px;
+    padding: 0;
+  }
+
+  .cadastro-elora-page .ce-form {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .cadastro-elora-page .ce-aside {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+
+    right: auto;
+    bottom: auto;
+
+    width: 100%;
+    height: 270px;
+    min-height: 0;
+
+    margin: -10px 0 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .cadastro-elora-page .ce-sofa-art {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    margin: 0;
+  }
+
+  .cadastro-elora-page .ce-sofa-art img {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: contain;
+    object-position: center bottom;
+    transform: none;
+    opacity: 1;
+    filter: none;
+  }
+
+  .cadastro-elora-page .ce-sofa-art::before {
+    right: 15%;
+    bottom: 8%;
+    width: 70%;
+    height: 66%;
+  }
+
+  .cadastro-elora-page .ce-sofa-art::after {
+    right: 13%;
+    bottom: 0;
+    width: 74%;
   }
 }
+
+/* CELULARES */
+
+@media (max-width: 600px) {
+  .cadastro-elora-topbar {
+    height: 60px;
+    min-height: 60px;
+    padding: 8px 16px;
+  }
+
+  .cadastro-elora-brand img {
+    width: 31px;
+    height: 31px;
+  }
+
+  .cadastro-elora-brand span {
+    font-size: 35px;
+  }
+
+  .ce-topbar-label {
+    font-size: 10px;
+  }
+
+  .cadastro-elora-page .ce-layout {
+    width: calc(100% - 24px);
+    padding-top: 14px;
+  }
+
+  .ce-navigation {
+    gap: 16px;
+  }
+
+  .ce-voltar-inicio {
+    min-height: 32px;
+    font-size: 10px;
+  }
+
+  .ce-step-number {
+    width: 29px;
+    height: 29px;
+  }
+
+  .ce-step:not(:last-child)::after {
+    top: 14px;
+  }
+
+  .ce-step-label {
+    font-size: 9px;
+  }
+
+  .ce-heading h1 {
+    font-size: clamp(27px, 7.8vw, 35px);
+  }
+
+  .ce-heading p {
+    font-size: 12px;
+  }
+
+  .cadastro-elora-page .ce-form {
+    padding: 18px 15px;
+    border-radius: 19px;
+  }
+
+  .ce-fields {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .ce-largo {
+    grid-column: 1;
+  }
+
+  .ce-genero-opcoes {
+    gap: 6px;
+  }
+
+  .ce-genero-opcoes button {
+    min-height: 33px;
+    font-size: 10px;
+  }
+
+  .ce-review-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ce-actions {
+    gap: 8px;
+  }
+
+  .ce-submit,
+  .ce-back {
+    font-size: 12px;
+  }
+
+  .cadastro-elora-page .ce-aside {
+    height: 220px;
+    margin-top: 0;
+  }
+}
+
+/* ACESSIBILIDADE */
 
 @media (prefers-reduced-motion: reduce) {
-  .cadastro-elora-confirmacao {
-    animation: none;
+  .cadastro-elora-page *,
+  .cadastro-elora-page *::before,
+  .cadastro-elora-page *::after {
+    animation: none !important;
+    transition: none !important;
   }
 }
