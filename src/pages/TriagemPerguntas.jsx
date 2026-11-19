@@ -1,7 +1,9 @@
+
 import {
-  useState,
-  useRef,
   useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
 } from "react";
 
 import {
@@ -9,10 +11,12 @@ import {
   useNavigate,
 } from "react-router-dom";
 
+import { auth } from "../firebase";
+
 import "./TriagemCientifica.css";
 
 // ======================================================
-// 1. CONFIGURAÇÕES
+// CONFIGURAÇÕES
 // ======================================================
 
 const LIMITE_PADRAO = 5;
@@ -20,11 +24,11 @@ const LIMITE_PADRAO = 5;
 const PRIMEIRA =
   "Olá, tudo bem? Seja bem-vindo(a) à Elora. " +
   "O que fez você procurar a Elora hoje? " +
-  "Me conte um pouco sobre você e sobre o que está acontecendo. " +
-  "Pode compartilhar com suas próprias palavras, no seu tempo.";
+  "Me conte um pouco sobre você e sobre o que " +
+  "está acontecendo, com suas próprias palavras.";
 
 // ======================================================
-// 2. COMUNICAÇÃO COM O BACKEND
+// COMUNICAÇÃO COM O BACKEND
 // ======================================================
 
 async function requisitar(rota, dados) {
@@ -35,20 +39,17 @@ async function requisitar(rota, dados) {
       `/api/triagem/${rota}`,
       {
         method: "POST",
-
         headers: {
           "Content-Type": "application/json",
         },
-
         cache: "no-store",
-
         body: JSON.stringify(dados),
       }
     );
-
   } catch {
     throw new Error(
-      "Backend indisponível. Abra INICIAR_BACKEND.bat e mantenha o terminal aberto."
+      "Backend indisponível. Inicie o servidor " +
+      "da triagem e tente novamente."
     );
   }
 
@@ -67,46 +68,47 @@ async function requisitar(rota, dados) {
 }
 
 // ======================================================
-// 3. COMPONENTE
+// COMPONENTE PRINCIPAL
 // ======================================================
 
 export default function TriagemPerguntas() {
   const navigate = useNavigate();
 
-  const [aceite, setAceite] =
-    useState(false);
-
-  const [sessao, setSessao] =
-    useState(null);
-
-  const [modo, setModo] =
-    useState("demo");
-
-  const [mensagens, setMensagens] =
-    useState([]);
-
-  const [texto, setTexto] =
-    useState("");
-
-  const [erro, setErro] =
-    useState("");
-
-  const [ocupado, setOcupado] =
-    useState(false);
-
-  const [risco, setRisco] =
-    useState(false);
-
-  const [numeroRespostas, setNumeroRespostas] =
-    useState(0);
-
-  const [limiteRespostas, setLimiteRespostas] =
-    useState(LIMITE_PADRAO);
-
   const campo = useRef(null);
+  const chatRef = useRef(null);
+  const contadorMensagens = useRef(0);
 
   // ====================================================
-  // 4. IDENTIFICAR O MODELO EM EXECUÇÃO
+  // ESTADOS
+  // ====================================================
+
+  const [aceite, setAceite] = useState(false);
+  const [sessao, setSessao] = useState(null);
+
+  const [modo, setModo] = useState("demo");
+
+  const [mensagens, setMensagens] = useState([]);
+  const [texto, setTexto] = useState("");
+
+  const [erro, setErro] = useState("");
+  const [ocupado, setOcupado] = useState(false);
+  const [aguardandoIA, setAguardandoIA] =
+    useState(false);
+
+  const [risco, setRisco] = useState(false);
+
+  const [
+    numeroRespostas,
+    setNumeroRespostas,
+  ] = useState(0);
+
+  const [
+    limiteRespostas,
+    setLimiteRespostas,
+  ] = useState(LIMITE_PADRAO);
+
+  // ====================================================
+  // IDENTIFICAR O MODO DA IA
   // ====================================================
 
   useEffect(() => {
@@ -117,14 +119,10 @@ export default function TriagemPerguntas() {
     })
       .then((resposta) => {
         if (!resposta.ok) return null;
-
         return resposta.json();
       })
       .then((dados) => {
-        if (
-          ativo &&
-          dados?.modo
-        ) {
+        if (ativo && dados?.modo) {
           setModo(dados.modo);
         }
       })
@@ -136,7 +134,26 @@ export default function TriagemPerguntas() {
   }, []);
 
   // ====================================================
-  // 5. INICIAR TRIAGEM
+  // ROLAGEM AUTOMÁTICA DO CHAT
+  //
+  // Rola somente o elemento do histórico.
+  // Não movimenta a página inteira.
+  // ====================================================
+
+  useLayoutEffect(() => {
+    const chat = chatRef.current;
+
+    if (!chat) return;
+
+    chat.scrollTop = chat.scrollHeight;
+  }, [
+    mensagens,
+    aguardandoIA,
+    sessao,
+  ]);
+
+  // ====================================================
+  // INICIAR TRIAGEM
   // ====================================================
 
   async function iniciar() {
@@ -151,14 +168,18 @@ export default function TriagemPerguntas() {
         {}
       );
 
+      if (!resposta.sessaoId) {
+        throw new Error(
+          "O backend não retornou uma sessão válida."
+        );
+      }
+
+      const limite = Number(resposta.limite);
+
       setSessao(resposta.sessaoId);
 
       setModo(
         resposta.modo || "demo"
-      );
-
-      const limite = Number(
-        resposta.limite
       );
 
       setLimiteRespostas(
@@ -167,17 +188,25 @@ export default function TriagemPerguntas() {
           : LIMITE_PADRAO
       );
 
+      // A abertura já entra como primeira
+      // mensagem do histórico da conversa.
+
       setMensagens([
         {
+          id: "abertura",
           papel: "elora",
-          texto:
-            resposta.mensagem || PRIMEIRA,
+          texto: resposta.mensagem || PRIMEIRA,
         },
       ]);
 
-      setRisco(false);
       setNumeroRespostas(0);
+      setRisco(false);
       setTexto("");
+      setAguardandoIA(false);
+
+      requestAnimationFrame(() => {
+        campo.current?.focus();
+      });
 
     } catch (e) {
       setErro(e.message);
@@ -188,7 +217,7 @@ export default function TriagemPerguntas() {
   }
 
   // ====================================================
-  // 6. ENVIAR RESPOSTA
+  // ENVIAR RESPOSTA
   // ====================================================
 
   async function enviar(evento) {
@@ -207,7 +236,24 @@ export default function TriagemPerguntas() {
     }
 
     setOcupado(true);
+    setAguardandoIA(true);
     setErro("");
+
+    const id = ++contadorMensagens.current;
+
+    // Mostra o relato do paciente imediatamente,
+    // sem aguardar o processamento da IA.
+
+    setMensagens((atual) => [
+      ...atual,
+      {
+        id: `paciente-${id}`,
+        papel: "paciente",
+        texto: mensagem,
+      },
+    ]);
+
+    setTexto("");
 
     try {
       const resposta = await requisitar(
@@ -229,29 +275,24 @@ export default function TriagemPerguntas() {
           : numeroRespostas + 1;
 
       const novoLimite =
-        Number.isInteger(resposta.limite)
+        Number.isInteger(resposta.limite) &&
+        resposta.limite > 0
           ? resposta.limite
           : limiteRespostas;
 
-      // Atualizar histórico visual.
+      // A resposta da IA também entra
+      // no chat, como qualquer outra mensagem.
 
       setMensagens((atual) => [
         ...atual,
-
         {
-          papel: "paciente",
-          texto: mensagem,
-        },
-
-        {
+          id: `elora-${id}`,
           papel: "elora",
           texto:
             resposta.mensagem ||
             "Não foi possível gerar uma resposta.",
         },
       ]);
-
-      setTexto("");
 
       setLimiteRespostas(novoLimite);
 
@@ -261,7 +302,8 @@ export default function TriagemPerguntas() {
         setNumeroRespostas(novoNumero);
       }
 
-      // Não focar novamente se o limite foi atingido.
+      // O foco retorna ao campo quando
+      // ainda existem respostas disponíveis.
 
       if (
         !ocorreuRisco &&
@@ -273,15 +315,28 @@ export default function TriagemPerguntas() {
       }
 
     } catch (e) {
+      // Se a solicitação falhar, restauramos
+      // o texto e retiramos a mensagem visual
+      // que ainda não recebeu confirmação.
+
+      setMensagens((atual) =>
+        atual.filter(
+          (item) =>
+            item.id !== `paciente-${id}`
+        )
+      );
+
+      setTexto(mensagem);
       setErro(e.message);
 
     } finally {
+      setAguardandoIA(false);
       setOcupado(false);
     }
   }
 
   // ====================================================
-  // 7. GERAR RESUMO
+  // GERAR RESUMO
   // ====================================================
 
   async function finalizar() {
@@ -307,14 +362,10 @@ export default function TriagemPerguntas() {
 
       setSessao(null);
 
-      navigate(
-        "/triagem/resumo",
-        {
-          state: {
-            resumo,
-          },
-        }
-      );
+      navigate("/triagem/resumo", {
+        state: { resumo },
+        replace: true,
+      });
 
     } catch (e) {
       setErro(e.message);
@@ -323,52 +374,85 @@ export default function TriagemPerguntas() {
   }
 
   // ====================================================
-  // 8. ENCERRAR E APAGAR SESSÃO
+  // ENCERRAR A SESSÃO
   // ====================================================
 
   async function encerrar() {
-    if (sessao) {
+    const sessaoAtual = sessao;
+
+    if (sessaoAtual) {
       await requisitar(
         "encerrar",
         {
-          sessaoId: sessao,
+          sessaoId: sessaoAtual,
         }
       ).catch(() => {});
     }
 
     setSessao(null);
     setMensagens([]);
-    setRisco(false);
-    setNumeroRespostas(0);
-    setLimiteRespostas(LIMITE_PADRAO);
     setTexto("");
     setErro("");
+    setRisco(false);
+    setAguardandoIA(false);
+    setNumeroRespostas(0);
+    setLimiteRespostas(LIMITE_PADRAO);
   }
 
   // ====================================================
-  // 9. IDENTIFICAÇÃO DO MODELO
+  // VOLTAR AO INÍCIO
   // ====================================================
 
-  const nomeModo =
-    modo === "ollama"
-      ? "Ollama local"
-      : "Simulação";
+  async function voltarAoInicio() {
+    if (ocupado) return;
+
+    await encerrar();
+
+    navigate(
+      auth.currentUser
+        ? "/cliente"
+        : "/"
+    );
+  }
+
+  // ====================================================
+  // VOLTAR À APRESENTAÇÃO DA TRIAGEM
+  // ====================================================
+
+  function voltarParaTriagem() {
+    if (ocupado || sessao) return;
+
+    navigate("/triagem");
+  }
+
+  // ====================================================
+  // ESTADOS DERIVADOS
+  // ====================================================
 
   const limiteAtingido =
     numeroRespostas >= limiteRespostas;
 
+  const nomeModo =
+    modo === "ollama"
+      ? "Ollama local"
+      : modo === "demo"
+        ? "Simulação"
+        : "IA experimental";
+
   // ====================================================
-  // 10. INTERFACE
+  // INTERFACE
   // ====================================================
 
   return (
     <div className="ec-page">
 
-      <header className="ec-header">
+      {/* CABEÇALHO */}
 
+      <header className="ec-header">
         <Link
           to="/"
           className="ec-brand"
+          aria-label="Elora — início"
         >
           <img
             src="/images/logo-elora.png"
@@ -378,306 +462,320 @@ export default function TriagemPerguntas() {
           <span>elora</span>
         </Link>
 
-        <Link
-          to="/triagem"
-          className="ec-link"
-          onClick={() => {
-            if (sessao) {
-              void requisitar(
-                "encerrar",
-                {
-                  sessaoId: sessao,
-                }
-              ).catch(() => {});
-            }
-          }}
+        <button
+          type="button"
+          className="ec-header-exit"
+          onClick={voltarAoInicio}
+          disabled={ocupado}
         >
-          Sair da triagem
-        </Link>
-
+          <span aria-hidden="true">←</span>
+          Voltar ao início
+        </button>
       </header>
 
       <main className="ec-shell">
 
-        {/* LATERAL */}
+        {/* COLUNA ESQUERDA */}
 
         <aside className="ec-aside">
+          <div
+            className="ec-watermark"
+            aria-hidden="true"
+          />
 
-          <span className="ec-eyebrow">
-            ELORA · TCC
-          </span>
+          <p className="ec-eyebrow">
+            UM ESPAÇO PARA VOCÊ
+          </p>
 
           <h1>
-            Um espaço para <em>ser ouvido.</em>
+            Uma conversa
+            <br />
+            no seu <em>tempo.</em>
           </h1>
 
-          <p>
-            A conversa parte do seu relato,
-            não de um questionário sobre uma
-            condição escolhida previamente.
+          <p className="ec-aside-description">
+            Conte com suas palavras o que está
+            vivendo. A conversa se adapta ao relato
+            e organiza as informações sem atribuir
+            diagnósticos.
           </p>
 
-          <div className="ec-steps">
+          <div className="ec-aside-tempo">
+            <span aria-hidden="true">
+              ◷
+            </span>
 
             <div>
-              <strong>01</strong>
-              <span>
-                Compartilhar com suas palavras
-              </span>
-            </div>
+              <strong>
+                Triagem opcional{" "}
+                {sessao
+                  ? "em andamento"
+                  : ""}
+              </strong>
 
-            <div>
-              <strong>02</strong>
-              <span>
-                Esclarecer o que for relevante
-              </span>
+              <small>
+                Você pode interromper quando quiser.
+              </small>
             </div>
-
-            <div>
-              <strong>03</strong>
-              <span>
-                Organizar o relato sem diagnóstico
-              </span>
-            </div>
-
           </div>
 
-          <p className="ec-legal">
-            Protótipo acadêmico sem validação clínica.
-            Não é atendimento psicológico, não monitora
-            emergências e não avisa profissionais
-            automaticamente.
-          </p>
+          <p className="ec-aside-note">
+            <span aria-hidden="true">
+              ✳
+            </span>
 
+            Protótipo do TCC. Use apenas relatos
+            fictícios. Não substitui atendimento
+            psicológico e não monitora emergências.
+          </p>
         </aside>
 
-        {/* PAINEL PRINCIPAL */}
+        {/* COLUNA DIREITA */}
 
         <section
-          className="ec-panel"
+          className={`ec-content ${
+            sessao ? "ec-content-live" : ""
+          }`}
           aria-label="Triagem conversacional"
         >
 
-          <div className="ec-panel-head">
+          {/* STATUS */}
 
-            <div>
-
-              <span className="ec-eyebrow">
-                CONVERSA EXPLORATÓRIA
-              </span>
-
-              <h2>
-                Como você tem se sentido?
-              </h2>
-
-            </div>
+          <div className="ec-top-row">
+            <span className="ec-status">
+              {sessao
+                ? "Em andamento"
+                : "Antes de começar"}
+            </span>
 
             <span className="ec-mode">
               {nomeModo}
             </span>
-
           </div>
 
+          <p className="ec-eyebrow">
+            SUA CONVERSA
+          </p>
+
+          {/* ANTES DE COMEÇAR */}
+
           {!sessao ? (
+            <>
+              <h2>
+                Vamos iniciar sua conversa?
+              </h2>
 
-            // ==========================================
-            // TELA INICIAL
-            // ==========================================
+              <div className="ec-before">
+                <p>
+                  Esta versão é destinada
+                  exclusivamente a testes
+                  acadêmicos com exemplos
+                  fictícios. Ao continuar, uma
+                  sessão temporária será iniciada
+                  no backend da triagem.
+                </p>
 
-            <div className="ec-welcome">
+                <label className="ec-consent">
+                  <input
+                    type="checkbox"
+                    checked={aceite}
+                    onChange={(evento) =>
+                      setAceite(
+                        evento.target.checked
+                      )
+                    }
+                  />
 
-              <div
-                className="ec-orb"
-                aria-hidden="true"
-              >
-                ✳
+                  <span>
+                    Entendi que devo usar somente
+                    relatos fictícios e que a Elora
+                    não realiza diagnósticos.
+                  </span>
+                </label>
+
+                <div className="ec-before-actions">
+                  <button
+                    type="button"
+                    className="ec-secondary ec-before-back"
+                    onClick={voltarParaTriagem}
+                    disabled={ocupado}
+                  >
+                    <span aria-hidden="true">
+                      ←
+                    </span>
+
+                    Voltar
+                  </button>
+
+                  <button
+                    type="button"
+                    className="ec-primary ec-before-start"
+                    onClick={iniciar}
+                    disabled={!aceite || ocupado}
+                  >
+                    {ocupado
+                      ? "Iniciando..."
+                      : "Começar triagem"}
+
+                    <span aria-hidden="true">
+                      →
+                    </span>
+                  </button>
+                </div>
               </div>
-
-              <h3>
-                Começar a triagem
-              </h3>
-
-              <p>
-                Esta versão é exclusiva para testes
-                com <strong>relatos inventados</strong>.
-                A Elora utiliza o contexto da conversa
-                para formular perguntas e organizar
-                as informações compartilhadas.
-
-                Quando o Ollama está ativo, o processamento
-                acontece localmente pelo modelo instalado.
-              </p>
-
-              <label className="ec-consent">
-
-                <input
-                  type="checkbox"
-                  checked={aceite}
-                  onChange={(e) =>
-                    setAceite(e.target.checked)
-                  }
-                />
-
-                <span>
-                  Entendi que devo utilizar apenas
-                  informações fictícias e que este
-                  sistema não realiza diagnósticos.
-                </span>
-
-              </label>
-
-              <button
-                className="ec-primary"
-                type="button"
-                disabled={!aceite || ocupado}
-                onClick={iniciar}
-              >
-                {ocupado
-                  ? "Iniciando..."
-                  : "Começar conversa →"}
-              </button>
-
-            </div>
+            </>
 
           ) : (
 
-            // ==========================================
-            // CONVERSA
-            // ==========================================
+            /* CONVERSA EM ANDAMENTO */
 
             <>
 
+              {/* HISTÓRICO COMPLETO */}
+
               <div
-                className="ec-chat"
+                ref={chatRef}
+                className="ec-chat ec-chat-expanded"
                 role="log"
+                aria-label="Histórico da conversa"
                 aria-live="polite"
-                aria-label="Mensagens da triagem"
+                aria-relevant="additions"
+                aria-busy={aguardandoIA}
               >
-
-                {mensagens.map((m, i) => (
-
+                {mensagens.map((mensagem) => (
                   <div
+                    key={mensagem.id}
                     className={`ec-bubble ${
-                      m.papel === "paciente"
+                      mensagem.papel === "paciente"
                         ? "ec-user"
                         : "ec-ai"
                     }`}
-                    key={i}
                   >
-
                     <small>
-                      {m.papel === "paciente"
-                        ? "Relato fictício"
+                      {mensagem.papel === "paciente"
+                        ? "Seu relato fictício"
                         : "Elora"}
                     </small>
 
-                    <p>
-                      {m.texto}
-                    </p>
-
+                    <p>{mensagem.texto}</p>
                   </div>
-
                 ))}
 
-                {ocupado && (
-                  <p className="ec-thinking">
-                    Aguarde, processando...
-                  </p>
-                )}
+                {/* INDICADOR DE RESPOSTA */}
 
+                {aguardandoIA && (
+                  <div
+                    className="ec-bubble ec-ai ec-thinking-bubble"
+                    role="status"
+                  >
+                    <small>Elora</small>
+
+                    <p>
+                      Preparando sua resposta
+                      <span
+                        className="ec-thinking-dots"
+                        aria-hidden="true"
+                      >
+                        <i />
+                        <i />
+                        <i />
+                      </span>
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* SITUAÇÃO DE RISCO */}
 
               {risco ? (
-
                 <div
                   className="ec-risk"
                   role="alert"
                 >
-                  A conversa automática foi interrompida.
+                  <strong>
+                    A conversa automática foi
+                    interrompida.
+                  </strong>
 
-                  A Elora não monitora emergências.
+                  <p>
+                    A Elora não acompanha emergências
+                    nem comunica profissionais
+                    automaticamente. Se houver risco
+                    real e imediato, procure
+                    atendimento de emergência.
 
-                  Para recomeçar com outro exemplo fictício,
-                  encerre esta sessão.
+                    No Brasil, SAMU: 192; apoio
+                    emocional CVV: 188.
+                  </p>
                 </div>
+
+              ) : limiteAtingido ? (
+
+                /* LIMITE ATINGIDO */
+
+                <p className="ec-complete">
+                  Você concluiu as respostas desta
+                  etapa. Pode gerar seu resumo.
+                </p>
 
               ) : (
 
-                // ======================================
-                // CAMPO DE RESPOSTA
-                // ======================================
+                /* CAMPO DE RESPOSTA */
 
                 <form
-                  onSubmit={enviar}
                   className="ec-compose"
+                  onSubmit={enviar}
                 >
-
                   <label htmlFor="ec-text">
-                    Seu relato fictício
+                    Sua resposta
                   </label>
 
                   <textarea
-                    ref={campo}
                     id="ec-text"
-                    value={texto}
-                    onChange={(e) =>
-                      setTexto(e.target.value)
-                    }
-                    maxLength={1800}
+                    ref={campo}
                     rows={3}
-                    disabled={
-                      ocupado ||
-                      limiteAtingido
+                    maxLength={1800}
+                    value={texto}
+                    onChange={(evento) =>
+                      setTexto(
+                        evento.target.value
+                      )
                     }
-                    placeholder={
-                      limiteAtingido
-                        ? "Limite atingido. Gere seu resumo para concluir."
-                        : "Ex.: Ultimamente tenho me preocupado com a faculdade..."
-                    }
+                    disabled={ocupado}
+                    placeholder="Digite sua resposta..."
                   />
 
                   <div className="ec-compose-bottom">
-
                     <small>
-                      {texto.length}/1800 ·{" "}
-                      {numeroRespostas}/{limiteRespostas} respostas
+                      {texto.length}/1800 caracteres
+                      {" · "}
+                      {numeroRespostas}/{limiteRespostas}
+                      {" respostas"}
                     </small>
 
                     <button
-                      className="ec-primary"
                       type="submit"
+                      className="ec-primary"
                       disabled={
                         ocupado ||
-                        texto.trim().length < 2 ||
-                        limiteAtingido
+                        texto.trim().length < 2
                       }
                     >
-                      Enviar →
+                      {ocupado
+                        ? "Processando..."
+                        : "Enviar"}
+
+                      <span aria-hidden="true">
+                        →
+                      </span>
                     </button>
-
                   </div>
-
                 </form>
-
               )}
 
-              {/* LIMITE ATINGIDO */}
-
-              {limiteAtingido && !risco && (
-
-                <p className="ec-legal">
-                  Você chegou ao limite de respostas
-                  desta etapa. Já pode gerar seu resumo.
-                </p>
-
-              )}
-
-              {/* AÇÕES */}
+              {/* AÇÕES DA SESSÃO */}
 
               <div className="ec-bottom-actions">
-
                 <button
                   type="button"
                   className="ec-secondary"
@@ -688,44 +786,40 @@ export default function TriagemPerguntas() {
                 </button>
 
                 {!risco && (
-
                   <button
                     type="button"
-                    className="ec-secondary"
+                    className="ec-primary"
                     disabled={
                       ocupado ||
                       numeroRespostas < 1
                     }
                     onClick={finalizar}
                   >
-                    Gerar resumo →
+                    {ocupado
+                      ? "Gerando resumo..."
+                      : "Gerar resumo"}
+
+                    <span aria-hidden="true">
+                      →
+                    </span>
                   </button>
-
                 )}
-
               </div>
-
             </>
-
           )}
 
           {/* ERROS */}
 
           {erro && (
-
             <p
               className="ec-error"
               role="alert"
             >
               {erro}
             </p>
-
           )}
-
         </section>
-
       </main>
-
     </div>
   );
 }

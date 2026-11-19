@@ -1,467 +1,1532 @@
+
+/* =====================================================
+   ELORA — TRIAGEM CONVERSACIONAL
+   Layout baseado na estrutura original do Git
+   Cores roxo / lilás / azul-marinho
+===================================================== */
+
 .ec-page {
+  --ec-navy: #15376c;
+  --ec-purple: #71338e;
+  --ec-purple-dark: #532066;
+  --ec-lilac: #f0eafb;
+  --ec-border: #e7ddef;
+  --ec-muted: #607292;
+
   min-height: 100vh;
-  background: #f6f8fd;
-  color: #132e55;
+
+  color: var(--ec-navy);
+  background:
+    radial-gradient(
+      ellipse at 43% 46%,
+      #f5effb 0%,
+      #ffffff 62%,
+      #fbf9fe 100%
+    );
+
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-.ec-header {
-  background: #6bb4ef;
-  min-height: 76px;
-  padding: 14px max(24px, calc((100vw - 1200px) / 2));
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
+.ec-page *,
+.ec-page *::before,
+.ec-page *::after {
+  box-sizing: border-box;
 }
 
-.ec-brand {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  color: #fff;
+.ec-page button,
+.ec-page textarea {
+  font: inherit;
+}
+
+.ec-page button {
+  cursor: pointer;
+}
+
+.ec-page a {
   text-decoration: none;
 }
 
+.ec-page :is(
+  button,
+  a,
+  textarea,
+  input
+):focus-visible {
+  outline: 2px solid #9c77c8;
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   1. CABEÇALHO
+===================================================== */
+
+.ec-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  min-height: 76px;
+
+  padding:
+    11px
+    max(30px, calc((100vw - 1380px) / 2));
+
+  background: linear-gradient(
+    100deg,
+    #71348f 0%,
+    #642b86 100%
+  );
+
+  color: #ffffff;
+}
+
+.ec-brand {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 10px;
+
+  color: #ffffff;
+}
+
 .ec-brand img {
-  width: 40px;
-  height: 40px;
+  width: 37px;
+  height: 37px;
+
   object-fit: contain;
   filter: brightness(0) invert(1);
 }
 
 .ec-brand span {
-  font: 42px Georgia, serif;
+  font: 400 43px/1 Georgia, serif;
   letter-spacing: -2px;
 }
 
+.ec-header-exit,
 .ec-link {
-  color: #132e55;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  padding: 8px 0;
+
+  border: none;
+
+  background: transparent;
+  color: #ffffff;
+
   font-size: 13px;
-  text-decoration: none;
-  font-weight: 700;
+  font-weight: 600;
 }
+
+.ec-header-exit span {
+  font-size: 19px;
+}
+
+.ec-header-exit:hover,
+.ec-link:hover {
+  opacity: 0.82;
+}
+
+.ec-header-exit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =====================================================
+   2. ESTRUTURA DE DUAS COLUNAS
+===================================================== */
 
 .ec-shell {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 56px 24px 75px;
   display: grid;
-  grid-template-columns: 0.82fr 1.18fr;
-  gap: 54px;
+
+  grid-template-columns:
+    minmax(0, 0.9fr)
+    minmax(0, 1.1fr);
+
   align-items: start;
+
+  gap: clamp(
+    35px,
+    5vw,
+    76px
+  );
+
+  width: min(
+    1320px,
+    calc(100% - 90px)
+  );
+
+  min-height: calc(100dvh - 76px);
+
+  margin: 0 auto;
+
+  padding: 35px 0 34px;
 }
+
+/* =====================================================
+   3. LADO ESQUERDO
+===================================================== */
 
 .ec-aside {
-  padding-top: 48px;
+  position: relative;
+  isolation: isolate;
+
+  min-width: 0;
+
+  padding: 46px 0 0;
 }
+
+/* IMPORTANTE:
+   A coluna esquerda não tem overflow.
+   Assim desaparece a barra de rolagem lateral.
+*/
+
+.ec-aside > :not(.ec-watermark) {
+  position: relative;
+  z-index: 1;
+}
+
+/* MARCA-D'ÁGUA */
+
+.ec-watermark {
+  position: absolute;
+  z-index: 0;
+
+  top: 105px;
+  right: -25px;
+
+  width: clamp(
+    195px,
+    19vw,
+    285px
+  );
+
+  height: clamp(
+    195px,
+    19vw,
+    285px
+  );
+
+  pointer-events: none;
+
+  background: #b395d7;
+  opacity: 0.30;
+
+  -webkit-mask:
+    url("/images/logo-elora.png")
+    center / contain no-repeat;
+
+  mask:
+    url("/images/logo-elora.png")
+    center / contain no-repeat;
+}
+
+/* TEXTOS */
 
 .ec-eyebrow {
-  font-size: 10px;
+  margin: 0 0 15px;
+
+  color: #24427a;
+
+  font-size: 11px;
   font-weight: 800;
-  letter-spacing: 2px;
-  color: #5b7da7;
+  letter-spacing: 2.1px;
 }
 
-.ec-aside h1,
-.ec-report h1 {
-  font: 400 clamp(40px, 5vw, 66px) / 1.08 Georgia, serif;
-  letter-spacing: -1.8px;
-  margin: 20px 0 25px;
+.ec-aside h1 {
+  max-width: 550px;
+
+  margin: 0;
+
+  font: 400 clamp(
+    41px,
+    3.7vw,
+    55px
+  ) / 1.09 Georgia, serif;
+
+  letter-spacing: -1.7px;
 }
 
 .ec-aside h1 em {
-  color: #7d80bf;
+  color: #7956b8;
   font-weight: 400;
 }
 
-.ec-aside > p {
-  color: #566983;
-  line-height: 1.8;
+.ec-aside-description {
+  max-width: 460px;
+
+  margin: 28px 0 0;
+
+  color: #415a80;
+
+  font-size: 14px;
+  line-height: 1.7;
 }
 
-.ec-steps {
-  border-top: 1px solid #dbe4f0;
-  margin-top: 35px;
-}
+/* TEMPO */
 
-.ec-steps > div {
+.ec-aside-tempo {
   display: flex;
-  gap: 18px;
-  padding: 20px 0;
-  border-bottom: 1px solid #dbe4f0;
-  color: #365477;
+  align-items: center;
+
+  gap: 13px;
+
+  margin-top: 28px;
 }
 
-.ec-steps strong {
-  font-size: 11px;
-  color: #8b96b4;
+.ec-aside-tempo > span {
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width: 42px;
+  height: 42px;
+
+  border-radius: 50%;
+
+  background: #ebe6fa;
+  color: #7561bf;
+
+  font-size: 23px;
 }
 
-.ec-aside .ec-legal {
+.ec-aside-tempo strong,
+.ec-aside-tempo small {
+  display: block;
+}
+
+.ec-aside-tempo strong {
   font-size: 12px;
-  margin-top: 30px;
+  font-weight: 700;
 }
 
-.ec-panel {
-  background: white;
-  border: 1px solid #e0e7f0;
-  box-shadow: 0 20px 65px rgba(23, 51, 95, 0.07);
+.ec-aside-tempo small {
+  margin-top: 5px;
+
+  color: #60769a;
+  font-size: 12px;
+}
+
+/* AVISO ACADÊMICO */
+
+.ec-aside-note {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 12px;
+
+  max-width: 480px;
+
+  margin: 27px 0 0;
+
+  color: #546b91;
+
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+.ec-aside-note > span {
+  color: #9979cf;
+  font-size: 19px;
+}
+
+/* =====================================================
+   4. PAINEL DE CONVERSA
+   Recupera o estilo organizado do Git
+===================================================== */
+
+.ec-shell:not(.ec-result-shell)
+.ec-content {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+
+  padding: 22px 26px 23px;
+
+  border: 1px solid var(--ec-border);
   border-radius: 22px;
-  overflow: hidden;
+
+  background: rgba(
+    255,
+    255,
+    255,
+    0.88
+  );
+
+  box-shadow:
+    0 12px 36px rgba(
+      69,
+      37,
+      103,
+      0.065
+    );
 }
 
-.ec-panel-head {
-  padding: 25px 28px;
-  border-bottom: 1px solid #e6ebf2;
+/* Evita que a coluna direita tenha
+   sua própria barra de rolagem. */
+
+/* TOPO DO PAINEL */
+
+.ec-top-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+
+  gap: 12px;
+
+  margin-bottom: 21px;
 }
 
-.ec-panel-head h2 {
-  font: 400 27px Georgia, serif;
-  margin: 9px 0 0;
+.ec-status {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 7px 15px;
+
+  border-radius: 999px;
+
+  background: #eee7fa;
+  color: #4c347d;
+
+  font-size: 11px;
+  font-weight: 800;
 }
 
 .ec-mode {
-  display: inline-flex;
-  border-radius: 999px;
-  background: #eeeafa;
-  color: #5d5794;
+  color: #8462a8;
+
   font-size: 11px;
-  padding: 7px 12px;
   font-weight: 700;
-  white-space: nowrap;
 }
 
-.ec-welcome {
-  padding: 48px 35px 52px;
+/* =====================================================
+   5. PERGUNTA ATUAL DA IA
+   Tipografia refinada, sem barra de rolagem
+===================================================== */
+
+.ec-content > .ec-eyebrow {
+  margin-bottom: 10px;
 }
 
-.ec-orb {
-  display: grid;
-  place-items: center;
-  background: #f0ecff;
-  color: #7676b5;
-  width: 55px;
-  height: 55px;
-  border-radius: 18px;
-  font-size: 32px;
+.ec-content > h2 {
+  max-width: 100%;
+
+  margin: 0 0 20px;
+
+  color: #17396d;
+
+  font: 400 clamp(
+    22px,
+    1.7vw,
+    27px
+  ) / 1.28 Georgia, serif;
+
+  letter-spacing: -0.35px;
+
+  overflow-wrap: anywhere;
 }
 
-.ec-welcome h3 {
-  font: 400 31px Georgia, serif;
-  margin: 20px 0 8px;
+/* Não usar max-height nem overflow aqui.
+   A pergunta fica inteira e legível. */
+
+/* =====================================================
+   6. TELA ANTES DE COMEÇAR
+===================================================== */
+
+.ec-before {
+  padding-top: 20px;
+
+  border-top: 1px solid #ece5f2;
 }
 
-.ec-welcome p {
-  color: #60728a;
-  font-size: 14px;
-  line-height: 1.8;
+.ec-before > p {
+  margin: 0 0 18px;
+
+  color: #546a8c;
+
+  font-size: 13px;
+  line-height: 1.7;
 }
 
 .ec-consent {
   display: flex;
-  gap: 12px;
-  align-items: start;
-  margin: 26px 0;
-  color: #435875;
-  font-size: 13px;
+  align-items: flex-start;
+
+  gap: 11px;
+
+  margin: 0 0 23px;
+
+  color: #3e547c;
+
+  font-size: 12px;
   line-height: 1.55;
 }
 
 .ec-consent input {
-  margin-top: 4px;
-  accent-color: #132e55;
+  flex-shrink: 0;
+
+  margin-top: 2px;
+
+  accent-color: #793b96;
+}
+
+/* DOIS BOTÕES ANTES DA CONVERSA */
+
+.ec-before-actions {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1.35fr);
+
+  gap: 12px;
+
+  margin-top: 10px;
+}
+
+.ec-before-back,
+.ec-before-start {
+  width: 100%;
+  min-height: 47px;
+
+  font-size: 13px;
+}
+
+/* =====================================================
+   7. BOTÕES GERAIS
+===================================================== */
+
+.ec-primary,
+.ec-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 13px;
+
+  min-height: 44px;
+
+  padding: 10px 20px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  text-align: center;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .ec-primary {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  background: #132e55;
-  color: white;
-  border: 0;
-  border-radius: 999px;
-  padding: 13px 21px;
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
+  border: 1px solid #15376c;
+
+  color: #fff;
+  background: #15376c;
 }
 
-.ec-primary:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
+.ec-primary:hover:not(:disabled) {
+  background: #254c86;
 }
 
 .ec-secondary {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid #ccd9e8;
+  border: 1px solid #bac2d9;
+
+  color: #284a7a;
   background: #fff;
-  color: #365477;
-  border-radius: 999px;
-  padding: 11px 15px;
-  text-decoration: none;
-  font-size: 12px;
-  cursor: pointer;
 }
 
+.ec-secondary:hover:not(:disabled) {
+  background: #f6f1fb;
+  border-color: #9f87bf;
+}
+
+.ec-primary:disabled,
 .ec-secondary:disabled {
-  opacity: 0.45;
+  opacity: 0.48;
   cursor: not-allowed;
 }
 
-.ec-chat {
-  padding: 24px 24px 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 17px;
-  max-height: 440px;
-  min-height: 280px;
-  overflow-y: auto;
+.ec-primary > span,
+.ec-secondary > span {
+  font-size: 17px;
+  font-weight: 400;
 }
 
+/* =====================================================
+   8. HISTÓRICO DA CONVERSA
+
+   ÚNICA ÁREA COM ROLAGEM INTERNA.
+===================================================== */
+
+.ec-chat {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+
+  width: 100%;
+
+  min-height: 0;
+
+  max-height: clamp(
+    115px,
+    21dvh,
+    175px
+  );
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  padding: 12px 10px;
+
+  margin: 0 0 16px;
+
+  border: 1px solid #eee8f5;
+  border-radius: 14px;
+
+  background: #fcfaff;
+
+  scrollbar-width: thin;
+  scrollbar-color: #c7b4df transparent;
+}
+
+.ec-chat::-webkit-scrollbar {
+  width: 5px;
+}
+
+.ec-chat::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ec-chat::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: #c7b4df;
+}
+
+/* MENSAGENS */
+
 .ec-bubble {
-  max-width: 90%;
-  padding: 16px 18px;
-  border-radius: 16px;
-  line-height: 1.65;
-  font-size: 14px;
+  flex-shrink: 0;
+
+  max-width: 92%;
+
+  padding: 11px 14px;
+
+  border-radius: 14px;
+
+  font-size: 12px;
+  line-height: 1.6;
+
   overflow-wrap: anywhere;
   white-space: pre-wrap;
 }
 
 .ec-bubble small {
-  font-size: 10px;
+  font-size: 9px;
+  font-weight: 800;
+
   letter-spacing: 1px;
   text-transform: uppercase;
-  font-weight: 800;
-  opacity: 0.7;
+
+  opacity: 0.75;
 }
 
 .ec-bubble p {
-  margin: 7px 0 0;
+  margin: 6px 0 0;
 }
 
 .ec-ai {
-  background: #f0f3fb;
-  color: #2d4262;
   align-self: flex-start;
-  border-bottom-left-radius: 3px;
+
+  background: #f0ecf9;
+  color: #2c4273;
+
+  border-bottom-left-radius: 4px;
 }
 
 .ec-user {
-  background: #dcecff;
-  color: #1a3c62;
   align-self: flex-end;
-  border-bottom-right-radius: 3px;
+
+  background: #e8ddfa;
+  color: #3b286c;
+
+  border-bottom-right-radius: 4px;
 }
 
-.ec-thinking {
-  color: #8a95aa;
-  font-size: 12px;
-}
+/* =====================================================
+   9. CAMPO DE RESPOSTA
+===================================================== */
 
 .ec-compose {
-  border-top: 1px solid #e6ebf2;
-  padding: 19px 24px;
+  width: 100%;
 }
 
 .ec-compose label {
   display: block;
-  font-size: 12px;
+
+  margin-bottom: 8px;
+
+  color: #334e7c;
+
+  font-size: 11px;
   font-weight: 700;
-  margin-bottom: 10px;
 }
 
 .ec-compose textarea {
+  display: block;
+
   width: 100%;
-  border: 1px solid #ccd9e8;
+  height: 77px;
+  min-height: 77px;
+  max-height: 120px;
+
+  padding: 12px 14px;
+
+  border: 1px solid #ccd0e7;
   border-radius: 13px;
+
+  background: #fff;
+
+  color: #17396b;
+
+  font-size: 13px;
+  line-height: 1.5;
+
   resize: vertical;
-  padding: 12px;
-  font: 14px/1.5 Arial, sans-serif;
-  color: #132e55;
+}
+
+.ec-compose textarea::placeholder {
+  color: #8190a9;
+}
+
+.ec-compose textarea:focus {
+  border-color: #ad8ccf;
 }
 
 .ec-compose-bottom {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
+
+  gap: 12px;
+
   margin-top: 10px;
 }
 
 .ec-compose-bottom small {
-  color: #8996a8;
+  color: #7b88a0;
+  font-size: 10px;
 }
+
+.ec-compose-bottom .ec-primary {
+  min-width: 120px;
+}
+
+/* =====================================================
+   10. BOTÕES DE ENCERRAMENTO E RESUMO
+===================================================== */
 
 .ec-bottom-actions {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  padding: 15px 24px 24px;
+
+  flex-wrap: wrap;
+
+  gap: 12px;
+
+  margin-top: 17px;
+  padding-top: 15px;
+
+  border-top: 1px solid #eee8f5;
 }
 
+.ec-bottom-actions .ec-primary,
+.ec-bottom-actions .ec-secondary {
+  min-height: 40px;
+  padding: 9px 17px;
+
+  font-size: 11px;
+}
+
+/* =====================================================
+   11. ESTADOS DA TRIAGEM
+===================================================== */
+
 .ec-error {
-  margin: 0 24px 20px;
-  color: #9a273b;
-  background: #fff0f1;
-  border-radius: 10px;
-  padding: 13px;
-  font-size: 13px;
+  margin: 15px 0 0;
+
+  padding: 12px 14px;
+
+  border: 1px solid #efc4cf;
+  border-radius: 12px;
+
+  background: #fff0f4;
+  color: #a22c49;
+
+  font-size: 12px;
+  line-height: 1.55;
 }
 
 .ec-risk {
-  margin: 15px 24px;
-  background: #fff2e7;
-  border: 1px solid #e9b996;
-  border-radius: 12px;
   padding: 15px;
+
+  border: 1px solid #ebc4aa;
+  border-radius: 12px;
+
+  background: #fff4ea;
+  color: #763e30;
+
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.ec-risk p {
+  margin-bottom: 0;
+}
+
+.ec-complete {
+  padding: 14px 17px;
+
+  border-radius: 12px;
+
+  background: #f0eafb;
+  color: #405389;
+
   font-size: 13px;
   line-height: 1.5;
 }
 
-.ec-report {
-  max-width: 850px;
-  padding: 55px 24px 90px;
-  margin: auto;
+.ec-thinking {
+  color: #846c9c;
+  font-size: 12px;
 }
 
-.ec-report h1 {
-  margin-bottom: 12px;
-  font-size: clamp(36px, 5vw, 54px);
+/* =====================================================
+   12. RESUMO E CONCLUSÃO
+
+   Preserva o layout dos mockups aprovados.
+===================================================== */
+
+.ec-result-shell {
+  align-items: center;
 }
 
-.ec-lead {
-  color: #60728a;
+.ec-result-shell .ec-aside {
+  padding-top: 10px;
+}
+
+.ec-result-shell .ec-content {
+  min-width: 0;
+
+  padding: 15px 0;
+
+  border: 0;
+  border-radius: 0;
+
+  background: transparent;
+  box-shadow: none;
+}
+
+.ec-result-shell .ec-content > h2 {
+  font-size: clamp(
+    27px,
+    2.6vw,
+    37px
+  );
+}
+
+.ec-summary-content .ec-synthesis {
+  padding: 21px 23px;
+
+  border-radius: 14px;
+
+  background: #f0eafb;
+  color: #19376b;
+
+  font: 400 clamp(
+    19px,
+    2vw,
+    26px
+  ) / 1.45 Georgia, serif;
+
+  white-space: pre-wrap;
+}
+
+.ec-information {
+  margin: 20px 0;
+
+  color: #40577e;
+
+  font-size: 12px;
   line-height: 1.6;
 }
 
-.ec-report-card {
-  background: #fff;
-  border: 1px solid #e1e8f2;
-  border-radius: 18px;
-  padding: 27px 30px;
-  margin: 23px 0;
+.ec-download {
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+  color: #6d429c;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
-.ec-report-card h2 {
-  font: 400 26px Georgia, serif;
-  margin: 0 0 16px;
+.ec-result-actions {
+  margin-top: 28px;
 }
 
-.ec-report-card p,
-.ec-report-card li {
+.ec-result-actions .ec-primary {
+  min-width: 200px;
+}
+
+/* DETALHES COMPLETOS */
+
+.ec-technical {
+  margin-top: 30px;
+
+  padding-top: 18px;
+
+  border-top: 1px solid #e5ddeb;
+}
+
+.ec-technical summary {
+  color: #42547c;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.ec-technical-body {
+  padding-top: 12px;
+
+  color: #485c80;
+
+  font-size: 13px;
   line-height: 1.7;
-  color: #435875;
+
   overflow-wrap: anywhere;
 }
 
-.ec-report-card li {
-  margin-bottom: 8px;
+.ec-technical-body h3 {
+  margin: 20px 0 10px;
+
+  color: #17396d;
+
+  font: 400 23px Georgia, serif;
 }
 
-.ec-report-card a {
-  color: #285f9a;
+.ec-technical-body article {
+  padding: 12px 0;
+
+  border-bottom: 1px solid #ede6f4;
+}
+
+.ec-technical-body a {
+  color: #6e4197;
+  text-decoration: underline;
+}
+
+.ec-privacy-note {
+  margin-top: 22px;
+
+  color: #6f7c97;
+
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* CONCLUSÃO */
+
+.ec-final-content > h2 {
+  margin-bottom: 20px;
+}
+
+.ec-final-content > p:not(
+  .ec-eyebrow
+):not(
+  .ec-privacy-note
+) {
+  color: #334a76;
+
+  font: 400 20px/1.5 Georgia, serif;
+}
+
+.ec-final-actions {
+  display: flex;
+  flex-direction: column;
+
+  gap: 13px;
+
+  max-width: 315px;
+  margin-top: 27px;
+}
+
+.ec-final-actions .ec-primary,
+.ec-final-actions .ec-secondary {
+  width: 100%;
+}
+
+/* =====================================================
+   13. ESTILOS LEGADOS DO RELATÓRIO DO GIT
+
+   Mantidos para compatibilidade.
+===================================================== */
+
+.ec-report {
+  max-width: 850px;
+
+  margin: 0 auto;
+  padding: 48px 24px 75px;
+}
+
+.ec-report h1 {
+  font: 400 clamp(
+    35px,
+    5vw,
+    53px
+  ) / 1.1 Georgia, serif;
+
+  margin: 0 0 15px;
+}
+
+.ec-lead,
+.ec-report-card p,
+.ec-report-card li {
+  color: #4e6487;
+  line-height: 1.7;
+}
+
+.ec-report-card {
+  margin: 20px 0;
+  padding: 25px;
+
+  border: 1px solid #e8dcef;
+  border-radius: 17px;
+
+  background: #fff;
+}
+
+.ec-report-card h2 {
+  font: 400 25px Georgia, serif;
 }
 
 .ec-finding {
-  border-top: 1px solid #e6ebf2;
-  padding: 17px 0;
-}
-
-.ec-finding h3 {
-  margin: 0 0 8px;
-  font-size: 16px;
+  padding: 15px 0;
+  border-top: 1px solid #eee8f5;
 }
 
 .ec-muted {
-  color: #75849a !important;
-  font-size: 13px;
+  color: #7885a0;
+  font-size: 12px;
 }
 
 .ec-disclaimer {
-  border-left: 4px solid #7c87c6;
-  background: #e9edf9;
-  padding: 20px 25px;
-  border-radius: 10px;
-  line-height: 1.65;
+  padding: 20px;
+
+  border-left: 4px solid #9977bd;
+  border-radius: 12px;
+
+  background: #f1eafa;
 }
 
 .ec-report-actions {
   display: flex;
   flex-wrap: wrap;
+
   gap: 15px;
   margin-top: 25px;
 }
 
 .ec-empty {
-  max-width: 650px;
+  width: min(
+    640px,
+    calc(100% - 40px)
+  );
+
   margin: 12vh auto;
-  padding: 24px;
+  padding: 30px;
+
+  border: 1px solid #eadff1;
+  border-radius: 20px;
+
+  background: #fff;
 }
 
 .ec-empty h1 {
-  font: 400 42px Georgia, serif;
+  font: 400 38px Georgia, serif;
 }
 
-@media (max-width: 900px) {
+/* =====================================================
+   14. TELAS COM ALTURA REDUZIDA
+===================================================== */
+
+@media (min-width: 1001px) and (max-height: 760px) {
+
+  .ec-shell:not(.ec-result-shell) {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .ec-shell:not(.ec-result-shell)
+  .ec-aside {
+    padding-top: 23px;
+  }
+
+  .ec-shell:not(.ec-result-shell)
+  .ec-aside h1 {
+    font-size: clamp(
+      39px,
+      3.2vw,
+      49px
+    );
+  }
+
+  .ec-shell:not(.ec-result-shell)
+  .ec-aside-description {
+    margin-top: 20px;
+    font-size: 13px;
+  }
+
+  .ec-shell:not(.ec-result-shell)
+  .ec-aside-tempo {
+    margin-top: 20px;
+  }
+
+  .ec-shell:not(.ec-result-shell)
+  .ec-aside-note {
+    margin-top: 20px;
+  }
+
+  .ec-shell:not(.ec-result-shell)
+  .ec-content {
+    padding: 17px 22px 18px;
+  }
+
+  .ec-top-row {
+    margin-bottom: 14px;
+  }
+
+  .ec-content > h2 {
+    font-size: 22px;
+    margin-bottom: 13px;
+  }
+
+  .ec-chat {
+    max-height: 120px;
+    margin-bottom: 12px;
+  }
+
+  .ec-compose textarea {
+    height: 65px;
+    min-height: 65px;
+  }
+
+  .ec-bottom-actions {
+    margin-top: 10px;
+    padding-top: 11px;
+  }
+}
+
+/* =====================================================
+   15. TABLETS
+===================================================== */
+
+@media (max-width: 1000px) {
+
   .ec-shell {
     grid-template-columns: 1fr;
-    gap: 25px;
-    padding-top: 20px;
+
+    width: min(
+      720px,
+      calc(100% - 44px)
+    );
+
+    min-height: auto;
+
+    gap: 28px;
+    padding: 34px 0 55px;
   }
 
   .ec-aside {
-    padding-top: 10px;
+    padding-top: 5px;
   }
 
   .ec-aside h1 {
-    font-size: 43px;
+    font-size: clamp(
+      40px,
+      5.7vw,
+      52px
+    );
+  }
+
+  .ec-aside-description {
+    margin-top: 20px;
+  }
+
+  .ec-aside-tempo,
+  .ec-aside-note {
+    margin-top: 18px;
+  }
+
+  .ec-watermark {
+    width: 225px;
+    height: 225px;
+
+    top: 15px;
+    right: 2%;
+  }
+
+  .ec-chat {
+    max-height: 220px;
+  }
+
+  .ec-result-shell .ec-content {
+    padding-top: 6px;
   }
 }
 
-@media (max-width: 550px) {
+/* =====================================================
+   16. CELULARES
+===================================================== */
+
+@media (max-width: 600px) {
+
   .ec-header {
-    padding: 12px 18px;
+    min-height: 68px;
+    padding: 10px 18px;
+  }
+
+  .ec-brand img {
+    width: 31px;
+    height: 31px;
   }
 
   .ec-brand span {
     font-size: 35px;
   }
 
-  .ec-panel-head {
+  .ec-header-exit {
+    font-size: 12px;
+  }
+
+  .ec-shell {
+    width: calc(100% - 30px);
+    padding: 28px 0 45px;
+  }
+
+  .ec-aside h1 {
+    font-size: 43px;
+  }
+
+  .ec-aside-description {
+    font-size: 13px;
+  }
+
+  .ec-watermark {
+    width: 185px;
+    height: 185px;
+
+    opacity: 0.20;
+  }
+
+  .ec-shell:not(.ec-result-shell)
+  .ec-content {
     padding: 20px 17px;
+
+    border-radius: 18px;
   }
 
-  .ec-panel-head h2 {
-    font-size: 22px;
+  .ec-top-row {
+    margin-bottom: 15px;
   }
 
-  .ec-welcome {
-    padding: 25px 19px;
+  .ec-content > h2 {
+    font-size: 24px;
+    line-height: 1.3;
   }
 
-  .ec-chat,
-  .ec-compose {
-    padding: 17px;
+  .ec-before-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .ec-before-back,
+  .ec-before-start {
+    width: 100%;
+  }
+
+  .ec-chat {
+    max-height: 220px;
   }
 
   .ec-bubble {
-    max-width: 98%;
+    max-width: 96%;
+  }
+
+  .ec-compose-bottom {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ec-compose-bottom .ec-primary {
+    width: 100%;
   }
 
   .ec-bottom-actions {
-    padding: 12px 17px 20px;
+    flex-direction: column;
+    align-items: stretch;
   }
 
-  .ec-report-card {
-    padding: 20px;
+  .ec-bottom-actions button {
+    width: 100%;
+  }
+
+  .ec-final-actions {
+    max-width: 100%;
+  }
+
+  .ec-result-shell .ec-content {
+    padding: 0;
+  }
+}
+
+/* =====================================================
+   17. ACESSIBILIDADE
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .ec-page *,
+  .ec-page *::before,
+  .ec-page *::after {
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* =====================================================
+   ELORA — CHAT CONTÍNUO
+   Primeira pergunta e respostas dentro do histórico
+===================================================== */
+
+/* Aproveita o espaço liberado pelo título */
+
+.ec-content-live .ec-eyebrow {
+  margin-bottom: 15px;
+}
+
+/* Histórico maior, com uma única rolagem */
+
+.ec-content-live .ec-chat-expanded {
+  width: 100%;
+
+  height: clamp(205px, 32dvh, 310px);
+  min-height: 205px;
+  max-height: none;
+
+  margin: 0 0 17px;
+  padding: 15px 14px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  overscroll-behavior-y: contain;
+
+  border: 1px solid #e8def2;
+  border-radius: 16px;
+
+  background: #faf7ff;
+
+  scrollbar-width: thin;
+  scrollbar-color: #bfa4d8 transparent;
+}
+
+/* Bolhas mais confortáveis para leitura */
+
+.ec-content-live .ec-bubble {
+  flex-shrink: 0;
+  max-width: 88%;
+
+  padding: 12px 16px;
+
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.ec-content-live .ec-ai {
+  align-self: flex-start;
+  background: #f0ebf8;
+}
+
+.ec-content-live .ec-user {
+  align-self: flex-end;
+  background: #e8dcfa;
+}
+
+/* Indicador de resposta da IA */
+
+.ec-thinking-bubble {
+  opacity: 0.85;
+}
+
+.ec-thinking-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  margin-left: 8px;
+}
+
+.ec-thinking-dots i {
+  display: block;
+
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+  background: #8564b3;
+
+  animation: ec-pulse 1s infinite ease-in-out;
+}
+
+.ec-thinking-dots i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.ec-thinking-dots i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes ec-pulse {
+  0%, 60%, 100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+
+  30% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+/* Ajuste para telas mais baixas */
+
+@media (min-width: 1001px) and (max-height: 760px) {
+  .ec-content-live .ec-chat-expanded {
+    height: clamp(170px, 27dvh, 220px);
+    min-height: 170px;
+    max-height: none;
+  }
+}
+
+/* Tablets */
+
+@media (max-width: 1000px) {
+  .ec-content-live .ec-chat-expanded {
+    height: 300px;
+    min-height: 210px;
+    max-height: none;
+  }
+}
+
+/* Celulares */
+
+@media (max-width: 600px) {
+  .ec-content-live .ec-chat-expanded {
+    height: min(42dvh, 300px);
+    min-height: 190px;
+    max-height: none;
+
+    padding: 12px;
+  }
+
+  .ec-content-live .ec-bubble {
+    max-width: 96%;
+  }
+}
+
+/* Respeita preferências de movimento reduzido */
+
+@media (prefers-reduced-motion: reduce) {
+  .ec-thinking-dots i {
+    animation: none;
+  }
+}
+
+
+/* ==============================================
+   ELORA — AMPLIAÇÃO FINAL DO CHAT
+============================================== */
+
+@media (min-width: 1001px) {
+
+  /* Mais espaço horizontal para as colunas */
+
+  .ec-shell:not(.ec-result-shell) {
+    width: min(1430px, calc(100% - 70px));
+
+    grid-template-columns:
+      minmax(0, 0.9fr)
+      minmax(0, 1.1fr);
+
+    gap: clamp(30px, 4vw, 60px);
+
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+
+  /* Painel da conversa mais alto */
+
+  .ec-shell:not(.ec-result-shell)
+  .ec-content-live {
+    height: min(700px, calc(100dvh - 125px));
+    min-height: 0;
+  }
+
+  /* O histórico ocupa o espaço disponível */
+
+  .ec-shell:not(.ec-result-shell)
+  .ec-content-live
+  .ec-chat-expanded {
+    flex: 1 1 0;
+
+    height: auto;
+    min-height: 0;
+    max-height: none;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    overscroll-behavior-y: contain;
+  }
+
+  /* Mantém o campo e os botões na parte inferior */
+
+  .ec-content-live .ec-compose,
+  .ec-content-live .ec-bottom-actions {
+    flex-shrink: 0;
   }
 }
